@@ -2,7 +2,7 @@
 <html>
 	<!--BEGINNING OF HEAD-->
 	<head>
-		<title>sm64romhacks - DOCUMENT TITLE</title> <!--CHANGE TITLE-->
+		<title>sm64romhacks - Streams</title> <!--CHANGE TITLE-->
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<meta name="keywords" content="super mario, romhacks, hack, speedrun, sm64hacks, sm64romhacks, rom, modification" />
 		<meta name="description" content="Welcome to SM64ROMHacks! We have a really big collection of SM64 ROM Hacks which wait to be played! Community News/Events will also be tracked here" />
