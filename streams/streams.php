@@ -103,8 +103,9 @@
 	}
 
 	function validateTags($tags) {
+		$whiteList = array("romhack", "rom hack", "hack", "modded");
 		foreach($tags as $tag) {
-			if(str_contains(strtolower($tag), "romhack") || str_contains(strtolower($tag), "rom hack") || str_contains(strtolower($tag), "modded")) {
+			if(in_array(strtolower($tag), $whiteList)) {
 				return true;
 			}
 		}
