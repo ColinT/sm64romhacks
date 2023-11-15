@@ -1,3 +1,4 @@
+<br/><br/>
 <!-- Footer -->
 <footer class="text-center text-white" style="background-color: #1C1C1C;">
   <!-- Grid container -->

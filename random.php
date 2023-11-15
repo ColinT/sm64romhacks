@@ -24,13 +24,12 @@ include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php';
 </head>
 <body>
 <div class="container" align=center>
-<?php
-    include 'header.php';
-?>
+<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/header.php'); ?>
+
     <div id="randomHack"></div>
 <br/>
 <a class="btn btn-primary" href="random.php">New Random</a>
-<?php include 'footer.php'; ?>
+<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/footer.php'); ?>
 </div>
 </body>
 </html>

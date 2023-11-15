@@ -195,7 +195,7 @@ function tryPatch()
 <!--END OF HEAD-->
 	<body>	
 	<div class="container">
-		<?php include '../header.php'; ?>
+	<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/header.php'); ?>
 		<div align="center">
 			<h1>Online Patcher</h1>
 			<ol>
@@ -214,7 +214,7 @@ function tryPatch()
 			</table>-->
 			<embed src="https://hack64.net/tools/patcher.php" style="width:500px; height:400px;" />
 		</div>
-		<?php include '../footer.php'; ?>
+		<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/footer.php'); ?>
 	</div>
 
 </body>

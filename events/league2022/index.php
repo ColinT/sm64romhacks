@@ -23,7 +23,7 @@ include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php';
 		</style>
 	</head>
 	<body>		<div class="container">
-			<?php include '../../header.php'; ?>
+	<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/header.php'); ?>
 			<div align="center">
 				<h1>SM64 ROMHACKS LEAGUE (Sepember 17th - November 30th)</h1><hr/>
 				<h2><b><u>TABLE OF CONTENTS</u></b></h2>
@@ -279,7 +279,7 @@ include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php';
 					<tr><td>3</td><td>aglab2</td><td>1:46:20</td></tr>
 					<tr><td>4</td><td>Okami</td><td>2:23:31</td></tr>
 				</table>
-				<?php include '../../footer.php'; ?>	
+				<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/footer.php'); ?>
 			</div>		</div>
 	</body>
 </html>

@@ -20,7 +20,7 @@ include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php';
 
 <body>
 <div class="container">
-<?php include '../header.php'; ?>
+<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/header.php'); ?>
 <div align=center>
 <h5>Q: What is a bps file?</h5>
 <h5>A: It is technically illegal to provide links to contents that belong to Nintendo, which includes every copy of Super Mario 64. A BPS file contains the differences between an original Super Mario 64 ROM and a ROM hack. This way, we can legally share ROM hacks, but anyone who wants to play them needs to find an original Super Mario 64 ROM on their own.</h5>
@@ -42,6 +42,6 @@ I got a blackscreen without sound after booting up the ROM<br/><i><font color=re
 Then, go to "Advanced" and set the "Default Memory Size" to 8MB. Furthermore, it is recommended to set the counter factor to 1 under "Rom Settings" for a better gameplay experience. However, the counter factor needs to be changed for each ROM individually.<br/>
 For further questions, make sure to join the <a href=https://discord.gg/BYrpMBG> <u>sm64romhacks Discord Server</u></a><br/><br/>
 </div>
-<?php include '../footer.php'; ?>
+<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/footer.php'); ?>
 </body>
 </html>

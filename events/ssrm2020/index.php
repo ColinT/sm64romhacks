@@ -19,8 +19,7 @@ include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php';
 	</head>
 	<body>		
 	<div class="container">
-			<?php include '../../header.php';
-			?>
+	<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/header.php'); ?>
 			<div align="center">
 			SSRM stands for Summer SM64 ROM Hacks Marathon and is a 3-4 days long Marathon featuring a variety of Runners and SM64 ROM Hacks!<br/>
 			The Marathon will be taking place from August 6th to 9th on the<a href="https://www.twitch.tv/sm64romhacks"> sm64romhacks Twitch channel!</a><br/><br/>
@@ -35,6 +34,9 @@ include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php';
 			<h5>Also don't forget to submit your <b><u>avaibility</u></b> as well to make sure your runs fit with well with the schedule!</h5>-->
 			<h5>Unfortunately our submissions are closed. Try it next time again!</h5>
 			<h5>The Schedule has been released! Just click <a href="https://horaro.org/ssrm2020/schedule"><u>here</u></a>to take a look!<br/>Note: All times are converted to your local timezone</h5>
-			</div>		</div>
+			<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/footer.php'); ?>
+	
+		</div>		</div>
+
 	</body>
 </html>

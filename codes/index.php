@@ -20,7 +20,7 @@ include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php';
 <body>
 	<div align=center>
 		<div class="container">
-			<?php include '../header.php';?>
+		<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/header.php'); ?>
 			<table border="1">
 			<tr align="center"><td><h4><u>Table of Contents</u></h4><br/>
 			<ol>
@@ -206,7 +206,7 @@ include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php';
 			8133B17E 0880<br/>
 			</code>
 		</div>
-		<?php include '../footer.php' ?>
+		<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/footer.php'); ?>
 	</div>
 </body>	
 </html>

@@ -25,7 +25,7 @@ include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php';
 		</style>
 	</head>
 	<body>		<div class="container">
-			<?php include '../header.php'; ?>
+	<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/header.php'); ?>
 			<div>
 				<h1>Plugins for playing SM64 ROM Hacks</h1>
 				<div align="center" id="opsys">Firstly, select your operating system for which you intend to play on!
@@ -1009,7 +1009,7 @@ include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php';
 
 
 
-			<?php include '../footer.php'; ?>	
+				<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/footer.php'); ?>
 			</div>		</div>
 	
 

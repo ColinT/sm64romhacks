@@ -28,7 +28,7 @@ if($id == 0 || !$_SESSION['logged_in'] || !in_array($user_id, ADMIN_NEWS) || $us
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
 	</head>
 	<body>		<div class="container">
-			<?php include '../header.php'; ?>
+	<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/header.php'); ?>
 			<div align="center">
 				<!--HTML CONTENT HERE-->
                 <form action="updateNewspost.php" method="post">
@@ -49,7 +49,7 @@ if($id == 0 || !$_SESSION['logged_in'] || !in_array($user_id, ADMIN_NEWS) || $us
 					</table>
 				</form>
 
-			<?php include '../footer.php'; ?>	
+				<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/footer.php'); ?>
 			</div>		</div>
 	</body>
 </html>

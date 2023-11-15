@@ -19,7 +19,7 @@ include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php';
 		<link rel="shortcut icon" href="../_img/icon.ico" />
 	</head>
 	<body>		<div class="container">
-			<?php include '../header.php'; ?>
+	<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/header.php'); ?>
 			<div align="center">
 				<ul>
 				<li><a href=ssrm2020>SSRM2020</a></li>
@@ -29,7 +29,7 @@ include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php';
 				<li><a href=ssrm2022>SSRM2022</a></li>
 				<li><a href=league2022>League 2022</a></li>
 				</ul>
-			<?php include '../footer.php'; ?>	
+				<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/footer.php'); ?>
 			</div>		</div>
 	</body>
 </html>

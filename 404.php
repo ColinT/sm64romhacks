@@ -21,12 +21,12 @@ include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php';
 
 <body>
 <div class="container">
-<?php include "header.php"; ?>
+<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/header.php'); ?>
 <div align=center>
 <h5>Error 404.</h5>
 <p>an oopsie happened :/</p>
 <a class="btn btn-primary" href="index.php">Return to Main</a>
 </div>
-<?php include "footer.php"; ?>
+<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/footer.php'); ?>
 </body>
 </html>

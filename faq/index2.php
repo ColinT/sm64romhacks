@@ -13,7 +13,7 @@
 
 <body>
 <div class="container">
-<?php include '../header.php'; ?>
+<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/header.php'); ?>
 <b>Q: How do I do to play ROM Hacks / What do I need to play ROM Hacks?</b><br/><br/>
 A: You need:
 <ul>
@@ -38,6 +38,6 @@ Congratulations, your romhack should now boot up! Enjoy.<br/><br/>
 Another way to apply a patch is by using the online patcher, which you can find at this <u><a href="/patcher" target="blank">page</a></u>. It works much like Flips, however first you need to choose a ROM (the .z64) and on the second field the patch (.bps).<br/><br/><br/>
 <b>Q: What are good ROM Hacks to start with?</b><br/>
 A: For a list of recommended hacks, click <u><a href="https://docs.google.com/spreadsheets/d/1A6_ixwQSVgJSJUhzYTAi-JcIghoqdRBOFvdGuj1oGmg/edit#gid=452504935" target="blank">here</a></u>. It has ROM Hacks seperated by Quality and Difficulty with most information provided!
-<?php include '../footer.php'; ?>
+<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/footer.php'); ?>
 </body>
 </html>

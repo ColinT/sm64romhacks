@@ -23,7 +23,7 @@ include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php';
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
 	</head>
 	<body>		<div class="container">
-			<?php include '../../header.php'; ?>
+	<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/header.php'); ?>
 			<div align="center">
 				<h1>SM64 ROMHACKS LEAGUE 2023 (September 16th - October 31st)</h1><hr/>
 				<h2 id="countdown"></h2>
@@ -79,7 +79,7 @@ include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php';
 				</table><br/>
 				<h3 id="streams">STREAMS</h3>
 				<?php include 'streams.php'; ?>
-				<?php include '../../footer.php'; ?>	
+				<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/footer.php'); ?>
 			</div>		</div>
 	</body>
 </html>

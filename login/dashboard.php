@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php';
+include($_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php');
 
 
 if(!$_SESSION['logged_in']){
@@ -29,15 +29,15 @@ $avatar_url = "https://cdn.discordapp.com/avatars/$discord_id/$avatar.jpg";
 	</head>
 <body>
   <div class="container">
-    <?php include "../header.php"; ?>
+    <?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/header.php'); ?>
     <div class="flex items-center justify-center h-screen bg-discord-gray flex-col">
-      <div class="text-white text-3xl">Welcome to the dashboard, </div>
+      <div class="text-white text-3xl"><img src=<?php print($avatar_url);?> height=32 width=32 /> <?php print($global_name);?></div>
       <?php
       if($name == "marvjungs") print("You are Admin");
       else print("You are a nobody :(");
       ?>
     </div>
-    <?php include "../footer.php";?>
+    <?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/footer.php'); ?>
 </div>
 
 </body>

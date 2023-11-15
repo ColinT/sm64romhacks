@@ -25,12 +25,12 @@ if(isset($_SESSION['userData'])) {
 	</head>
 <body>
     <div class="container">
-      <?php include '../header.php';?>
+	<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/header.php'); ?>
       <div align=center>
         <span class="text-white text-3xl">Sorry, you need to be logged in or have permission to view this page.</span>
         <a href="/index.php">Back to home</a>
     </div>
-    <?php include '../footer.php';?>
+	<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/footer.php'); ?>
 </div>
 
 </body>

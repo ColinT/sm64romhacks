@@ -37,14 +37,14 @@ foreach ($all_users as $key => $userData) {
 	</head>
 <body>
     <div class="container">
-        <?php include "../header.php";?>
+    <?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/header.php'); ?>
         <div align="center">
             <h3>Users:</h3>
             <table border=1>
                 <tr><td>Profile Picture</td><td>ID</td><td>Username</td><td>E-Mail</td><td>Created at</tr>
             <?php echo $usersMarkup;?>
 </table>
-        <?php include "../footer.php";?>
+<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/footer.php'); ?>
     </div></div>
 </body>
 </html>

@@ -29,7 +29,7 @@ include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php';
 <!--END OF HEAD-->
 <body>
 <div class="container">
-<?php include 'header.php'; ?>
+<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/header.php'); ?>
 	<div align="center">
 <!--<iframe src="//player.twitch.tv/?channel=sm64romhacks&autoplay=true&muted=true&parent=sm64romhacks.com" allowfullscreen='true' width='640' height='360'></iframe><br/>-->
 <input type="text" id="hackNamesInput" placeholder="Search for hacknames.."/><input type="text" id="authorNamesInput" placeholder="Search for hackcreators.." style="align-self: center;" /><input type="text" id="hackDatesInput" placeholder="Search for Date (yyyy-mm-dd)..." style="align-self: center; width: 215px;"/>
@@ -215,7 +215,7 @@ Technical Note: If it seems like something is broken, try to refresh your browse
 			fclose($f_json);
 	?>
 	<hr/>
-	<?php include 'footer.php'; ?>
+	<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/footer.php'); ?>
 </div>
 </div>
 </body>
@@ -329,7 +329,8 @@ function getHTMLContent($head)
 			<script src=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js\" integrity=\"sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz\" crossorigin=\"anonymous\"></script>
 		</head>
 		<body>		<div class=\"container\">
-				<?php include '../../header.php'; ?>
+		<?php include(\$_SERVER['DOCUMENT_ROOT'].'/_includes/header.php'); ?>
+
 				<div align=\"center\">
 					<!--HTML CONTENT HERE-->
 					<?php
@@ -366,7 +367,7 @@ function getHTMLContent($head)
 			print \"<hr><div>\";
 			print \$description;
 			print \"</div>\";}
-			include '../../footer.php'; 
+			<?php include(\$_SERVER['DOCUMENT_ROOT'].'/_includes/footer.php'); ?>
 			?>
 				</div>		</div>
 		</body>

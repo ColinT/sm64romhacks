@@ -1,6 +1,6 @@
 <?php
-include('../_includes/db.php');
-include('../_includes.functions.php');
+include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php';
+
 
 if(!isset($_GET['code'])){
     echo 'no code';
