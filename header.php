@@ -1,3 +1,17 @@
+<?php
+session_start();
+if(isset($_SESSION['userData'])) {
+  extract($_SESSION['userData']);
+  $avatar_url = "https://cdn.discordapp.com/avatars/$discord_id/$avatar.jpg";
+  $_SESSION["logged_in"] = true;
+}
+else $_SESSION["logged_in"] = false;
+
+
+
+?>
+
+
 <script>
 setInterval(() => {
   var t = new Date();
@@ -65,6 +79,19 @@ setInterval(() => {
 	<li class="nav-item">
 	  <a class="nav-link" href="https://ko-fi.com/marvjungs">Support!</a>
 	</li>
+    <?php if(!$_SESSION["logged_in"]) { ?>    
+      <li class="nav-item"><a href="/login" class="nav-link">Login</a></li>
+    <?php }?>
+    <?php if($_SESSION["logged_in"]) { ?>      
+      <li class="nav-item dropdown">          
+        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <img src="<?php echo $avatar_url;?>" width=16 height=16 />&nbsp;<?php echo $global_name;?>
+          </a>
+          <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="/login/dashboard.php">Dashboard</a></li>
+          <hr/>
+          <li><a class="dropdown-item" href="/login/logout.php">Logout</a></li>
+          </ul></li><?php } ?>
       </ul>
     </div>
   <!--</div>-->
