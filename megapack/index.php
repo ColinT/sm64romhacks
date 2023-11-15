@@ -1,4 +1,11 @@
- <!DOCTYPE HTML>
+<?php
+
+include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php';
+
+?>
+
+
+<!DOCTYPE HTML>
 <html>
 	<head>
 		<title>sm64romhacks - Megapack</title>

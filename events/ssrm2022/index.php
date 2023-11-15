@@ -1,3 +1,11 @@
+<?php
+
+include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php';
+
+?>
+
+
+
 <!DOCTYPE HTML>
 <html>
 	<!--BEGINNING OF HEAD-->
