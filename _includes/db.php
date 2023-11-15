@@ -1,9 +1,12 @@
 <?php
 
-$host = "localhost";
-$user = "db";
-$pass = "db";
-$db='new_application';
+include($_SERVER['DOCUMENT_ROOT'].'/_includes/config.php');
+
+
+$host = DB_HOST;
+$user = DB_USER;
+$pass = DB_PASS;
+$db = DB_NAME;
 
 try {
   $pdo = new PDO("mysql:host=$host;dbname=$db", $user, $pass);
@@ -135,6 +138,48 @@ function getNewspostFromDatabase($pdo, $post_id){
 
 function getAllNewspostsFromDatabase($pdo){
     $sql = "SELECT * FROM news ORDER BY post_id desc";
+    try {
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $data;
+    } catch (Exception $e) {
+        echo $e;
+    }
+}
+
+function addHackToDatabase($pdo,$hack_name,$hack_version,$hack_author,$hack_starcount,$hack_release_date,$hack_patchname,$hack_tags){
+    $sql = "INSERT INTO hacks (hack_name,hack_version,hack_author,hack_starcount,hack_release_date,hack_patchname,hack_tags) VALUES (:hack_name,:hack_version,:hack_author,:hack_starcount,:hack_release_date,:hack_patchname,:hack_tags)";
+    try {
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([
+            'hack_name'=>$hack_name,
+            'hack_version'=>$hack_version,
+            'hack_author'=>$hack_author,
+            'hack_starcount'=>$hack_starcount,
+            'hack_release_date'=>$hack_release_date,
+            'hack_patchname'=>$hack_patchname,
+            'hack_tags'=>$hack_tags
+        ]);
+    } catch (Exception $e) {
+        echo $e;
+    }
+}
+
+function getAllHacksFromDatabase($pdo){
+    $sql = "SELECT * FROM hacks ORDER BY hack_name";
+    try {
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $data;
+    } catch (Exception $e) {
+        echo $e;
+    }
+}
+
+function getAllUniqueHacksFromDatabase($pdo){
+    $sql = "SELECT DISTINCT hack_name AS name, hack_tags, (SELECT hack_release_date FROM hacks WHERE hack_name = name AND hack_release_date <> \"\" LIMIT 1) AS release_date FROM hacks ORDER BY hack_name;";
     try {
         $stmt = $pdo->prepare($sql);
         $stmt->execute();
