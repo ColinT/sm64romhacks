@@ -38,7 +38,6 @@ function updateUserInDatabase($pdo,$discord_id,$discord_avatar,$discord_email,$d
             discord_email = '$discord_email',
             discord_username = '$discord_username'
             WHERE discord_id = '$discord_id'";
-                print($sql);
 
     try {
             $stmt = $pdo->prepare($sql);
@@ -166,6 +165,52 @@ function addHackToDatabase($pdo,$hack_name,$hack_version,$hack_author,$hack_star
     }
 }
 
+function getHackFromDatabase($pdo, $hack_name) {
+    $sql = "SELECT * FROM hacks WHERE hack_name=:hack_name ORDER BY hack_version DESC";
+    try {
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([
+            'hack_name'=>$hack_name
+        ]);
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $data;
+    } catch (Exception $e) {
+        echo $e;
+    }
+
+}
+
+function getRandomHackFromDatabase($pdo) {
+    $sql = "SELECT * FROM hacks ORDER BY RAND() LIMIT 1";
+    try {
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $data;
+    } catch (Exception $e) {
+        echo $e;
+    }
+
+}
+
+function updateHackInDatabase($pdo,$hack_name,$hack_version,$hack_author,$hack_starcount,$hack_release_date,$hack_patchname,$hack_tags){
+    $sql = "UPDATE hacks SET 
+            hack_name = '$hack_name',
+            hack_version = '$hack_version',
+            hack_author = '$hack_author',
+            hack_starcount = '$hack_starcount',
+            hack_release_date = '$hack_release_date',
+            hack_patchname = '$hack_patchname',
+            hack_tags = '$hack_tags'
+            WHERE hack_name = '$hack_name'";
+    try {
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+    } catch (Exception $e) {
+        echo $e;
+    }
+}
+
 function getAllHacksFromDatabase($pdo){
     $sql = "SELECT * FROM hacks ORDER BY hack_name";
     try {
@@ -179,11 +224,23 @@ function getAllHacksFromDatabase($pdo){
 }
 
 function getAllUniqueHacksFromDatabase($pdo){
-    $sql = "SELECT DISTINCT hack_name AS name, hack_tags, (SELECT hack_release_date FROM hacks WHERE hack_name = name AND hack_release_date <> \"\" LIMIT 1) AS release_date FROM hacks ORDER BY hack_name;";
+    $sql = "SELECT hack_name, MIN(hack_release_date) AS release_date, MIN(hack_author) AS author, hack_tags FROM hacks GROUP BY hack_name";
     try {
         $stmt = $pdo->prepare($sql);
         $stmt->execute();
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $data;
+    } catch (Exception $e) {
+        echo $e;
+    }
+}
+
+function getAmountOfHacksInDatabase($pdo){
+    $sql = "SELECT COUNT(*) AS 'count' FROM hacks";
+    try {
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC); 
         return $data;
     } catch (Exception $e) {
         echo $e;

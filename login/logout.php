@@ -3,6 +3,6 @@
 
 session_start();
 session_destroy();
-header("Location: /faq/index.php");
+header("Location: /");
 exit();
 ?>
