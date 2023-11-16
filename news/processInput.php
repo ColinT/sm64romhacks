@@ -17,7 +17,7 @@ if(!$_SESSION['logged_in'] || !in_array($_SESSION['userData']['discord_id'], ADM
 
 addNewspostToDatabase($pdo, $post_title, $post_text, $post_author);
 
-header("Location: /news");
+header("Location: /");
 die();
 ?>
 

@@ -15,6 +15,6 @@ if($post_id == 0 || !$_SESSION['logged_in'] || !in_array($_SESSION['userData']['
 
 deleteNewspostFromDatabase($pdo, $post_id);
 
-header("Location: /news");
+header("Location: /");
 
 ?>

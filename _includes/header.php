@@ -37,7 +37,7 @@ setInterval(() => {
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link" href="/">ROM Hacks </a>
+          <a class="nav-link" href="/hacks">ROM Hacks </a>
         </li> 
         <li class="nav-item">
           <a class="nav-link" href="/megapack">Megapack</a>
@@ -80,7 +80,7 @@ setInterval(() => {
 	  <a class="nav-link" href="https://ko-fi.com/marvjungs">Support!</a>
 	</li>
     <?php if(!$_SESSION["logged_in"]) { ?>    
-      <li class="nav-item"><a href="/login" class="nav-link">Login</a></li>
+      <li class="nav-item"><a href="/login" class="nav-link" title="By logging in you agree with our Terms of Service">Login</a></li>
     <?php }?>
     <?php if($_SESSION["logged_in"]) { ?>      
       <li class="nav-item dropdown">          

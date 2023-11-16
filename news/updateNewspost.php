@@ -15,6 +15,6 @@ $post_id = intval($_POST['post_id']);
 
 updateNewspostInDatabase($pdo,$post_id,$post_title,$post_text);
 
-header("Location: /news");
+header("Location: /");
 die();
 ?>
