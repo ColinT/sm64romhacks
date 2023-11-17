@@ -58,7 +58,9 @@
 
 				<div class="table-responsive">
 				<table class="table-sm table-bordered" id="myTable">
-					<tr><th><b>Hackname</b></th><th><b>Creator</b></th><th><b>Initial Release Date (yyyy-mm-dd)</b></th><th hidden><b>Tag</b></th><th class="border-0"><a class="btn btn-success btn-block text-nowrap" href="addHack.php">Add Hack</a></th></tr>
+					<?php $add_button = ($_SESSION['logged_in'] && in_array($_SESSION['userData']['discord_id'], ADMIN_SITE)) ? "<a class=\"btn btn-success btn-block text-nowrap\" href=\"addHack.php\">Add Hack</a>" : "&nbsp;"; ?>
+
+					<tr><th><b>Hackname</b></th><th class="creator"><b>Creator</b></th><th><b>Initial Release Date (yyyy-mm-dd)</b></th><th hidden><b>Tag</b></th><th class="border-0"><?php print($add_button);?></th></tr>
 				<?Php 
 				$amount = getAmountOfHacksInDatabase($pdo)[0]['count'];
 				if($amount == 0){
@@ -75,8 +77,9 @@
 						$creator = $authors;
 						$tag=str_replace("\n", "", $tag);
 						$tag=substr_replace($tag, "", -1);
+						$description="";
 						if(strlen($date) == 0) $date = "9999-12-31";
-						addHackToDatabase($pdo, $name, $version, $creator, $amount, $date, $dl, $tag);
+						addHackToDatabase($pdo, $name, $version, $creator, $amount, $date, $dl, $tag,$description);
 					}	
 				}
 				$data = (getAllUniqueHacksFromDatabase($pdo));
@@ -89,7 +92,7 @@
 					$hack_tags = $entry['hack_tags'];
 
 					$delete_button = ($_SESSION['logged_in'] && in_array($_SESSION['userData']['discord_id'], ADMIN_SITE)) ? "<a class=\"btn btn-danger btn-block text-nowrap\" href=\"deleteHack.php?hack_name=$hack_name\">Delete Hack</a>" : "&nbsp;";
-					print("<tr><td><a href=\"/hacks/$dir_name\">$hack_name</a></td><td>$hack_author</td><td>$hack_release_date</td><td hidden>$hack_tags</td><td class=\"border-0\">$delete_button</td></tr>");
+					print("<tr><td><a href=\"/hacks/$dir_name\">$hack_name</a></td><td class=\"creator\">$hack_author</td><td>$hack_release_date</td><td hidden>$hack_tags</td><td class=\"border-0\">$delete_button</td></tr>");
 				}
 				?>
 				</table>

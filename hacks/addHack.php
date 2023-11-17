@@ -26,7 +26,7 @@ if(!$_SESSION['logged_in'] || !in_array($_SESSION['userData']['discord_id'], ADM
 	<body>		<div class="container">
 	<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/header.php'); ?>
 			<div align="center">
-                <form action="/hacks/processInput.php" method="post">
+                <form action="/hacks/processInput.php" method="post" enctype="multipart/form-data">
                     <table class="table">
                     <tr>
                         <td>
@@ -52,7 +52,7 @@ if(!$_SESSION['logged_in'] || !in_array($_SESSION['userData']['discord_id'], ADM
                         </td>
                         <td>
                             <label for="hack_author" class="col-form-label text-nowrap">Author:</label>
-                        </td>
+                            <small id="hack_author_help" class="form-text text-muted">Seperate multiple author with &quot;&nbsp;&amp;&nbsp;&quot;</small>                        </td>
                         <td>
                             <input type="text" name="hack_author" class="form-control">
                         </td>
@@ -74,7 +74,7 @@ if(!$_SESSION['logged_in'] || !in_array($_SESSION['userData']['discord_id'], ADM
                             <label for="hack_patchname" class="col-form-label text-nowrap">Patchname:</label>
                         </td>
                         <td>
-                            <input type="file" name="hack_patchname" class="form-control">
+                            <input type="file" name="hack_patchname" class="form-control" required>
                         </td>
                     </tr>
                     <tr>
