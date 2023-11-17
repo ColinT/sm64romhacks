@@ -13,6 +13,11 @@ if(!isset($hack_name) || !$_SESSION['logged_in'] || !in_array($_SESSION['userDat
 	die();
 }
 
+$data = getHackFromDatabase($pdo, $hack_name);
+foreach($data as $entry) {
+	unlink($_SERVER['DOCUMENT_ROOT'] . '/patch/' . $entry['hack_patchname'] . '.zip');
+}
+
 deleteHackFromDatabase($pdo, $hack_name);
 
 header("Location: /hacks");
