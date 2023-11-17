@@ -147,8 +147,8 @@ function getAllNewspostsFromDatabase($pdo){
     }
 }
 
-function addHackToDatabase($pdo,$hack_name,$hack_version,$hack_author,$hack_starcount,$hack_release_date,$hack_patchname,$hack_tags){
-    $sql = "INSERT INTO hacks (hack_name,hack_version,hack_author,hack_starcount,hack_release_date,hack_patchname,hack_tags) VALUES (:hack_name,:hack_version,:hack_author,:hack_starcount,:hack_release_date,:hack_patchname,:hack_tags)";
+function addHackToDatabase($pdo,$hack_name,$hack_version,$hack_author,$hack_starcount,$hack_release_date,$hack_patchname,$hack_tags,$hack_description){
+    $sql = "INSERT INTO hacks (hack_name,hack_version,hack_author,hack_starcount,hack_release_date,hack_patchname,hack_tags,hack_description) VALUES (:hack_name,:hack_version,:hack_author,:hack_starcount,:hack_release_date,:hack_patchname,:hack_tags,:hack_description)";
     try {
         $stmt = $pdo->prepare($sql);
         $stmt->execute([
@@ -158,7 +158,8 @@ function addHackToDatabase($pdo,$hack_name,$hack_version,$hack_author,$hack_star
             'hack_starcount'=>$hack_starcount,
             'hack_release_date'=>$hack_release_date,
             'hack_patchname'=>$hack_patchname,
-            'hack_tags'=>$hack_tags
+            'hack_tags'=>$hack_tags,
+            'hack_description'=>$hack_description
         ]);
     } catch (Exception $e) {
         echo $e;
@@ -235,6 +236,18 @@ function getAllUniqueHacksFromDatabase($pdo){
     }
 }
 
+function getAllTagsFromDatabase($pdo) {
+    $sql = "SELECT hack_tags FROM hacks WHERE hack_tags <> \"\" GROUP BY hack_tags ORDER BY hack_tags";
+    try {
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC); 
+        return $data;
+    } catch (Exception $e) {
+        echo $e;
+    }
+}
+
 function getAmountOfHacksInDatabase($pdo){
     $sql = "SELECT COUNT(*) AS 'count' FROM hacks";
     try {
@@ -256,6 +269,5 @@ function deleteHackFromDatabase($pdo, $hack_name) {
         echo $e;
         header("Location: /404.php");
     }
-
 }
 
