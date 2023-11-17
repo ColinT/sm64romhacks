@@ -42,6 +42,7 @@ const TAG_COLUMN_INDEX = 3;
 
 async function main() {
   const myTable = document.getElementById("myTable");
+  document.getElementById("hack_release_date").setAttribute("max", new Date().toISOString().slice(0, 10));
 
 
   /** @type {HackTableRowContent[]} */
