@@ -57,8 +57,8 @@
 
 
 				<div class="table-responsive">
-				<table class="table-sm" id="myTable" border=1>
-					<tr><th><b>Hackname</b></th><th><b>Creator</b></th><th><b>Initial Release Date (yyyy-mm-dd)</b></th><th hidden><b>Tag</b></th></tr>
+				<table class="table-sm table-bordered" id="myTable">
+					<tr><th><b>Hackname</b></th><th><b>Creator</b></th><th><b>Initial Release Date (yyyy-mm-dd)</b></th><th hidden><b>Tag</b></th><th class="border-0"><a class="btn btn-success btn-block text-nowrap" href="addHack.php">Add Hack</a></th></tr>
 				<?Php 
 				$amount = getAmountOfHacksInDatabase($pdo)[0]['count'];
 				if($amount == 0){
@@ -87,7 +87,9 @@
 					$hack_author = $entry['author'];
 					$hack_release_date = $entry['release_date'];
 					$hack_tags = $entry['hack_tags'];
-					print("<tr><td><a href=\"/hacks/$dir_name\">$hack_name</a></td><td>$hack_author</td><td>$hack_release_date</td><td hidden>$hack_tags</td></tr>");
+
+					$delete_button = ($_SESSION['logged_in'] && in_array($_SESSION['userData']['discord_id'], ADMIN_SITE)) ? "<a class=\"btn btn-danger btn-block text-nowrap\" href=\"deleteHack.php?hack_name=$hack_name\">Delete Hack</a>" : "&nbsp;";
+					print("<tr><td><a href=\"/hacks/$dir_name\">$hack_name</a></td><td>$hack_author</td><td>$hack_release_date</td><td hidden>$hack_tags</td><td class=\"border-0\">$delete_button</td></tr>");
 				}
 				?>
 				</table>

@@ -246,3 +246,16 @@ function getAmountOfHacksInDatabase($pdo){
         echo $e;
     }
 }
+
+function deleteHackFromDatabase($pdo, $hack_name) {
+    $sql = "DELETE FROM hacks WHERE hack_name = '$hack_name'";
+    try {
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+    } catch (Exception $e) {
+        echo $e;
+        header("Location: /404.php");
+    }
+
+}
+
