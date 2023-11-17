@@ -83,7 +83,8 @@ $_SESSION['userData'] = [
     'email'=>stripChars($userData['email']),
     'global_name'=>stripChars($userData['global_name'])
 ];
-header("location: dashboard.php");
+header("Location: " . $_SESSION['redirect']);
+//header("Location: dashboard.php");
 exit();
 
 ?>

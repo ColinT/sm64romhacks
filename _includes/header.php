@@ -7,6 +7,7 @@ if(isset($_SESSION['userData'])) {
 }
 else $_SESSION["logged_in"] = false;
 
+$_SESSION['redirect'] = $_SERVER['REQUEST_URI'];
 
 
 ?>
