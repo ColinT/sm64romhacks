@@ -34,6 +34,10 @@
                         print "<tr><td>$id</td><td>$hack_name</td><td>$version</td><td><u><a href=$ref>Download</a></u></td><td>$creator</td><td>$amount</td><td>$date</td></tr>";
                     }
 			    print "</table>";?> <br/>
+                <div><table>
+                    <tr><td class="align-top text-right"><a class="btn btn-primary text-nowrap">Edit Description</a></td></tr>
+                <tr><td class="bg-dark"><?php $hack_description = $data[0]['hack_description']; print($hack_description); ?></td>
+                </tr></table></div>
 
 			<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/footer.php'); ?>
 				</div>		</div>
