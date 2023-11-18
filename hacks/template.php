@@ -35,8 +35,12 @@
                     }
 			    print "</table>";?> <br/>
                 <div><table>
-                    <tr><td class="align-top text-right"><a class="btn btn-primary text-nowrap">Edit Description</a></td></tr>
-                <tr><td class="bg-dark"><?php $hack_description = $data[0]['hack_description']; print($hack_description); ?></td>
+					<?php
+						$description_button = ($_SESSION['logged_in'] && in_array($_SESSION['userData']['discord_id'], ADMIN_SITE)) ? "<a class=\"btn btn-primary text-nowrap\" href=\"editHack.php?hack_name=$hack_name\">Edit Description</a>" : "&nbsp;";
+
+					?>
+                    <tr><td class="align-top text-right"><?php print($description_button);?></td></tr>
+                <tr><td class="bg-dark" id="hack_description"><?php $hack_description = $data[0]['hack_description']; print($hack_description); ?></td>
                 </tr></table></div>
 
 			<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/footer.php'); ?>
