@@ -18,16 +18,16 @@ $hack_description = $_POST['hack_description'];
 
 $result = move_uploaded_file($_FILES['hack_patchname']['tmp_name'], $_SERVER['DOCUMENT_ROOT'].'/patch/'.$hack_patchname);
 $hack_patchname = substr($hack_patchname, 0, -4);
-//if(!$result) {header("Location: /404.php"); die();}
+if(!$result) {header("Location: /404.php"); die();}
 if(!$_SESSION['logged_in'] || !in_array($_SESSION['userData']['discord_id'], ADMIN_SITE) || !isset($hack_name) || !isset($hack_version)) {
-    //header("Location: /login/error.php");
-    //die();
+    header("Location: /login/error.php");
+    die();
 }
 
 
-//addHackToDatabase($pdo, $hack_name, $hack_version, $hack_author, $hack_starcount, $hack_release_date, $hack_patchname, $hack_tags, $hack_description);
+addHackToDatabase($pdo, $hack_name, $hack_version, $hack_author, $hack_starcount, $hack_release_date, $hack_patchname, $hack_tags, $hack_description);
 
-//header("Location: /");
-//die();
+header("Location: /");
+die();
 ?>
 
