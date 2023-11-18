@@ -36,7 +36,8 @@
 			    print "</table>";?> <br/>
                 <div><table>
 					<?php
-						$description_button = ($_SESSION['logged_in'] && in_array($_SESSION['userData']['discord_id'], ADMIN_SITE)) ? "<a class=\"btn btn-primary text-nowrap\" href=\"editHack.php?hack_name=$hack_name\">Edit Description</a>" : "&nbsp;";
+						$description_button_text = strlen($data[0]['hack_description']) == 0 ? "Add Description" : "Edit Description";
+						$description_button = ($_SESSION['logged_in'] && in_array($_SESSION['userData']['discord_id'], ADMIN_SITE)) ? "<a class=\"btn btn-primary text-nowrap\" href=\"editHack.php?hack_name=$hack_name\">$description_button_text</a>" : "&nbsp;";
 
 					?>
                     <tr><td class="align-top text-right"><?php print($description_button);?></td></tr>
