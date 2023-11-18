@@ -21,7 +21,7 @@ include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php';
 	<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/header.php'); ?>
 			<div align="center">
 				<!--HTML CONTENT HERE-->
-			<?php include '../footer.php'; ?>	
+			<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/footer.php'); ?>	
 			</div>		</div>
 	</body>
 </html>
