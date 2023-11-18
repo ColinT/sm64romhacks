@@ -194,20 +194,30 @@ function getRandomHackFromDatabase($pdo) {
 
 }
 
-function updateHackInDatabase($pdo,$hack_name,$hack_version,$hack_author,$hack_starcount,$hack_release_date,$hack_patchname,$hack_tags){
+function updatePatchInDatabase($pdo,$hack_name,$hack_version,$hack_author,$hack_starcount,$hack_release_date,$hack_patchname,$hack_tags){
     $sql = "UPDATE hacks SET 
-            hack_name = '$hack_name',
-            hack_version = '$hack_version',
-            hack_author = '$hack_author',
-            hack_starcount = '$hack_starcount',
+            hack_name = \"$hack_name\",
+            hack_version = \"$hack_version\",
+            hack_author = \"$hack_author\",
+            hack_starcount = $hack_starcount,
             hack_release_date = '$hack_release_date',
-            hack_patchname = '$hack_patchname',
-            hack_tags = '$hack_tags'
-            WHERE hack_name = '$hack_name'";
+            hack_patchname = \"$hack_patchname\",
+            hack_tags = \"$hack_tags\"
+            WHERE hack_name = \"$hack_name\"";
     try {
         $stmt = $pdo->prepare($sql);
         $stmt->execute();
     } catch (Exception $e) {
+        echo $e;
+    }
+}
+
+function updateHackInDatabase($pdo, $hack_name, $hack_description) {
+    $sql = "UPDATE hacks SET hack_description = \"$hack_description\" WHERE hack_name = \"$hack_name\"";
+    try {
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+    } catch(Exception $e) {
         echo $e;
     }
 }
