@@ -12,7 +12,7 @@ else {
 	$hack_name = getURLDecodedName($hack_name);
 	$data = getHackFromDatabase($pdo, $hack_name);
 	if(sizeof($data) == 0) {
-		header("Location: /404.php");
+		header("Location: /hacks");
 		die();
 	}
 	include("template.php");
