@@ -208,16 +208,15 @@ function getRandomHackFromDatabase($pdo) {
 
 }
 
-function updatePatchInDatabase($pdo,$hack_name,$hack_version,$hack_author,$hack_starcount,$hack_release_date,$hack_patchname,$hack_tags){
+function updatePatchInDatabase($pdo,$hack_id,$hack_name,$hack_version,$hack_author,$hack_starcount,$hack_release_date,$hack_tags){
     $sql = "UPDATE hacks SET 
             hack_name = \"$hack_name\",
             hack_version = \"$hack_version\",
             hack_author = \"$hack_author\",
             hack_starcount = $hack_starcount,
             hack_release_date = '$hack_release_date',
-            hack_patchname = \"$hack_patchname\",
             hack_tags = \"$hack_tags\"
-            WHERE hack_name = \"$hack_name\"";
+            WHERE hack_id = $hack_id";
     try {
         $stmt = $pdo->prepare($sql);
         $stmt->execute();
