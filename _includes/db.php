@@ -181,6 +181,20 @@ function getHackFromDatabase($pdo, $hack_name) {
 
 }
 
+function getPatchFromDatabase($pdo, $hack_id) {
+    $sql = "SELECT * FROM hacks WHERE hack_id=:hack_id";
+    try {
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([
+            'hack_id'=>$hack_id
+        ]);
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $data;
+    } catch(Exception $e) {
+        echo $e;
+    }
+}
+
 function getRandomHackFromDatabase($pdo) {
     $sql = "SELECT * FROM hacks ORDER BY RAND() LIMIT 1";
     try {
@@ -277,7 +291,16 @@ function deleteHackFromDatabase($pdo, $hack_name) {
         $stmt->execute();
     } catch (Exception $e) {
         echo $e;
-        header("Location: /404.php");
+        //header("Location: /404.php");
     }
 }
 
+function deletePatchFromDatabase($pdo, $hack_id) {
+    $sql = "DELETE FROM hacks WHERE hack_id = $hack_id";
+    try {
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+    } catch(Exception $e) {
+        echo $e;
+    }
+}

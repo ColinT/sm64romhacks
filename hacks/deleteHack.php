@@ -7,19 +7,32 @@ include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php';
 session_start();
 
 $hack_name = $_GET['hack_name'];
+$hack_id = intval($_GET['hack_id']);
+var_dump(isset($hack_name), $hack_id);
 
-if(!isset($hack_name) || !$_SESSION['logged_in'] || !in_array($_SESSION['userData']['discord_id'], ADMIN_SITE)) {
+
+if(!isset($hack_name) && $hack_id == 0 || (isset($hack_name) && $hack_id != 0) || !$_SESSION['logged_in'] || !in_array($_SESSION['userData']['discord_id'], ADMIN_SITE)) {
 	header("Location: /login/error.php");
 	die();
 }
 
-$data = getHackFromDatabase($pdo, $hack_name);
-foreach($data as $entry) {
+if(isset($hack_name)) {
+	$data = getHackFromDatabase($pdo, $hack_name);
+	foreach($data as $entry) {
 	unlink($_SERVER['DOCUMENT_ROOT'] . '/patch/' . $entry['hack_patchname'] . '.zip');
+	}	
+	deleteHackFromDatabase($pdo, $hack_name);
+	header("Location: /hacks");
+
 }
 
-deleteHackFromDatabase($pdo, $hack_name);
+else {
+	$data = getPatchFromDatabase($pdo, $hack_id);
+	$hack_patchname = $data[0]['hack_patchname'];
+	unlink($_SERVER['DOCUMENT_ROOT'] . '/patch/' . $hack_patchname . '.zip');
+	deletePatchFromDatabase($pdo, $hack_id);
+	header("Location: /hacks/" .  getURLEncodedName($data[0]['hack_name']));
+}
 
-header("Location: /hacks");
 
 ?>
