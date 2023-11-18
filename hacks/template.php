@@ -18,8 +18,9 @@
 					<!--HTML CONTENT HERE-->
 					<?php
 					print "<h1><u>$hack_name</u></h1>";
-		        	print "<table id='myTable' border=1 align=center>";
-			        print "<tr><th><b>Hack ID</b></th><th><b>Hackname</b></th><th>Version</th><th><b>Downloadlink</b></th><th><b>Creator</b></th><th><b>Starcount</b></th><th>Date (Format: yyyy-mm-dd)</th><th>&nbsp;</th></tr>";
+					print("<div class=\"table-responsive\">");
+		        	print "<table class=\"table-sm table-bordered\">";
+			        print "<tr><th hidden><b>Hack ID</b></th><th><b>Hackname</b></th><th>Version</th><th><b>Downloadlink</b></th><th><b>Creator</b></th><th><b>Starcount</b></th><th>Date</th><th>Tag</th><th colspan=2 class=\"border-0\">&nbsp;</th></tr>";
 				    $fileending=".zip";
                     foreach($data as $entry) 
                     {
@@ -31,11 +32,12 @@
                         $date = $entry['hack_release_date'];
                         $link=$dl.$fileending;
                         $ref="'/patch/$link'"; 
-						$delete_button = ($_SESSION['logged_in'] && in_array($_SESSION['userData']['discord_id'], ADMIN_SITE)) ? "<a class=\"btn btn-danger btn-block text-nowrap\" href=\"deleteHack.php?hack_id=$id\">Delete Patch</a>" : "&nbsp;";
+						$tag = $entry['hack_tags'];
+						$admin_buttons = ($_SESSION['logged_in'] && in_array($_SESSION['userData']['discord_id'], ADMIN_SITE)) ? "<a class=\"btn btn-danger btn-block text-nowrap\" href=\"deleteHack.php?hack_id=$id\">Delete Patch</a></th><th class=\"border-0\"><a class=\"btn btn-info btn-block text-nowrap\" href=\"editHack.php?hack_id=$id\">Edit Patch</a>" : "&nbsp;";
    
-                        print "<tr><td>$id</td><td>$hack_name</td><td>$version</td><td><u><a href=$ref>Download</a></u></td><td>$creator</td><td>$amount</td><td>$date</td><td>$delete_button</td></tr>";
+                        print "<tr><td hidden>$id</td><td>$hack_name</td><td>$version</td><td><u><a href=$ref>Download</a></u></td><td>$creator</td><td>$amount</td><td>$date</td><td>$tag</td><td class=\"border-0\">$admin_buttons</td></tr>\n";
                     }
-			    print "</table>";?> <br/>
+			    print "</table>";?></div> <br/>
                 <div><table>
 					<?php
 						$description_button_text = strlen($data[0]['hack_description']) == 0 ? "Add Description" : "Edit Description";
