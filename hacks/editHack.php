@@ -2,20 +2,22 @@
 
 include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php';
 
+$hack_name = $_GET['hack_name'];
+$hack_id = intval($_GET['hack_id']);
 
 session_start();
-if(!$_SESSION['logged_in'] || !in_array($_SESSION['userData']['discord_id'], ADMIN_NEWS)) {
+if(!isset($hack_name) & $hack_id == 0 || isset($hack_name) && $hack_id != 0 || !$_SESSION['logged_in'] || !in_array($_SESSION['userData']['discord_id'], ADMIN_NEWS)) {
 	header("Location: /login/error.php");
 	die();
 }
-
-$data = getHackFromDatabase($pdo, $_GET['hack_name']);
+if(isset($hack_name)) $hackdata = getHackFromDatabase($pdo, $_GET['hack_name']);
+else $hackdata = getPatchFromDatabase($pdo, $hack_id);
 ?>
 <!DOCTYPE HTML>
 <html>
 	<!--BEGINNING OF HEAD-->
 	<head>
-		<title>sm64romhacks - Add Hack</title> <!--CHANGE TITLE-->
+		<title>sm64romhacks - Edit Hack</title> <!--CHANGE TITLE-->
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<meta name="keywords" content="super mario, romhacks, hack, speedrun, sm64hacks, sm64romhacks, rom, modification" />
 		<meta name="description" content="Welcome to SM64ROMHacks! We have a really big collection of SM64 ROM Hacks which wait to be played! Community News/Events will also be tracked here" />
@@ -28,6 +30,7 @@ $data = getHackFromDatabase($pdo, $_GET['hack_name']);
 	<body>		<div class="container">
 	<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/header.php'); ?>
 			<div align="center">
+                <?php if(isset($hack_name)) { ?>
                 <form action="/hacks/updateHack.php" method="post">
                     <table class="table">
                     <tr>
@@ -35,8 +38,8 @@ $data = getHackFromDatabase($pdo, $_GET['hack_name']);
                             <label for="hack_name" class="col-form-label text-nowrap">Hack Name:</label>
                         </td>
                         <td>
-                            <input type="hidden" class="form-control" name="hack_name" id="hack_name" value="<?php print($data[0]['hack_name']); ?>">  
-                            <input type="text" class="form-control" value="<?php print($data[0]['hack_name']); ?>" disabled>  
+                            <input type="hidden" class="form-control" name="hack_name" id="hack_name" value="<?php print($hackdata[0]['hack_name']); ?>">  
+                            <input type="text" class="form-control" value="<?php print($hackdata[0]['hack_name']); ?>" disabled>  
                         </td>
                     </tr>
                     <tr>
@@ -44,15 +47,95 @@ $data = getHackFromDatabase($pdo, $_GET['hack_name']);
                         <label for="hack_description" class="col-form-label text-nowrap">Description:</label>
                         </td>
                         <td colspan=3>
-                            <textarea name="hack_description" class="form-control" rows="10" required><?php print(str_replace('<br/>', "\r\n", $data[0]['hack_description']));?></textarea>
+                            <textarea name="hack_description" class="form-control" rows="10" required><?php print(str_replace('<br/>', "\r\n", $hackdata[0]['hack_description']));?></textarea>
                         </td>
                     </tr>
                     <tr>
                         <td>&nbsp;</td>
-                        <td class="text-center"><button type="submit" class="btn btn-secondary align-middle">Add Hack!</button></td>
+                        <td class="text-center"><button type="submit" class="btn btn-secondary align-middle">Add Description!</button></td>
                     </tr>
                     </table>
                 </form>
+                <?php } else { ?>
+                    <form action="/hacks/updateHack.php" method="post">
+                    <table class="table">
+                    <tr>
+                        <td>
+                            <label for="hack_name" class="col-form-label text-nowrap">Hack Name:</label>
+                        </td>
+                        <td>
+                            <input class="form-control" list="hack_name_options" name="hack_name" value="<?php print($hackdata[0]['hack_name']); ?>" required>                            
+                            <datalist id="hack_name_options">
+                                <?php 
+                                $data = getAllUniqueHacksFromDatabase($pdo);
+                                foreach($data as $entry) {
+                                    $name = $entry['hack_name'];
+                                    print("<option value=\"$name\">");
+                                }
+                                ?>
+                            </datalist>
+                        </td>
+                        <td>
+                            <label for="hack_version" class="col-form-label text-nowrap">Version:</label>
+                        </td>
+                        <td>
+                            <input type="text" name="hack_version" class="form-control" value="<?php print($hackdata[0]['hack_version']); ?>" required>
+                        </td>
+                        <td>
+                            <label for="hack_author" class="col-form-label text-nowrap">Author:</label>
+                            <small id="hack_author_help" class="form-text text-muted">Seperate multiple author with &quot;&nbsp;&amp;&nbsp;&quot;</small>                        </td>
+                        <td>
+                            <input type="text" name="hack_author" class="form-control" value="<?php print($hackdata[0]['hack_author']);?>">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="hack_starcount" class="col-form-label text-nowrap">Starcount:</label>
+                        </td>
+                        <td>
+                            <input type="number" name="hack_starcount" class="form-control" min="0" value="<?php print($hackdata[0]['hack_starcount']);?>">
+                        </td>
+                        <td>
+                            <label for="hack_release_date" class="col-form-label text-nowrap">Release Date:</label>
+                        </td>
+                        <td>
+                            <input type="date" name="hack_release_date" class="form-control" value="<?php print($hackdata[0]["hack_release_date"]);?>">
+                        </td>
+                        <td>
+                            <label for="hack_patchname" class="col-form-label text-nowrap">Patchname:</label>
+                        </td>
+                        <td>
+                            <input type="file" name="hack_patchname" class="form-control" disabled>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan=2><input type="hidden" class="form-control" name="hack_id" id="hack_id" value="<?php print($hackdata[0]['hack_id']); ?>"> </td>
+                        <td>
+                            <label for="hack_tags" class="col-form-label text-nowrap">Tags:</label>
+                        </td>
+                        <td colspan=2>
+                            <input class="form-control" list="hack_tags_options" name="hack_tags" value="<?php print($hackdata[0]['hack_tags']);?>">  
+                            <datalist id="hack_tags_options">                          
+                            <?php 
+                                $data = getAllTagsFromDatabase($pdo);
+                                foreach($data as $entry) {
+                                    $tag = $entry['hack_tags'];
+                                    print("<option value=\"$tag\">");
+                                }
+                            ?>
+                            </datalist>
+                        </td>
+                       <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td colspan=2>&nbsp;</td>
+                        <td colspan=2 class="text-center"><button type="submit" class="btn btn-secondary align-middle">Add Hack!</button></td>
+                        <td colspan=2>&nbsp;</td>
+                    </tr>
+                    </table>
+                </form>
+
+                    <?php }?>
                 </div>
 				<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/footer.php'); ?>
 			</div>		</div>
