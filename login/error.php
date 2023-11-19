@@ -2,11 +2,6 @@
 
 include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php';
 
-session_start();
-if(isset($_SESSION['userData'])) {
-  header("Location: /login/dashboard.php");
-  die();
-}
 ?>
 
 
