@@ -83,9 +83,10 @@ else $hackdata = getPatchFromDatabase($pdo, $hack_id);
                         </td>
                         <td>
                             <label for="hack_author" class="col-form-label text-nowrap">Author:</label>
-                            <small id="hack_author_help" class="form-text text-muted">Seperate multiple author with &quot;&nbsp;&amp;&nbsp;&quot;</small>                        </td>
+                        </td>
                         <td>
                             <input type="text" name="hack_author" class="form-control" value="<?php print($hackdata[0]['hack_author']);?>">
+                            <small id="hack_author_help" class="form-text text-muted">Seperate multiple author with &quot;&lt;Name&gt;,&nbsp;&lt;Name&gt;&quot;</small>                        
                         </td>
                     </tr>
                     <tr>
@@ -124,6 +125,7 @@ else $hackdata = getPatchFromDatabase($pdo, $hack_id);
                                 }
                             ?>
                             </datalist>
+                            <small id="hack_author_help" class="form-text text-muted">Seperate multiple author with &quot;&lt;Tag&gt;,&nbsp;&lt;Tag&gt;&quot;</small>                        
                         </td>
                        <td>&nbsp;</td>
                     </tr>

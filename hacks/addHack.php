@@ -52,9 +52,10 @@ if(!$_SESSION['logged_in'] || !in_array($_SESSION['userData']['discord_id'], ADM
                         </td>
                         <td>
                             <label for="hack_author" class="col-form-label text-nowrap">Author:</label>
-                            <small id="hack_author_help" class="form-text text-muted">Seperate multiple author with &quot;&nbsp;&amp;&nbsp;&quot;</small>                        </td>
+                        </td>
                         <td>
                             <input type="text" name="hack_author" class="form-control">
+                            <small id="hack_author_help" class="form-text text-muted">Seperate multiple author with &quot;&lt;Name&gt;,&nbsp;&lt;Name&gt;&quot;</small>
                         </td>
                     </tr>
                     <tr>
@@ -80,6 +81,7 @@ if(!$_SESSION['logged_in'] || !in_array($_SESSION['userData']['discord_id'], ADM
                     <tr>
                         <td>
                             <label for="hack_tags" class="col-form-label text-nowrap">Tags:</label>
+
                         </td>
                         <td>
                             <input class="form-control" list="hack_tags_options" name="hack_tags" placeholder="Type to search...">  
@@ -92,6 +94,8 @@ if(!$_SESSION['logged_in'] || !in_array($_SESSION['userData']['discord_id'], ADM
                                 }
                             ?>
                             </datalist>
+                            <small id="hack_tags_help" class="form-text text-muted">Seperate multiple tags with &quot;&lt;Tag&gt;,&nbsp;&lt;Tag&gt;&quot;</small>                        </td>
+
                         </td>
                         <td>
                             <label for="hack_description" class="col-form-label text-nowrap">Description:</label>
