@@ -1,6 +1,7 @@
 <?php
 
 include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php';
+createHacksDatabase($pdo);
 
 $path = ltrim($_SERVER['REQUEST_URI'], '/');
 $hack_name = explode('/', $path);

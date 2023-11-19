@@ -17,6 +17,23 @@ catch(PDOException $e){
   echo "Connection failed: " . $e->getMessage();
 }
 
+function createUsersDatabase($pdo) {
+    $sql = "CREATE TABLE IF NOT EXISTS `users` (
+        `discord_email` varchar(255) NOT NULL,
+        `discord_username` varchar(255) NOT NULL,
+        `discord_id` varchar(255) NOT NULL,
+        `discord_avatar` varchar(255) NOT NULL,
+        `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+        PRIMARY KEY (`discord_id`)
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
+      try {
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+      } catch(Exception $e) {
+        echo $e;
+      }
+}
+
 function addUserToDatabase($pdo,$discord_id,$discord_avatar,$discord_email,$discord_username){
     $sql = "INSERT INTO users (discord_email,discord_username,discord_id,discord_avatar) VALUES (:discord_email,:discord_username,:discord_id,discord_avatar)";
     try {
@@ -73,6 +90,24 @@ function getAllUsersFromDatabase($pdo){
     } catch (Exception $e) {
         echo $e;
     }
+}
+
+function createNewspostDatabase($pdo) {
+    $sql = "CREATE TABLE IF NOT EXISTS `news` (
+        `post_id` int(11) NOT NULL AUTO_INCREMENT,
+        `post_author` varchar(255) NOT NULL,
+        `created_at` datetime NOT NULL,
+        `edited_at` datetime NOT NULL,
+        `post_title` tinytext NOT NULL,
+        `post_text` longtext NOT NULL,
+        PRIMARY KEY (`post_id`)
+      ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4";
+      try {
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+      } catch(Exception $e) {
+        echo $e;
+      }
 }
 
 function addNewspostToDatabase($pdo, $post_title, $post_text, $post_author) {
@@ -145,6 +180,27 @@ function getAllNewspostsFromDatabase($pdo){
     } catch (Exception $e) {
         echo $e;
     }
+}
+
+function createHacksDatabase($pdo) {
+    $sql = "CREATE TABLE IF NOT EXISTS `hacks` (
+        `hack_id` int(11) NOT NULL AUTO_INCREMENT,
+        `hack_name` varchar(255) NOT NULL,
+        `hack_version` varchar(255) NULL,
+        `hack_author` varchar(255) NULL,
+        `hack_starcount` int(11) NULL,
+        `hack_release_date` date NULL,
+        `hack_patchname` varchar(255) NOT NULL,
+        `hack_tags` varchar(255) NULL,
+        `hack_description` text NULL,
+        PRIMARY KEY (`hack_id`)
+      ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4";
+      try {
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+      } catch(Exception $e) {
+        echo $e;
+      }
 }
 
 function addHackToDatabase($pdo,$hack_name,$hack_version,$hack_author,$hack_starcount,$hack_release_date,$hack_patchname,$hack_tags,$hack_description){

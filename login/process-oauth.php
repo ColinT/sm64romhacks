@@ -1,5 +1,6 @@
 <?php
 include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php';
+createUsersDatabase($pdo);
 
 
 if(!isset($_GET['code'])){
