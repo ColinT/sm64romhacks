@@ -14,7 +14,7 @@ $usersMarkup='';
 foreach ($all_users as $key => $userData) {
     $usersMarkup.='<tr>
     <td><img src="https://cdn.discordapp.com/avatars/'.$userData['discord_id'].'/'.$userData['discord_avatar'].'.jpg"/ height=32 width=32></td>
-    <td>'.$userData['discord_id'].'</td>    
+    <td><a href="'.$userData['discord_id'] .'">'.$userData['discord_id'].'</a></td>    
     <td>'.$userData['discord_username'].'</td>
     <td>'.$userData['discord_email'].'</td>
     <td>'.$userData['created_at'].'</td>
