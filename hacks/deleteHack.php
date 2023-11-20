@@ -8,8 +8,6 @@ session_start();
 
 $hack_name = $_GET['hack_name'];
 $hack_id = intval($_GET['hack_id']);
-var_dump(isset($hack_name), $hack_id);
-
 
 if(!isset($hack_name) && $hack_id == 0 || (isset($hack_name) && $hack_id != 0) || !$_SESSION['logged_in'] || !in_array($_SESSION['userData']['discord_id'], ADMIN_SITE)) {
 	header("Location: /login/error.php");
