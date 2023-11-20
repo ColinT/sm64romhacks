@@ -54,7 +54,7 @@
 						$tag=substr_replace($tag, "", -1);
 						$description="";
 						if(strlen($date) == 0) $date = "9999-12-31";
-						addHackToDatabase($pdo, $name, $version, $creator, $amount, $date, $dl, $tag,$description);
+						addHackToDatabase($pdo, $name, $version, $creator, $amount, $date, $dl, $tag,$description, 1);
 					}	
 				}
 				$data = (getAllUniqueHacksFromDatabase($pdo));
