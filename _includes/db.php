@@ -80,6 +80,21 @@ function getUserFromDatabase($pdo,$discord_id){
     }
 }
 
+function getUserByNameFromDatabase($pdo,$discord_username){
+    $sql = "SELECT * FROM users WHERE discord_username=:discord_username";
+    try {
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([
+            'discord_username'=>$discord_username,
+        ]);
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $data;
+    } catch (Exception $e) {
+        echo $e;
+    }
+}
+
+
 function getAllUsersFromDatabase($pdo){
     $sql = "SELECT * FROM users";
     try {
@@ -237,6 +252,44 @@ function getHackFromDatabase($pdo, $hack_name) {
 
 }
 
+function getHackByUserFromDatabase($pdo, $user_id) {
+    $sql = "SELECT hack_name, MIN(hack_release_date) AS release_date, MIN(hack_author) AS author FROM hacks WHERE hack_author LIKE '%$user_id%' GROUP BY hack_name";
+
+    try {
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $data;
+    } catch(Exception $e) {
+        echo $e;
+    }
+}
+
+function getAllHacksFromDatabase($pdo){
+    $sql = "SELECT * FROM hacks ORDER BY hack_name";
+    try {
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $data;
+    } catch (Exception $e) {
+        echo $e;
+    }
+}
+
+function getAllUniqueHacksFromDatabase($pdo){
+    $sql = "SELECT hack_name, MIN(hack_release_date) AS release_date, MIN(hack_author) AS author, hack_tags FROM hacks GROUP BY hack_name";
+    try {
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $data;
+    } catch (Exception $e) {
+        echo $e;
+    }
+}
+
+
 function getPatchFromDatabase($pdo, $hack_id) {
     $sql = "SELECT * FROM hacks WHERE hack_id=:hack_id";
     try {
@@ -291,30 +344,6 @@ function updateHackInDatabase($pdo, $hack_name, $hack_description) {
     }
 }
 
-function getAllHacksFromDatabase($pdo){
-    $sql = "SELECT * FROM hacks ORDER BY hack_name";
-    try {
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute();
-        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        return $data;
-    } catch (Exception $e) {
-        echo $e;
-    }
-}
-
-function getAllUniqueHacksFromDatabase($pdo){
-    $sql = "SELECT hack_name, MIN(hack_release_date) AS release_date, MIN(hack_author) AS author, hack_tags FROM hacks GROUP BY hack_name";
-    try {
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute();
-        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        return $data;
-    } catch (Exception $e) {
-        echo $e;
-    }
-}
-
 function getAllTagsFromDatabase($pdo) {
     $sql = "SELECT hack_tags FROM hacks WHERE hack_tags <> \"\" GROUP BY hack_tags ORDER BY hack_tags";
     try {
@@ -352,6 +381,70 @@ function deleteHackFromDatabase($pdo, $hack_name) {
 
 function deletePatchFromDatabase($pdo, $hack_id) {
     $sql = "DELETE FROM hacks WHERE hack_id = $hack_id";
+    try {
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+    } catch(Exception $e) {
+        echo $e;
+    }
+}
+
+function createClaimsDatabase($pdo) {
+    $sql = "CREATE TABLE IF NOT EXISTS `claims` (`claim_id` INT NOT NULL AUTO_INCREMENT , `hack_id` INT NOT NULL , `user_id` VARCHAR(255) NOT NULL , `claimed_author` VARCHAR(255) NOT NULL , PRIMARY KEY (`claim_id`)) ENGINE = InnoDB";
+    try {
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+    } catch(Exception $e) {
+        echo $e;
+    }
+}
+
+function addClaimToDatabase($pdo, $hack_id, $user_id, $claimed_author) {
+    $sql = "INSERT INTO claims (hack_id,user_id,claimed_author) VALUES (:hack_id,:user_id,:claimed_author)";
+    try {
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([
+            'hack_id'=>$hack_id,
+            'user_id'=>$user_id,
+            'claimed_author'=>$claimed_author
+        ]);
+    } catch (Exception $e) {
+        echo $e;
+    }
+ 
+}
+
+function getClaimFromDatabase($pdo, $claim_id) {
+    $sql = "SELECT * FROM claims WHERE claim_id = $claim_id";
+    try {
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([
+            'claim_id'=>$claim_id
+        ]);
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC); 
+        return $data;
+    } catch (Exception $e) {
+        echo $e;
+    }
+
+}
+
+
+function getClaimsFromDatabase($pdo) {
+    $sql = "SELECT * FROM claims";
+    try {
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC); 
+        return $data;
+    } catch (Exception $e) {
+        echo $e;
+    }
+
+}
+
+function deleteClaimFromDatabase($pdo, $claim_id) {
+    $sql = "DELETE FROM claims WHERE claim_id=$claim_id"; 
     try {
         $stmt = $pdo->prepare($sql);
         $stmt->execute();
