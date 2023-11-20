@@ -334,6 +334,16 @@ function updatePatchInDatabase($pdo,$hack_id,$hack_name,$hack_version,$hack_auth
     }
 }
 
+function updateDownloadCounter($pdo, $hack_id) {
+    $sql = "UPDATE hacks SET hack_downloads=hack_downloads+1 WHERE hack_id=$hack_id";
+    try {
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+    } catch (Exception $e) {
+        echo $e;
+    }
+}
+
 function updateHackInDatabase($pdo, $hack_name, $hack_description) {
     $sql = "UPDATE hacks SET hack_description = \"$hack_description\" WHERE hack_name = \"$hack_name\"";
     try {
