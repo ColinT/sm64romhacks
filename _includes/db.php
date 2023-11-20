@@ -206,6 +206,7 @@ function createHacksDatabase($pdo) {
         `hack_starcount` int(11) NULL,
         `hack_release_date` date NULL,
         `hack_patchname` varchar(255) NOT NULL,
+        `hack_downloads` int(11) NULL,
         `hack_tags` varchar(255) NULL,
         `hack_description` text NULL,
         PRIMARY KEY (`hack_id`)
