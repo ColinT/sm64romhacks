@@ -66,6 +66,15 @@
 					$hack_release_date = $entry['release_date'];
 					$hack_tags = $entry['hack_tags'];
 
+					$authors = explode(", ", $hack_author);
+						$hack_author = "";
+						foreach($authors as $author) {
+						  $user = getUserFromDatabase($pdo, $author);
+						  if($user) $hack_author = $hack_author . $user['discord_username'] . ', ';
+						  else $hack_author = $hack_author . $author . ', ';
+						}
+						$hack_author = substr_replace($hack_author, '', -2);
+
 					$delete_button = ($_SESSION['logged_in'] && in_array($_SESSION['userData']['discord_id'], ADMIN_SITE)) ? "<a class=\"btn btn-danger btn-block text-nowrap\" href=\"deleteHack.php?hack_name=$hack_name\">Delete Hack</a>" : "&nbsp;";
 					print("<tr><td><a href=\"/hacks/$dir_name\">$hack_name</a></td><td class=\"creator\">$hack_author</td><td>$hack_release_date</td><td hidden>$hack_tags</td><td class=\"border-0\">$delete_button</td></tr>\n");
 				}
