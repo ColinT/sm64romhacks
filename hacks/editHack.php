@@ -10,6 +10,53 @@ if(!isset($hack_name) & $hack_id == 0 || isset($hack_name) && $hack_id != 0 || !
 	header("Location: /login/error.php");
 	die();
 }
+
+if(sizeof($_POST) != 0) {
+    $hack_id = intval($_POST['hack_id']);
+$hack_description = $_POST['hack_description'];
+
+
+if(!isset($hack_description) && $hack_id == 0) {
+    header("Location: /login/error.php");
+    die();
+}
+
+if(isset($hack_description)) {
+    $hack_name = ($_POST['hack_name']);
+    $hack_description = str_replace("\r\n", "<br/>", $hack_description);
+    $hack_description = stripChars($hack_description);
+    $hack_description = str_replace("&lt;br/&gt;", "<br/>", $hack_description);
+    updateHackInDatabase($pdo,$hack_name,$hack_description);
+
+}
+else {
+    $hack_name = $_POST['hack_name'];
+    $hack_version = $_POST['hack_version'];
+    $hack_author = $_POST['hack_author'];
+    $hack_starcount = $_POST['hack_starcount'];
+    $hack_release_date = $_POST['hack_release_date'];
+    $hack_tags = $_POST['hack_tags'];
+
+    $hack_authors = explode(", ", $hack_author);
+    $hack_author = "";
+    foreach($hack_authors as $author) {
+        $user = getUserByNameFromDatabase($pdo, $author);
+        if($user) $hack_author = $hack_author . $user['discord_id'] . ', ';
+        else $hack_author = $hack_author . $author . ', ';
+    }
+    $hack_author = substr_replace($hack_author, '', -2);
+
+
+    updatePatchInDatabase($pdo, $hack_id, $hack_name, $hack_version, $hack_author, $hack_starcount, $hack_release_date, $hack_tags);
+
+}
+
+header("Location: /hacks/" . getURLEncodedName($hack_name));
+die();
+
+}
+
+
 if(isset($hack_name)) $hackdata = getHackFromDatabase($pdo, $_GET['hack_name']);
 else $hackdata = getPatchFromDatabase($pdo, $hack_id);
 ?>
@@ -31,7 +78,7 @@ else $hackdata = getPatchFromDatabase($pdo, $hack_id);
 	<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/header.php'); ?>
 			<div align="center">
                 <?php if(isset($hack_name)) { ?>
-                <form action="/hacks/updateHack.php" method="post">
+                <form action="#" method="post">
                     <table class="table">
                     <tr>
                         <td class="text-right">
@@ -57,7 +104,7 @@ else $hackdata = getPatchFromDatabase($pdo, $hack_id);
                     </table>
                 </form>
                 <?php } else { ?>
-                    <form action="/hacks/updateHack.php" method="post">
+                    <form action="#" method="post">
                     <table class="table">
                     <tr>
                         <td>

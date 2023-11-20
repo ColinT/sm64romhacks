@@ -9,6 +9,19 @@ $data = getPatchFromDatabase($pdo, $hack_id);
 $hack_author = $data[0]['hack_author'];
 $authors = explode(", ", $hack_author);
 
+if(sizeof($_POST) != 0) {
+	if(intval($_POST['hack_id']) == 0) header("Location: /hacks");
+    
+    $hack_id = $_POST['hack_id'];
+    $user_id = $_SESSION['userData']['discord_id'];
+    $claimed_author = $_POST['hack_author_claim'];
+
+    createClaimsDatabase($pdo);
+    addClaimToDatabase($pdo, $hack_id, $user_id, $claimed_author);
+
+    header("Location: /hacks");
+}
+
 ?>
 
 <!DOCTYPE HTML>
@@ -28,7 +41,7 @@ $authors = explode(", ", $hack_author);
 	<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/header.php'); ?>
 			<div align="center">
 				<!--HTML CONTENT HERE-->
-				<form action="/admin/submitClaim.php" method="post">
+				<form action="#" method="post">
 					<input name="hack_id" type="hidden" value="<?php print($hack_id)?>">
 						<?php foreach($authors as $author) {
 							if(((int)$author) == 0 ) { ?>
