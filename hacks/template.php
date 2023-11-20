@@ -35,6 +35,7 @@
                         $link=$dl.$fileending;
                         $ref="'/patch/$link'"; 
 						$tag = $entry['hack_tags'];
+						$download = $entry['hack_downloads'];
 						$admin_buttons = ($_SESSION['logged_in'] && in_array($_SESSION['userData']['discord_id'], ADMIN_SITE)) ? "<a class=\"btn btn-danger btn-block text-nowrap\" href=\"deleteHack.php?hack_id=$id\">Delete Patch</a></th><th class=\"border-0\"><a class=\"btn btn-info btn-block text-nowrap\" href=\"editHack.php?hack_id=$id\">Edit Patch</a>" : "&nbsp;";
 						$user_button = $_SESSION['logged_in'] && !areAllAuthorsAnId($creator) ? "<a class=\"btn btn-warning btn-block text-nowrap\" href=\"/hacks/claim.php?hack_id=$id\">Claim Ownership!</a>" : "&nbsp;";
 
@@ -47,7 +48,7 @@
 						}
 						$hack_author = substr_replace($hack_author, '', -2);
 			   
-                        print "<tr><td $admin_HTMLLoad>$id</td><td>$hack_name</td><td>$version</td><td><u><a href=$ref>Download</a></u></td><td>$hack_author</td><td>$amount</td><td>$date</td><td $admin_HTMLLoad>$tag</td><td class=\"border-0\">$user_button</td><td class=\"border-0\">$admin_buttons</td></tr>\n";
+                        print "<tr><td $admin_HTMLLoad>$id</td><td>$hack_name</td><td>$version</td><td><u><a href=download.php?hack_id=$id>Download</a></u><br/><small class=\"text-muted\">Downloads: $download</small></td><td>$hack_author</td><td>$amount</td><td>$date</td><td $admin_HTMLLoad>$tag</td><td class=\"border-0\">$user_button</td><td class=\"border-0\">$admin_buttons</td></tr>\n";
                     }?>
 			    </table></div> <br/>
                 <div><table>
