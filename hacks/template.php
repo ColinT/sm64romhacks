@@ -43,7 +43,7 @@
 						$hack_author = "";
 						foreach($authors as $author) {
 						  $user = getUserFromDatabase($pdo, $author);
-						  if($user) $hack_author = $hack_author . $user['discord_username'] . ', ';
+						  if($user) $hack_author = $hack_author . '<a href="/users/' . $author . '">' . $user['discord_username'] . '</a>, ';
 						  else $hack_author = $hack_author . $author . ', ';
 						}
 						$hack_author = substr_replace($hack_author, '', -2);
