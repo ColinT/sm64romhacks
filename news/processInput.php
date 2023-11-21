@@ -2,9 +2,6 @@
 
 include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php';
 
-
-session_start();
-
 $post_author = $_SESSION['userData']['discord_id'];
 $post_title = stripChars($_POST['post_title']);
 $post_text = stripChars($_POST['post_text']);

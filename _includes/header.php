@@ -1,5 +1,4 @@
 <?php
-session_start();
 if(isset($_SESSION['userData'])) {
   extract($_SESSION['userData']);
   $avatar_url = "https://cdn.discordapp.com/avatars/$discord_id/$avatar.jpg";

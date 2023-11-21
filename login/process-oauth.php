@@ -58,11 +58,6 @@ curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
 
 $result = curl_exec($ch);
 
-var_dump($result);
-
-
-session_start();
-
 $userData = json_decode($result,true);
 
 $user_data = getUserFromDatabase($pdo,$userData['id']);

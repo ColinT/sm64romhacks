@@ -2,8 +2,6 @@
 
 include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php';
 
-
-session_start();
 if(!$_SESSION['logged_in']) {
 	header("Location: /login/error.php");
 	die();

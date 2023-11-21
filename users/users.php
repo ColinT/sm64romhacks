@@ -1,11 +1,12 @@
 <?php
 
-session_start();
+include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php';
+
+
 if($_SESSION['logged_in']) extract($_SESSION['userData']);
 
 if(!$_SESSION['logged_in'] || $name != 'marvjungs') header("Location: error.php");
 
-include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php';
 
 
 $all_users = getAllUsersFromDatabase($pdo);

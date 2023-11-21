@@ -2,10 +2,6 @@
 
 include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php';
 
-
-
-session_start();
-
 $hack_name = $_GET['hack_name'];
 $hack_id = intval($_GET['hack_id']);
 
