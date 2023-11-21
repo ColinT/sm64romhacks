@@ -8,6 +8,40 @@ if(!$_SESSION['logged_in'] || !in_array($_SESSION['userData']['discord_id'], ADM
 	die();
 }
 
+if(sizeof($_GET) != 0 && intval($_GET['claim_id']) != 0) {
+	$claim_id = intval($_GET['claim_id']);
+	if($_GET['mode'] == 'accept') {
+		$claim = getClaimFromDatabase($pdo, $claim_id);
+		$user_id = $claim[0]['user_id'];
+		$hack_id = intval($claim[0]['hack_id']);
+		$claimed_author = $claim[0]['claimed_author'];
+
+		$hack = getPatchFromDatabase($pdo, $hack_id)[0];
+		var_dump($hack);
+		$hack_name = $hack['hack_name'];
+		$hack_version = $hack['hack_version'];
+		$hack_author = $hack['hack_author'];
+		$hack_starcount = $hack['hack_starcount'];
+		$hack_release_date = $hack['hack_release_date'];
+		$hack_tags = $hack['hack_tags'];
+
+
+		$hack_author = str_replace($claimed_author, $user_id, $hack_author);
+		updatePatchInDatabase($pdo,$hack_id,$hack_name,$hack_version,$hack_author,$hack_starcount,$hack_release_date,$hack_tags, 1);
+
+
+		deleteClaimFromDatabase($pdo, $claim_id);
+
+		header("Location: /admin");
+		die();
+	}
+	else if($_GET['mode'] == 'delete') {
+		deleteClaimFromDatabase($pdo, $claim_id);
+		header("Location: /admin");
+		die();
+	}
+}
+
 $claims = getClaimsFromDatabase($pdo);
 $pending_hacks = getAllPendingHacksFromDatabase($pdo);
 ?>
@@ -33,7 +67,7 @@ $pending_hacks = getAllPendingHacksFromDatabase($pdo);
 				<table class="table-sm table-bordered">
 					<tr><th>Claim ID</th><th>Hack ID</th><th>User ID</th><th>Claimed Author</th><th class="border-0">&nbsp;</th></tr>
 					<?php foreach($claims as $entry) { ?>
-					<tr><td><?php print($entry['claim_id']);?></td><td><?php print($entry['hack_id']);?></td><td><?php print($entry['user_id']);?></td><td><?php print($entry['claimed_author']);?></td><td class="border-0"><a class="btn btn-success text-nowrap" href="acceptClaim.php?claim_id=<?php print($entry['claim_id']);?>"><img src="/_img/accept.svg"></a>&nbsp;<a class="btn btn-danger text-nowrap" href="rejectClaim.php?claim_id=<?php print($entry['claim_id']);?>"><img src="/_img/delete.svg"></a></td></tr>	
+					<tr><td><?php print($entry['claim_id']);?></td><td><?php print($entry['hack_id']);?></td><td><?php print($entry['user_id']);?></td><td><?php print($entry['claimed_author']);?></td><td class="border-0"><a class="btn btn-success text-nowrap" href="/admin?claim_id=<?php print($entry['claim_id']);?>&mode=accept"><img src="/_img/accept.svg"></a>&nbsp;<a class="btn btn-danger text-nowrap" href="/admin?claim_id=<?php print($entry['claim_id']);?>&mode=delete"><img src="/_img/delete.svg"></a></td></tr>	
 					<?php } ?>
 					</table>
 					</div>

@@ -455,9 +455,7 @@ function getClaimFromDatabase($pdo, $claim_id) {
     $sql = "SELECT * FROM claims WHERE claim_id = $claim_id";
     try {
         $stmt = $pdo->prepare($sql);
-        $stmt->execute([
-            'claim_id'=>$claim_id
-        ]);
+        $stmt->execute();
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC); 
         return $data;
     } catch (Exception $e) {
