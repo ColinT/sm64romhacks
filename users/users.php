@@ -5,8 +5,10 @@ include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php';
 
 if($_SESSION['logged_in']) extract($_SESSION['userData']);
 
-if(!$_SESSION['logged_in'] || $name != 'marvjungs') header("Location: error.php");
-
+if(!$_SESSION['logged_in'] || !in_array($_SESSION['userData']['discord_id'], ADMIN_SITE)) {
+	header("Location: /404.php");
+	die();
+}
 
 
 $all_users = getAllUsersFromDatabase($pdo);

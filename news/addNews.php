@@ -3,7 +3,7 @@
 include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php';
 
 if(!$_SESSION['logged_in'] || !in_array($_SESSION['userData']['discord_id'], ADMIN_NEWS)) {
-	header("Location: /login/error.php");
+	header("Location: /");
 	die();
 }
 ?>

@@ -4,7 +4,7 @@ include($_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php');
 
 
 if(!$_SESSION['logged_in']){
-  header('Location: error.php');
+  header('Location: /404.php');
   exit();
 }
 extract($_SESSION['userData']);
@@ -57,10 +57,6 @@ $avatar_url = "https://cdn.discordapp.com/avatars/$discord_id/$avatar.jpg";
           <?php }?>
         </table>
       </div>
-      <?php
-      if($name == "marvjungs") print("You are Admin<br/>");
-      else print("You are a nobody :(");
-      ?>
     </div>
     <?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/footer.php'); ?>
 </div>

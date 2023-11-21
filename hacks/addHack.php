@@ -3,47 +3,47 @@
 include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php';
 
 if(!$_SESSION['logged_in']) {
-	header("Location: /login/error.php");
+	header("Location: /404.php");
 	die();
 }
 
 if(sizeof($_POST) != 0) {
-$hack_name = $_POST['hack_name'];
-$hack_version = $_POST['hack_version'];
-$hack_author = $_POST['hack_author'];
-$hack_starcount = isset($_POST['hack_amount']) ? intval($_POST['hack_amount']) : 0;
-$hack_release_date = $_POST['hack_release_date'];
-$hack_patchname = $_FILES['hack_patchname']["name"];
-$hack_tags = $_POST['hack_tags'];
-$hack_description = $_POST['hack_description'];
+    $hack_name = $_POST['hack_name'];
+    $hack_version = $_POST['hack_version'];
+    $hack_author = $_POST['hack_author'];
+    $hack_starcount = isset($_POST['hack_amount']) ? intval($_POST['hack_amount']) : 0;
+    $hack_release_date = $_POST['hack_release_date'];
+    $hack_patchname = $_FILES['hack_patchname']["name"];
+    $hack_tags = $_POST['hack_tags'];
+    $hack_description = $_POST['hack_description'];
 
-$hack_authors = explode(", ", $hack_author);
-$hack_author = "";
-foreach($hack_authors as $author) {
-    $user = getUserByNameFromDatabase($pdo, $author);
-    if($user) $hack_author = $hack_author . $user['discord_id'] . ', ';
-    else $hack_author = $hack_author . $author . ', ';
-  }
-  $hack_author = substr_replace($hack_author, '', -2);
-
-$hack_patchname = substr($hack_patchname, 0, -4);
-
-if(in_array($_SESSION['userData']['discord_id'], ADMIN_NEWS)) {
-    addHackToDatabase($pdo, $hack_name, $hack_version, $hack_author, $hack_starcount, $hack_release_date, $hack_patchname, $hack_tags, $hack_description, 1);
-    $result = move_uploaded_file($_FILES['hack_patchname']['tmp_name'], $_SERVER['DOCUMENT_ROOT'].'/patch/'.$hack_patchname);
-
-}
-
-else {
-    addHackToDatabase($pdo, $hack_name, $hack_version, $hack_author, $hack_starcount, $hack_release_date, $hack_patchname, $hack_tags, $hack_description, 0);
-    $result = move_uploaded_file($_FILES['hack_patchname']['tmp_name'], $_SERVER['DOCUMENT_ROOT'].'/admin/'.$hack_patchname);
-}
-
-if(!$result) {header("Location: /404.php"); die();}
+    $hack_authors = explode(", ", $hack_author);
+    $hack_author = "";
+    foreach($hack_authors as $author) {
+        $user = getUserByNameFromDatabase($pdo, $author);
+        if($user) $hack_author = $hack_author . $user['discord_id'] . ', ';
+        else $hack_author = $hack_author . $author . ', ';
+    }
+    $hack_author = substr_replace($hack_author, '', -2);
 
 
-header("Location: /hacks");
-die();
+    if(in_array($_SESSION['userData']['discord_id'], ADMIN_SITE)) {
+        $result = move_uploaded_file($_FILES['hack_patchname']['tmp_name'], $_SERVER['DOCUMENT_ROOT'].'/patch/'.$hack_patchname);
+        $hack_patchname = substr($hack_patchname, 0, -4);
+        addHackToDatabase($pdo, $hack_name, $hack_version, $hack_author, $hack_starcount, $hack_release_date, $hack_patchname, $hack_tags, $hack_description, 1);
+    }
+
+    else {
+        $result = move_uploaded_file($_FILES['hack_patchname']['tmp_name'], $_SERVER['DOCUMENT_ROOT'].'/admin/'.$hack_patchname);
+        $hack_patchname = substr($hack_patchname, 0, -4);
+        addHackToDatabase($pdo, $hack_name, $hack_version, $hack_author, $hack_starcount, $hack_release_date, $hack_patchname, $hack_tags, $hack_description, 0);
+    }
+
+    if(!$result) {header("Location: /404.php"); die();}
+
+
+    header("Location: /hacks");
+    die();
 
 }
 

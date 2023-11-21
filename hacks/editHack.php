@@ -6,7 +6,7 @@ $hack_name = $_GET['hack_name'];
 $hack_id = intval($_GET['hack_id']);
 
 if(!isset($hack_name) & $hack_id == 0 || isset($hack_name) && $hack_id != 0 || !$_SESSION['logged_in'] || !in_array($_SESSION['userData']['discord_id'], ADMIN_NEWS)) {
-	header("Location: /login/error.php");
+	header("Location: /hacks");
 	die();
 }
 
@@ -16,7 +16,7 @@ $hack_description = $_POST['hack_description'];
 
 
 if(!isset($hack_description) && $hack_id == 0) {
-    header("Location: /login/error.php");
+    header("Location: /hacks");
     die();
 }
 

@@ -8,7 +8,7 @@ $newspost = getNewspostFromDatabase($pdo, $id);
 $author_id = $newspost['post_author'];
 $user_id = $_SESSION['userData']['discord_id'];
 if($id == 0 || !$_SESSION['logged_in'] || !in_array($user_id, ADMIN_NEWS) || $user_id != $author_id) {
-	header("Location: /login/error.php");
+	header("Location: /");
 	die();
 }
 ?>

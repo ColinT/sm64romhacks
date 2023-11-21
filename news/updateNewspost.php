@@ -2,11 +2,8 @@
 
 include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php';
 
-
-
-
 if(!isset($_POST['post_id'])) {
-    header("Location: /login/error.php");
+    header("Location: /");
     die();
 }
 $post_title = stripChars($_POST['post_title']);
