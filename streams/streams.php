@@ -1,12 +1,4 @@
-<?php
-	function getClient_id() {
-		return "7xxy8kh0hvswrrnnpzjpej41h5qxzz";
-	}
-
-	function getClient_secret() {
-		return "26i3l38b88g131htepkjbn8t9rolon";
-	}
-					
+<?php				
 	function getEndPoint() {
 		$endPoint = "game_id=2692&first=100";
 		return "https://api.twitch.tv/helix/streams?" . $endPoint; 
@@ -14,7 +6,7 @@
 
 	function getTwitchAuthorization() {
 		$endPoint = " ";
-		$data = "client_id=" . getClient_id() . "&client_secret=" . getClient_secret() . "&grant_type=client_credentials";
+		$data = "client_id=" . TWITCH_CLIENT_ID . "&client_secret=" . TWITCH_CLIENT_SECRET . "&grant_type=client_credentials";
 		$link = "https://id.twitch.tv/oauth2/token?" . $data;
 
 		// Request cURL POST pour get le token
@@ -43,7 +35,7 @@
 		$token_type = strtoupper(substr($token_type, 0, 1)) . substr($token_type, 1, strlen($token_type));
 						
 		$authorization = $token_type . " " . $access_token;
-		$header = array("Authorization: " . $authorization, "Client-ID: " . getClient_id());
+		$header = array("Authorization: " . $authorization, "Client-ID: " . TWITCH_CLIENT_ID);
 
 		$ch = curl_init($endPoint);
 

@@ -13,10 +13,10 @@ $discord_code = $_GET['code'];
 
 $payload = [
     'code'=>$discord_code,
-    'client_id'=>'1171219678132195419',
-    'client_secret'=>'vKrWpROs_jnIdVycxGS9nTPpVBpZydJT',
+    'client_id'=>DISCORD_CLIENT_ID,
+    'client_secret'=>DISCORD_CLIENT_SECRET,
     'grant_type'=>'authorization_code',
-    'redirect_uri'=>'http://localhost/login/process-oauth.php',
+    'redirect_uri'=>DISCORD_REDIRECT_URI,
     'scope'=>'identify%20guids',
 ];
 
@@ -80,7 +80,6 @@ $_SESSION['userData'] = [
     'global_name'=>stripChars($userData['global_name'])
 ];
 header("Location: " . $_SESSION['redirect']);
-//header("Location: dashboard.php");
 exit();
 
 ?>
