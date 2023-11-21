@@ -1,3 +1,5 @@
+<?php $add_button = ($_SESSION['logged_in']) ? "<a class=\"btn btn-success text-nowrap\" href=\"addHack.php\">Add Hack</a>" : "&nbsp;"; ?>
+
 <!DOCTYPE HTML>
 <html>
 	<!--BEGINNING OF HEAD-->
@@ -24,7 +26,10 @@
 						$all_tags = getAllTagsFromDatabase($pdo);
 						foreach($all_tags as $tag) {
 							$tag = $tag['hack_tags'];
-							print("<option value=\"$tag\">$tag</option>");
+							$tag = explode(", ", $tag);
+							foreach($tag as $t) {
+								print("<option value=\"$t\">$t</option>");
+							}
 						}
 					?>
 				</select>	
@@ -33,7 +38,6 @@
 
 				<div class="table-responsive">
 				<table class="table-sm table-bordered" id="myTable">
-					<?php $add_button = ($_SESSION['logged_in'] && in_array($_SESSION['userData']['discord_id'], ADMIN_SITE)) ? "<a class=\"btn btn-success btn-block text-nowrap\" href=\"addHack.php\">Add Hack</a>" : "&nbsp;"; ?>
 
 					<tr><th><b>Hackname</b></th><th class="creator"><b>Creator</b></th><th class="text-nowrap"><b>Initial Release Date</b></th><th hidden><b>Tag</b></th><th class="border-0"><?php print($add_button);?></th></tr>
 				<?Php 

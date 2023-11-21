@@ -306,7 +306,7 @@ function getAllUniqueHacksFromDatabase($pdo){
 
 
 function getPatchFromDatabase($pdo, $hack_id) {
-    $sql = "SELECT * FROM hacks WHERE hack_id=:hack_id AND hack_verified=1";
+    $sql = "SELECT * FROM hacks WHERE hack_id=:hack_id";
     try {
         $stmt = $pdo->prepare($sql);
         $stmt->execute([
