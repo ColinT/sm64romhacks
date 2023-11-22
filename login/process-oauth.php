@@ -79,7 +79,7 @@ $_SESSION['userData'] = [
     'email'=>stripChars($userData['email']),
     'global_name'=>stripChars($userData['global_name'])
 ];
-//header("Location: " . $_SESSION['redirect']);
-//exit();
+header("Location: " . $_SESSION['redirect']);
+exit();
 
 ?>
