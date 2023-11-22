@@ -37,25 +37,25 @@
 	  <!--Grid row-->
 	  <div class="row">
 		<div class="col">
-			<a href="https://www.smwcentral.net/" target="_blank"><img src="/_img/affiliates/smwc.gif" alt="SMW Central"></a>
+			<a href="https://www.smwcentral.net/" target="_blank"><img src="/_assets/_img/affiliates/smwc.gif" alt="SMW Central"></a>
 		</div>
 		<div class="col">
-			<a href="http://www.mfgg.net/" target="_blank"><img src="/_img/affiliates/mfgg.png" alt="Mario Fan Games Galaxy"></a>
+			<a href="http://www.mfgg.net/" target="_blank"><img src="/_assets/_img/affiliates/mfgg.png" alt="Mario Fan Games Galaxy"></a>
 		</div>
 		<div class="col">
-			<a href="http://www.superluigibros.com/" target="_blank"><img src="/_img/affiliates/luigibros.png" alt="Super Luigi Bros - Mario & Luigi Mega Fan Site"></a>
+			<a href="http://www.superluigibros.com/" target="_blank"><img src="/_assets/_img/affiliates/luigibros.png" alt="Super Luigi Bros - Mario & Luigi Mega Fan Site"></a>
 		</div>
 		<div class="col">
-			<a href="https://www.youtube.com/user/SimpleFlips" target="_blank"><img src="/_img/affiliates/simpleflips.png" alt="SimpleFlips"></a>
+			<a href="https://www.youtube.com/user/SimpleFlips" target="_blank"><img src="/_assets/_img/affiliates/simpleflips.png" alt="SimpleFlips"></a>
 		</div>
 		<div class="col">
-			<a href="http://smmdb.ddns.net/" target="_blank"><img src="/_img/affiliates/smmdb.png" alt="Super Mario Maker Database"></a>
+			<a href="http://smmdb.ddns.net/" target="_blank"><img src="/_assets/_img/affiliates/smmdb.png" alt="Super Mario Maker Database"></a>
 		</div>
 		<div class="col">
-			<a href="https://64dd.org/" target="_blank"> <img src="/_img/affiliates/64DD_logo.png" alt="64DD"></a>
+			<a href="https://64dd.org/" target="_blank"> <img src="/_assets/_img/affiliates/64DD_logo.png" alt="64DD"></a>
 		</div>
 		<div class="col">
-			<a href="http://kuribo64.net/" target="_blank"> <img src="/_img/affiliates/kuribo64.jpg" alt="Kuribo64"></a>
+			<a href="http://kuribo64.net/" target="_blank"> <img src="/_assets/_img/affiliates/kuribo64.jpg" alt="Kuribo64"></a>
 		</div>
 	  </div>
       <!--Grid row-->

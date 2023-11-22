@@ -6,15 +6,15 @@ $path = ltrim($_SERVER['REQUEST_URI'], '/');
 $user_id = explode('/', $path);
 $user_id = $user_id[1];
 if(strlen($user_id) == 0) {
-	header("Location: /404.php");
-	die();
+	include("users.php");
 }
 else {
-	$data = getHackByUserFromDatabase($pdo, $user_id);
-	if(sizeof($data) == 0) {
+	$user = getUserFromDatabase($pdo, $user_id);
+	if(sizeof($user) == 0) {
 		header("Location: /404.php");
 		die();
 	}
+	$data = getHackByUserFromDatabase($pdo, $user_id);
 	include("template.php");
 }
 ?>

@@ -15,10 +15,10 @@ include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php';
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<meta name="keywords" content="super mario, romhacks, hack, speedrun, sm64hacks, sm64romhacks, rom, modification" />
 		<meta name="description" content="Welcome to SM64ROMHacks! We have a really big collection of SM64 ROM Hacks which wait to be played! Community News/Events will also be tracked here" />
-		<link rel="stylesheet" type="text/css" href="/_css/bootstrap.css">
+		<link rel="stylesheet" type="text/css" href="/_assets/_css/bootstrap.css">
 		<link rel="stylesheet" type="text/css" href="style.css">
 		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-		<link rel="shortcut icon" href="/_img/icon.ico" />
+		<link rel="shortcut icon" href="/_assets/_img/icon.ico" />
 		<script src="index.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
 		<style>
@@ -30,7 +30,7 @@ include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php';
 				<h1>Plugins for playing SM64 ROM Hacks</h1>
 				<div align="center" id="opsys">Firstly, select your operating system for which you intend to play on!
 					<table>
-						<tr><td><img id="windows" src="../_img/windows.svg" width="360" height="360"></td><td><img id="linux" src="../_img/linux.png" width="360" height="360"/></td></tr>
+						<tr><td><img id="windows" src="../_assets/_img/windows.svg" width="360" height="360"></td><td><img id="linux" src="../_assets/_img/linux.png" width="360" height="360"/></td></tr>
 						<tr><td align="center">Windows</td><td align="center">Linux</td></tr>
 					</table>
 					Note: The instructions given in this page are only intended to be used in the operating systems and emulators mentioned here.<br/>
@@ -39,7 +39,7 @@ include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php';
 
 				<div id="wcontent" align="center" style="display: none;">
 				<table>
-						<tr><td><img src="../_img/301.png" onclick="showW301()" /></td><td><img src="../_img/16.png" onclick="showW16()"></td><td><img src="../_img/pl.png" onclick="showWParallel()"/></td></tr>
+						<tr><td><img src="../_assets/_img/301.png" onclick="showW301()" /></td><td><img src="../_assets/_img/16.png" onclick="showW16()"></td><td><img src="../_assets/_img/pl.png" onclick="showWParallel()"/></td></tr>
 						<tr><td align="center">Project 3.0.1-N</td><td align="center">Project64 1.6</td><td align="center">Parallel Launcher</td></tr>
 					</table>
 					Using any emulator outside this list to play SM64 romhacks isn't recommended and can make you run into lots of issues, and many romhacks may not run altogether.<br/>
@@ -522,7 +522,7 @@ include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php';
 
 				<div id="lcontent" align="center" style="display: none;">
 				<table>
-						<tr><td><img src="../_img/301.png" onclick="showL301()" /></td><td><img src="../_img/16.png" onclick="showL16()"></td><td><img src="../_img/pl.png" onclick="showLParallel()"/></td></tr>
+						<tr><td><img src="../_assets/_img/301.png" onclick="showL301()" /></td><td><img src="../_assets/_img/16.png" onclick="showL16()"></td><td><img src="../_assets/_img/pl.png" onclick="showLParallel()"/></td></tr>
 						<tr><td align="center">Project 3.0.1-N</td><td align="center">Project64 1.6</td><td align="center">Parallel Launcher</td></tr>
 					</table>
 					Note: The instructions given in this page are only intended to be used in the operating systems and emulators mentioned here.<br/>

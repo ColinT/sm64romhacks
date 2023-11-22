@@ -68,9 +68,9 @@ $pending_hacks = getAllPendingHacksFromDatabase($pdo);
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<meta name="keywords" content="super mario, romhacks, hack, speedrun, sm64hacks, sm64romhacks, rom, modification" />
 		<meta name="description" content="Welcome to SM64ROMHacks! We have a really big collection of SM64 ROM Hacks which wait to be played! Community News/Events will also be tracked here" />
-		<link rel="stylesheet" type="text/css" href="/_css/bootstrap.css">
+		<link rel="stylesheet" type="text/css" href="/_assets/_css/bootstrap.css">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-		<link rel="shortcut icon" href="/_img/icon.ico" />
+		<link rel="shortcut icon" href="/_assets/_img/icon.ico" />
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
 	</head>
 	<body>		<div class="container">
@@ -83,7 +83,7 @@ $pending_hacks = getAllPendingHacksFromDatabase($pdo);
 					<?php foreach($claims as $entry) { 
 						$patch = getPatchFromDatabase($pdo, intval($entry['hack_id']));
 						$user = getUserFromDatabase($pdo, intval($entry['user_id']));?>
-					<tr><td><?php print($entry['claim_id']);?></td><td><?php print($entry['hack_id'] . "&nbsp;(" . $patch[0]['hack_name'] . ")");?></td><td><?php print($entry['user_id'] . "&nbsp;(" . $user['discord_username']. ")");?></td><td><?php print($entry['claimed_author']);?></td><td class="border-0"><a class="btn btn-success text-nowrap" href="/admin?type=claim&claim_id=<?php print($entry['claim_id']);?>&mode=accept"><img src="/_img/accept.svg"></a>&nbsp;<a class="btn btn-danger text-nowrap" href="/admin?type=claim&claim_id=<?php print($entry['claim_id']);?>&mode=reject"><img src="/_img/delete.svg"></a></td></tr>	
+					<tr><td><?php print($entry['claim_id']);?></td><td><?php print($entry['hack_id'] . "&nbsp;(" . $patch[0]['hack_name'] . ")");?></td><td><?php print($entry['user_id'] . "&nbsp;(" . $user['discord_username']. ")");?></td><td><?php print($entry['claimed_author']);?></td><td class="border-0"><a class="btn btn-success text-nowrap" href="/admin?type=claim&claim_id=<?php print($entry['claim_id']);?>&mode=accept"><img src="/_assets/_img/accept.svg"></a>&nbsp;<a class="btn btn-danger text-nowrap" href="/admin?type=claim&claim_id=<?php print($entry['claim_id']);?>&mode=reject"><img src="/_assets/_img/delete.svg"></a></td></tr>	
 					<?php } ?>
 					</table>
 					</div>
@@ -92,7 +92,7 @@ $pending_hacks = getAllPendingHacksFromDatabase($pdo);
 				<table class="table-sm table-bordered">
 					<tr><th>Hack Name</th><th>Version</th><th>Hack Author</th><th>Star Count</th><th>Release Date</th><th>Tag</th><th>Description</th><th class="border-0">&nbsp;</th></tr>
 					<?php foreach($pending_hacks as $entry) { ?>
-					<tr><td class="align-top text-nowrap"><?php print($entry['hack_name']);?></td><td class="align-top text-nowrap"><?php print($entry['hack_version']);?></td><td class="align-top text-nowrap"><?php print($entry['hack_author']);?></td><td class="align-top text-nowrap"><?php print($entry['hack_starcount']);?></td><td class="align-top text-nowrap"><?php print($entry['hack_release_date']);?></td><td class="align-top text-nowrap"><?php print($entry['hack_tags']);?></td><td class="align-top w-25"><?php print($entry['hack_description']);?></td><td class="border-0 align-top"><a class="btn btn-success text-nowrap" href="/admin?type=submission&hack_id=<?php print($entry['hack_id']);?>&mode=accept"><img src="/_img/accept.svg"></a>&nbsp;<a class="btn btn-danger text-nowrap" href="/admin?type=submission&hack_id=<?php print($entry['hack_id']);?>&mode=reject"><img src="/_img/reject.svg"></a></td></tr>	
+					<tr><td class="align-top text-nowrap"><?php print($entry['hack_name']);?></td><td class="align-top text-nowrap"><?php print($entry['hack_version']);?></td><td class="align-top text-nowrap"><?php print($entry['hack_author']);?></td><td class="align-top text-nowrap"><?php print($entry['hack_starcount']);?></td><td class="align-top text-nowrap"><?php print($entry['hack_release_date']);?></td><td class="align-top text-nowrap"><?php print($entry['hack_tags']);?></td><td class="align-top w-25"><?php print($entry['hack_description']);?></td><td class="border-0 align-top"><a class="btn btn-success text-nowrap" href="/admin?type=submission&hack_id=<?php print($entry['hack_id']);?>&mode=accept"><img src="/_assets/_img/accept.svg"></a>&nbsp;<a class="btn btn-danger text-nowrap" href="/admin?type=submission&hack_id=<?php print($entry['hack_id']);?>&mode=reject"><img src="/_assets/_img/reject.svg"></a></td></tr>	
 					<?php } ?>
 					</table>
 					</div>

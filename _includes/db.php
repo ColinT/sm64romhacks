@@ -35,7 +35,7 @@ function createUsersDatabase($pdo) {
 }
 
 function addUserToDatabase($pdo,$discord_id,$discord_avatar,$discord_email,$discord_username){
-    $sql = "INSERT INTO users (discord_email,discord_username,discord_id,discord_avatar) VALUES (:discord_email,:discord_username,:discord_id,discord_avatar)";
+    $sql = "INSERT INTO users (discord_email,discord_username,discord_id,discord_avatar) VALUES (:discord_email,:discord_username,:discord_id,:discord_avatar)";
     try {
         $stmt = $pdo->prepare($sql);
         $stmt->execute([

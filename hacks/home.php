@@ -8,9 +8,9 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<meta name="keywords" content="super mario, romhacks, hack, speedrun, sm64hacks, sm64romhacks, rom, modification" />
 		<meta name="description" content="Welcome to SM64ROMHacks! We have a really big collection of SM64 ROM Hacks which wait to be played! Community News/Events will also be tracked here" />
-		<link rel="stylesheet" type="text/css" href="/_css/bootstrap.css">
+		<link rel="stylesheet" type="text/css" href="/_assets/_css/bootstrap.css">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-		<link rel="shortcut icon" href="/_img/icon.ico" />
+		<link rel="shortcut icon" href="/_assets/_img/icon.ico" />
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
 		<script src="/hacks/index.js"></script>
 
@@ -43,7 +43,7 @@
 				<?Php 
 				$amount = getAmountOfHacksInDatabase($pdo)[0]['count'];
 				if($amount == 0){
-					$a_patch=file($_SERVER['DOCUMENT_ROOT']. "/_data/patches.csv");
+					$a_patch=file($_SERVER['DOCUMENT_ROOT']. "/_assets/_data/patches.csv");
 					foreach($a_patch as $patch)
 					{
 						list($name, $version, $creator, $amount, $date, $dl, $tag)=explode(',',$patch);
@@ -79,7 +79,7 @@
 						}
 						$hack_author = substr_replace($hack_author, '', -2);
 
-					$delete_button = ($_SESSION['logged_in'] && in_array($_SESSION['userData']['discord_id'], ADMIN_SITE)) ? "<a class=\"btn btn-danger btn-block text-nowrap\" href=\"deleteHack.php?hack_name=$hack_name\"><img src=\"/_img/delete.svg\"></a>" : "&nbsp;";
+					$delete_button = ($_SESSION['logged_in'] && in_array($_SESSION['userData']['discord_id'], ADMIN_SITE)) ? "<a class=\"btn btn-danger btn-block text-nowrap\" href=\"deleteHack.php?hack_name=$hack_name\"><img src=\"/_assets/_img/delete.svg\"></a>" : "&nbsp;";
 					print("<tr><td><a href=\"/hacks/$dir_name\">$hack_name</a></td><td class=\"creator\">$hack_author</td><td>$hack_release_date</td><td hidden>$hack_tags</td><td class=\"border-0\">$delete_button</td></tr>\n");
 				}
 				?>

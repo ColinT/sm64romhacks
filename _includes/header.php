@@ -30,7 +30,7 @@ setInterval(() => {
 
 <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #1C1C1C;">
   <!--<div class="container-fluid">-->
-    <a class="navbar-brand" href="/"><img class="img-responsive d-inline-block align-text-top" src="/_img/logo.png" alt="Logo" width="160" height="90"></a>
+    <a class="navbar-brand" href="/"><img class="img-responsive d-inline-block align-text-top" src="/_assets/_img/logo.png" alt="Logo" width="160" height="90"></a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>

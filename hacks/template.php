@@ -6,9 +6,9 @@
 			<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 			<meta name="keywords" content="super mario, romhacks, hack, speedrun, sm64hacks, sm64romhacks, rom, modification" />
 			<meta name="description" content="Welcome to SM64ROMHacks! We have a really big collection of SM64 ROM Hacks which wait to be played! Community News/Events will also be tracked here" />
-			<link rel="stylesheet" type="text/css" href="/_css/bootstrap.css">
+			<link rel="stylesheet" type="text/css" href="/_assets/_css/bootstrap.css">
 			<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-			<link rel="shortcut icon" href="/_img/icon.ico" />
+			<link rel="shortcut icon" href="/_assets/_img/icon.ico" />
 			<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
 		</head>
 		<body>		<div class="container">
@@ -36,8 +36,8 @@
                         $ref="'/patch/$link'"; 
 						$tag = $entry['hack_tags'];
 						$download = $entry['hack_downloads'];
-						$admin_buttons = ($_SESSION['logged_in'] && in_array($_SESSION['userData']['discord_id'], ADMIN_SITE)) ? "<a class=\"btn btn-danger btn-block text-nowrap\" href=\"deleteHack.php?hack_id=$id\"><img src=\"/_img/delete.svg\"></a></th><th class=\"border-0\"><a class=\"btn btn-info btn-block text-nowrap\" href=\"editHack.php?hack_id=$id\"><img src=\"/_img/edit.svg\"></a>" : "&nbsp;";
-						$user_button = $_SESSION['logged_in'] && !areAllAuthorsAnId($creator) ? "<a class=\"btn btn-warning btn-block text-nowrap\" href=\"/hacks/claim.php?hack_id=$id\"><img src=\"/_img/claim.svg\"></a>" : "&nbsp;";
+						$admin_buttons = ($_SESSION['logged_in'] && in_array($_SESSION['userData']['discord_id'], ADMIN_SITE)) ? "<a class=\"btn btn-danger btn-block text-nowrap\" href=\"deleteHack.php?hack_id=$id\"><img src=\"/_assets/_img/delete.svg\"></a></th><th class=\"border-0\"><a class=\"btn btn-info btn-block text-nowrap\" href=\"editHack.php?hack_id=$id\"><img src=\"/_assets/_img/edit.svg\"></a>" : "&nbsp;";
+						$user_button = $_SESSION['logged_in'] && !areAllAuthorsAnId($creator) ? "<a class=\"btn btn-warning btn-block text-nowrap\" href=\"/hacks/claim.php?hack_id=$id\"><img src=\"/_assets/_img/claim.svg\"></a>" : "&nbsp;";
 
 						$authors = explode(", ", $creator);
 						$hack_author = "";
@@ -53,7 +53,7 @@
 			    </table></div> <br/>
                 <div><table>
 					<?php
-						$description_button_text = strlen($data[0]['hack_description']) == 0 ? "Add Description" : "<img src=\"/_img/edit.svg\">";
+						$description_button_text = strlen($data[0]['hack_description']) == 0 ? "Add Description" : "<img src=\"/_assets/_img/edit.svg\">";
 						$description_button = ($_SESSION['logged_in'] && in_array($_SESSION['userData']['discord_id'], ADMIN_SITE)) ? "<a class=\"btn btn-info text-nowrap\" href=\"editHack.php?hack_name=$hack_name\">$description_button_text</a>" : "&nbsp;";
 
 					?>
