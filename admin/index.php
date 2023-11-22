@@ -10,7 +10,7 @@ if(!$_SESSION['logged_in'] || !in_array($_SESSION['userData']['discord_id'], ADM
 if(sizeof($_GET) != 0 && (intval($_GET['claim_id']) != 0 || intval($_GET['hack_id']) != 0)) {
 	if($_GET['type'] == 'claim') {
 		$claim_id = intval($_GET['claim_id']);
-		if($_GET['mode'] == 'accept') {
+		if(scrapChars($_GET['mode']) == 'accept') {
 			$claim = getClaimFromDatabase($pdo, $claim_id);
 			$user_id = $claim[0]['user_id'];
 			$hack_id = intval($claim[0]['hack_id']);
@@ -34,20 +34,20 @@ if(sizeof($_GET) != 0 && (intval($_GET['claim_id']) != 0 || intval($_GET['hack_i
 			header("Location: /admin");
 			die();
 		}
-		else if($_GET['mode'] == 'reject') {
+		else if(scrapChars($_GET['mode']) == 'reject') {
 			deleteClaimFromDatabase($pdo, $claim_id);
 			header("Location: /admin");
 			die();
 		}
 	}
-	else if($_GET['type'] == 'submission') {
+	else if(scrapChars($_GET['type']) == 'submission') {
 		$hack_id = intval($_GET['hack_id']);
 		$patch = getPatchFromDatabase($pdo, $hack_id);
 		if($_GET['mode'] == 'accept') {
 			verifyPatchInDatabase($pdo, $hack_id);
 			rename($_SERVER['DOCUMENT_ROOT'] . "/admin/" . $patch[0]['hack_patchname'] . '.zip', $_SERVER['DOCUMENT_ROOT'] . "/patch/" . $patch[0]['hack_patchname'] . '.zip');
 		}
-		else if($_GET['mode'] == 'reject') {
+		else if(scrapChars($_GET['mode']) == 'reject') {
 			deletePatchFromDatabase($pdo, $hack_id);
 			unlink($_SERVER['DOCUMENT_ROOT'] . "/admin/" . $patch[0]['hack_patchname'] . '.zip');
 		}

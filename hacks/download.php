@@ -2,7 +2,7 @@
 
 include($_SERVER['DOCUMENT_ROOT'] . '/_includes/includes.php');
 
-$hack_id = $_GET['hack_id'];
+$hack_id = intval($_GET['hack_id']);
 
 if(!is_bot()) {
     updateDownloadCounter($pdo, $hack_id);

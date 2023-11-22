@@ -8,14 +8,14 @@ if(!$_SESSION['logged_in']) {
 }
 
 if(sizeof($_POST) != 0) {
-    $hack_name = $_POST['hack_name'];
-    $hack_version = $_POST['hack_version'];
-    $hack_author = $_POST['hack_author'];
+    $hack_name = stripChars($_POST['hack_name']);
+    $hack_version = stripChars($_POST['hack_version']);
+    $hack_author = stripChars($_POST['hack_author']);
     $hack_starcount = isset($_POST['hack_amount']) ? intval($_POST['hack_amount']) : 0;
     $hack_release_date = $_POST['hack_release_date'];
-    $hack_patchname = $_FILES['hack_patchname']["name"];
-    $hack_tags = $_POST['hack_tags'];
-    $hack_description = $_POST['hack_description'];
+    $hack_patchname = stripChars($_FILES['hack_patchname']["name"]);
+    $hack_tags = stripChars($_POST['hack_tags']);
+    $hack_description = stripChars($_POST['hack_description']);
 
     $hack_authors = explode(", ", $hack_author);
     $hack_author = "";
