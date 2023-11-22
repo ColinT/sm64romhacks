@@ -332,6 +332,20 @@ function getRandomHackFromDatabase($pdo) {
 
 }
 
+function getTotalDownloadCountForHackFromDatabase($pdo, $hack_name) {
+    $sql = "SELECT SUM(hack_downloads) AS total_downloads FROM hacks WHERE hack_name = :hack_name";
+    try {
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([
+            'hack_name'=> $hack_name
+        ]);
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $data;
+    } catch(Exception $e) {
+        echo $e;
+    }
+}
+
 function updatePatchInDatabase($pdo,$hack_id,$hack_name,$hack_version,$hack_author,$hack_starcount,$hack_release_date,$hack_tags,$hack_verified){
     $sql = "UPDATE hacks SET 
             hack_name = \"$hack_name\",

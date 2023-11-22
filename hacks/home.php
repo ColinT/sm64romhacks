@@ -1,4 +1,26 @@
-<?php $add_button = ($_SESSION['logged_in']) ? "<a class=\"btn btn-success text-nowrap\" href=\"addHack.php\">Add Hack</a>" : "&nbsp;"; ?>
+<?php 
+$add_button = ($_SESSION['logged_in']) ? "<a class=\"btn btn-success text-nowrap\" href=\"addHack.php\">Add Hack</a>" : "&nbsp;"; 
+$amount = getAmountOfHacksInDatabase($pdo)[0]['count'];
+if($amount == 0){
+	$a_patch=file($_SERVER['DOCUMENT_ROOT']. "/_assets/_data/patches.csv");
+	foreach($a_patch as $patch)
+	{
+		list($name, $version, $creator, $amount, $date, $dl, $tag)=explode(',',$patch);
+		$creator = explode(" & ", $creator);
+		$authors = "";
+		foreach($creator as $author) {
+			$authors = $authors . $author . ', ';
+		}
+		$authors = substr_replace($authors, '', -2);
+		$creator = $authors;
+		$tag=str_replace("\n", "", $tag);
+		$tag=substr_replace($tag, "", -1);
+		$description="";
+		if(strlen($date) == 0) $date = "9999-12-31";
+		addHackToDatabase($pdo, $name, $version, $creator, $amount, $date, $dl, $tag,$description, 1);
+	}	
+}
+?>
 
 <!DOCTYPE HTML>
 <html>
@@ -15,7 +37,8 @@
 		<script src="/hacks/index.js"></script>
 
 	</head>
-	<body>		<div class="container">
+	<body>		
+	<div class="container">
 	<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/header.php'); ?>
 			<div align="center">
 				<!--HTML CONTENT HERE-->
@@ -27,9 +50,9 @@
 						foreach($all_tags as $tag) {
 							$tag = $tag['hack_tags'];
 							$tag = explode(", ", $tag);
-							foreach($tag as $t) {
-								print("<option value=\"$t\">$t</option>");
-							}
+							foreach($tag as $t) { ?>
+							<option value="<?php print($t);?>"><?php print($t);?></option>
+					<?php }
 						}
 					?>
 				</select>	
@@ -39,28 +62,8 @@
 				<div class="table-responsive">
 				<table class="table-sm table-bordered" id="myTable">
 
-					<tr><th><b>Hackname</b></th><th class="creator"><b>Creator</b></th><th class="text-nowrap"><b>Initial Release Date</b></th><th hidden><b>Tag</b></th><th class="border-0"><?php print($add_button);?></th></tr>
-				<?Php 
-				$amount = getAmountOfHacksInDatabase($pdo)[0]['count'];
-				if($amount == 0){
-					$a_patch=file($_SERVER['DOCUMENT_ROOT']. "/_assets/_data/patches.csv");
-					foreach($a_patch as $patch)
-					{
-						list($name, $version, $creator, $amount, $date, $dl, $tag)=explode(',',$patch);
-						$creator = explode(" & ", $creator);
-						$authors = "";
-						foreach($creator as $author) {
-							$authors = $authors . $author . ', ';
-						}
-						$authors = substr_replace($authors, '', -2);
-						$creator = $authors;
-						$tag=str_replace("\n", "", $tag);
-						$tag=substr_replace($tag, "", -1);
-						$description="";
-						if(strlen($date) == 0) $date = "9999-12-31";
-						addHackToDatabase($pdo, $name, $version, $creator, $amount, $date, $dl, $tag,$description, 1);
-					}	
-				}
+					<tr><th><b>Hackname</b></th><th class="creator"><b>Creator</b></th><th class="text-nowrap"><b>Initial Release Date</b></th><th>Downloads</th><th hidden><b>Tag</b></th><th class="border-0"><?php print($add_button);?></th></tr>
+				<?php 
 				$data = (getAllUniqueHacksFromDatabase($pdo));
 				foreach($data as $entry) {
 					$hack_name = $entry['hack_name'];
@@ -69,6 +72,8 @@
 					$hack_author = $entry['author'];
 					$hack_release_date = $entry['release_date'];
 					$hack_tags = $entry['hack_tags'];
+
+					$total_downloads = getTotalDownloadCountForHackFromDatabase($pdo, $hack_name)[0]['total_downloads'];
 
 					$authors = explode(", ", $hack_author);
 						$hack_author = "";
@@ -80,7 +85,7 @@
 						$hack_author = substr_replace($hack_author, '', -2);
 
 					$delete_button = ($_SESSION['logged_in'] && in_array($_SESSION['userData']['discord_id'], ADMIN_SITE)) ? "<a class=\"btn btn-danger btn-block text-nowrap\" href=\"deleteHack.php?hack_name=$hack_name\"><img src=\"/_assets/_img/delete.svg\"></a>" : "&nbsp;";
-					print("<tr><td><a href=\"/hacks/$dir_name\">$hack_name</a></td><td class=\"creator\">$hack_author</td><td>$hack_release_date</td><td hidden>$hack_tags</td><td class=\"border-0\">$delete_button</td></tr>\n");
+					print("<tr><td><a href=\"/hacks/$dir_name\">$hack_name</a></td><td class=\"creator\">$hack_author</td><td>$hack_release_date</td><td class=\"text-nowrap text-muted\">Downloads: $total_downloads</td><td hidden>$hack_tags</td><td class=\"border-0\">$delete_button</td></tr>\n");
 				}
 				?>
 				</table>
