@@ -1,8 +1,11 @@
 <?php
 
 include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php';
-createNewspostDatabase($pdo);
 
+createUsersDatabase($pdo);
+createNewspostDatabase($pdo);
+createHacksDatabase($pdo);
+createClaimsDatabase($pdo);
 
 ?>
 
