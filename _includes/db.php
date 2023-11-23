@@ -421,7 +421,7 @@ function getAmountOfHacksInDatabase($pdo){
 }
 
 function deleteHackFromDatabase($pdo, $hack_name) {
-    $sql = "DELETE FROM hacks WHERE hack_name = '$hack_name'";
+    $sql = "DELETE FROM hacks WHERE hack_name = \"$hack_name\"";
     try {
         $stmt = $pdo->prepare($sql);
         $stmt->execute();
