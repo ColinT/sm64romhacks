@@ -69,8 +69,6 @@ else {
     updateUserInDatabase($pdo,$userData['id'],$userData['avatar'],stripChars($userData['email']),stripChars($userData['global_name']));
 }
 
-$forbidden_chars = array('<', '>');
-
 $_SESSION['logged_in'] = true;
 $_SESSION['userData'] = [
     'discord_id'=>$userData['id'],
