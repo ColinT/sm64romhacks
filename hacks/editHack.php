@@ -2,10 +2,11 @@
 
 include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php';
 
-$hack_name = scrapChars($_GET['hack_name']);
+$hack_name = stripChars($_GET['hack_name']);
 $hack_id = intval($_GET['hack_id']);
 
-if(!isset($hack_name) & $hack_id == 0 || isset($hack_name) && $hack_id != 0 || !$_SESSION['logged_in'] || !in_array($_SESSION['userData']['discord_id'], ADMIN_NEWS)) {
+$is_author = str_contains(getPatchFromDatabase($pdo, $hack_id)[0]['hack_author'], $_SESSION['userData']['discord_id']) || str_contains(getHackFromDatabase($pdo, $hack_name)[0]['hack_author'], $_SESSION['userData']['discord_id']);
+if(strlen($hack_name) == 0 && $hack_id == 0 || strlen($hack_name) != 0 && $hack_id != 0 || !$_SESSION['logged_in'] || (!$is_author && !in_array($_SESSION['userData']['discord_id'], ADMIN_NEWS))) {
 	header("Location: /hacks");
 	die();
 }
@@ -56,7 +57,7 @@ if(sizeof($_POST) != 0) {
 }
 
 
-if(isset($hack_name)) $hackdata = getHackFromDatabase($pdo, stripChars($_GET['hack_name']));
+if(strlen($hack_name) != 0) $hackdata = getHackFromDatabase($pdo, stripChars($_GET['hack_name']));
 else $hackdata = getPatchFromDatabase($pdo, $hack_id);
 ?>
 <!DOCTYPE HTML>
@@ -76,7 +77,7 @@ else $hackdata = getPatchFromDatabase($pdo, $hack_id);
 	<body>		<div class="container">
 	<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/header.php'); ?>
 			<div align="center">
-                <?php if(isset($hack_name)) { ?>
+                <?php if(strlen($hack_name) != 0) { ?>
                 <form action="#" method="post">
                     <table class="table">
                     <tr>
@@ -131,7 +132,7 @@ else $hackdata = getPatchFromDatabase($pdo, $hack_id);
                             <label for="hack_author" class="col-form-label text-nowrap">Author:</label>
                         </td>
                         <td>
-                            <input type="text" name="hack_author" class="form-control" value="<?php print($hackdata[0]['hack_author']);?>">
+                            <input type="text" name="hack_author" class="form-control" value="<?php print(getAllAuthorsNames($pdo, $hackdata[0]['hack_author']));?>">
                             <small id="hack_author_help" class="form-text text-muted">Seperate multiple author with &quot;&lt;Name&gt;,&nbsp;&lt;Name&gt;&quot;</small>                        
                         </td>
                     </tr>

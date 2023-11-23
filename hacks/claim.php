@@ -3,7 +3,7 @@
 include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php';
 
 if(!$_SESSION['logged_in']) header("Location: /");
-$hack_id = scrapChars($_GET['hack_id']); 
+$hack_id = stripChars($_GET['hack_id']); 
 $data = getPatchFromDatabase($pdo, $hack_id);
 $hack_author = $data[0]['hack_author'];
 $authors = explode(", ", $hack_author);
