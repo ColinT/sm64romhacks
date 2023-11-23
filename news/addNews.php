@@ -35,7 +35,7 @@ if(!$_SESSION['logged_in'] || !in_array($_SESSION['userData']['discord_id'], ADM
 						</tr>
 						<tr>
 							<td>&nbsp;</td>
-							<td><button type="submit">Add Newspost!</button></td>
+							<td><button class="btn btn-primary" type="submit">Add Newspost!</button></td>
 						</tr>
 					</table>
 				</form>
