@@ -1,5 +1,5 @@
 <?php 
-$add_button = ($_SESSION['logged_in']) ? "<a class=\"btn btn-success text-nowrap\" href=\"addHack.php\">Add Hack</a>" : "&nbsp;"; 
+$add_button = ($_SESSION['logged_in']) ? "<a class=\"btn btn-success text-nowrap\" href=\"addHack.php\"><img src=\"/_assets/_img/add.svg\"></a>" : "&nbsp;"; 
 $amount = getAmountOfHacksInDatabase($pdo)[0]['count'];
 if($amount == 0){
 	$a_patch=file($_SERVER['DOCUMENT_ROOT']. "/_assets/_data/patches.csv");
@@ -62,7 +62,7 @@ if($amount == 0){
 				<div class="table-responsive">
 				<table class="table-sm table-bordered" id="myTable">
 
-					<tr><th><b>Hackname</b></th><th class="creator"><b>Creator</b></th><th class="text-nowrap"><b>Initial Release Date</b></th><th>Downloads</th><th hidden><b>Tag</b></th><th class="border-0"><?php print($add_button);?></th></tr>
+					<tr><th><b>Hackname</b></th><th class="creator"><b>Creator</b></th><th class="text-nowrap"><b>Initial Release Date</b></th><th>Downloads</th><th hidden><b>Tag</b></th><th class="border-0"><?php print($add_button);?></th><th class="border-0">&nbsp;</th></tr>
 				<?php 
 				$data = (getAllUniqueHacksFromDatabase($pdo));
 				foreach($data as $entry) {
@@ -84,8 +84,10 @@ if($amount == 0){
 						}
 						$hack_author = substr_replace($hack_author, '', -2);
 
-					$delete_button = ($_SESSION['logged_in'] && in_array($_SESSION['userData']['discord_id'], ADMIN_SITE)) ? "<a class=\"btn btn-danger btn-block text-nowrap\" href=\"deleteHack.php?hack_name=$hack_name\"><img src=\"/_assets/_img/delete.svg\"></a>" : "&nbsp;";
-					print("<tr><td><a href=\"/hacks/$dir_name\">$hack_name</a></td><td class=\"creator\">$hack_author</td><td>$hack_release_date</td><td class=\"text-nowrap text-muted\">Downloads: $total_downloads</td><td hidden>$hack_tags</td><td class=\"border-0\">$delete_button</td></tr>\n");
+					$delete_button = ($_SESSION['logged_in'] && (in_array($_SESSION['userData']['discord_id'], ADMIN_SITE) || str_contains($hack_author, $_SESSION['userData']['discord_id']))) ? "<a class=\"btn btn-danger btn-block text-nowrap\" href=\"deleteHack.php?hack_name=$hack_name\"><img src=\"/_assets/_img/delete.svg\"></a>" : "&nbsp;";
+					$edit_button = ($_SESSION['logged_in'] && (in_array($_SESSION['userData']['discord_id'], ADMIN_SITE) || str_contains($hack_author, $_SESSION['userData']['discord_id']))) ? "<a class=\"btn btn-info btn-block text-nowrap\" href=\"editHack.php?hack_name=$hack_name\"><img src=\"/_assets/_img/edit.svg\"></a>" : "&nbsp;";
+
+					print("<tr><td><a href=\"/hacks/$dir_name\">$hack_name</a></td><td class=\"creator\">$hack_author</td><td>$hack_release_date</td><td class=\"text-nowrap text-muted\">Downloads: $total_downloads</td><td hidden>$hack_tags</td><td class=\"border-0\">$edit_button</td><td class=\"border-0\">$delete_button</td></tr>\n");
 				}
 				?>
 				</table>
