@@ -17,7 +17,7 @@ include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php';
 		<link rel="shortcut icon" href="/_assets/_img/icon.ico" />
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
 	</head>
-	<body>		
+	<body>		<div class="container">
 	<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/header.php'); ?>
 				<!--HTML CONTENT HERE-->
 				<h2><strong>Terms and Conditions</strong></h2>
@@ -139,6 +139,7 @@ include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php';
 <p>The limitations and prohibitions of liability set in this Section and elsewhere in this disclaimer: (a) are subject to the preceding paragraph; and (b) govern all liabilities arising under the disclaimer, including liabilities arising in contract, in tort and for breach of statutory duty.</p>
 
 <p>As long as the website and the information and services on the website are provided free of charge, we will not be liable for any loss or damage of any nature.</p>
-			<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/footer.php'); ?>			
+			<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/footer.php'); ?>		
+</div>	
 	</body>
 </html>
