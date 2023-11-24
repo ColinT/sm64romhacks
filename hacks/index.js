@@ -5,7 +5,7 @@ const DEBOUNCE_DELAY = 200;
 const HACK_NAME_COLUMN_INDEX = 0;
 const AUTHOR_NAME_COLUMN_INDEX = 1;
 const HACK_DATE_COLUMN_INDEX = 2;
-const TAG_COLUMN_INDEX = 3;
+const TAG_COLUMN_INDEX = 4;
 
 /**
  * @typedef {Object} HackTableRowContent
@@ -112,7 +112,7 @@ function setHackDatesFilterHandler(hackDatesInput, tableRowContents) {
  function setTagFilterHandler(tagInput, tableRowContents) {
   tagInput.addEventListener("change", debounce((changeEvent) => {
     const searchString = changeEvent.target.value.toUpperCase();
-    filterRows(tableRowContents, isTableRowContentKeyEqual(searchString, "tag"));
+    filterRows(tableRowContents, isTableRowContentKeySubstring(searchString, "tag"));
   }), DEBOUNCE_DELAY);
 }
 
