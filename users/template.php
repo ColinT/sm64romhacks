@@ -22,7 +22,7 @@
 					<?php foreach($data as $entry) { 
 						$authors = getAllAuthorsNames($pdo, $entry['author']);?> 
 						
-						<tr><td><?php print($entry['hack_name']); ?></td><td><?php print($authors); ?></td><td><?php print($entry['release_date']); ?></td></tr>
+						<tr><td><a href="/hacks/<?php print(getURLEncodedName($entry['hack_name']));?>"><?php print($entry['hack_name']); ?></a></td><td><?php print($authors); ?></td><td><?php print($entry['release_date']); ?></td></tr>
 					<?php } ?>
 			    </table></div> <br/>
 
