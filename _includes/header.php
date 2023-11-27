@@ -95,7 +95,7 @@ setInterval(() => {
           <img src="<?php echo $avatar_url;?>" width=16 height=16 />&nbsp;<?php echo $global_name . $available_actions;?>
           </a>
           <ul class="dropdown-menu">
-          <li><a class="dropdown-item" href="/login/dashboard.php">Dashboard</a></li>
+          <li><a class="dropdown-item" href="/users/<?php print($_SESSION['userData']['discord_id']);?>">Profile</a></li>
           <hr/>
           <li><a class="dropdown-item" href="/login/logout.php">Logout</a></li>
           </ul></li><?php } ?>
