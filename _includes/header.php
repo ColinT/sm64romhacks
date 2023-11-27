@@ -82,10 +82,17 @@ setInterval(() => {
     <?php if(!$_SESSION["logged_in"]) { ?>    
       <li class="nav-item"><a href="/login" class="nav-link" title="By logging in you agree with our Terms of Service">Login</a></li>
     <?php }?>
-    <?php if($_SESSION["logged_in"]) { ?>      
+    <?php if($_SESSION["logged_in"]) { 
+      if(in_array($_SESSION['userData']['discord_id'], ADMIN_SITE)) {
+        $available_actions = "&nbsp;<span class=\"badge badge-light\">" . sizeof(getClaimsFromDatabase($pdo)) + sizeof(getAllPendingHacksFromDatabase($pdo)) . "</span>";
+      }
+      else {
+        $available_actions = "&nbsp;";
+      }
+      ?>      
       <li class="nav-item dropdown">          
         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-          <img src="<?php echo $avatar_url;?>" width=16 height=16 />&nbsp;<?php echo $global_name;?>
+          <img src="<?php echo $avatar_url;?>" width=16 height=16 />&nbsp;<?php echo $global_name . $available_actions;?>
           </a>
           <ul class="dropdown-menu">
           <li><a class="dropdown-item" href="/login/dashboard.php">Dashboard</a></li>
