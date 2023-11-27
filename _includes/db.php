@@ -352,6 +352,27 @@ function updatePatchInDatabase($pdo,$hack_id,$hack_name,$hack_version,$hack_auth
     }
 }
 
+function recommendPatchFromDatabase($pdo, $hack_id) {
+    $sql = "UPDATE hacks SET hack_recommend = 1 WHERE hack_id = $hack_id";
+    try {
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+    } catch(Exception $e) {
+        echo $e;
+    }
+}
+
+function unrecommendPatchFromDatabase($pdo, $hack_id) {
+    $sql = "UPDATE hacks SET hack_recommend = 0 WHERE hack_id = $hack_id";
+    try {
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+    } catch(Exception $e) {
+        echo $e;
+    }
+
+}
+
 function verifyPatchInDatabase($pdo,$hack_id){
     $sql = "UPDATE hacks SET 
             hack_verified = 1

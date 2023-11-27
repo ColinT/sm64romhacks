@@ -12,7 +12,6 @@ if(strlen($hack_name) == 0 && $hack_id == 0 || strlen($hack_name) != 0 && $hack_
 }
 
 if(sizeof($_POST) != 0) {
-    $hack_id = intval($_POST['hack_id']);
     $hack_description = stripChars($_POST['hack_description']);
 
 
@@ -21,21 +20,27 @@ if(sizeof($_POST) != 0) {
         die();
     }
 
-    if(isset($hack_description)) {
+    if(strlen($hack_description) != 0) {
         $hack_name = stripChars($_POST['hack_name']);
         $hack_description = str_replace("\r\n", "<br/>", $hack_description);
         $hack_description = stripChars($hack_description);
         $hack_description = str_replace("&lt;br/&gt;", "<br/>", $hack_description);
-        updateHackInDatabase($pdo,$hack_name,$hack_description);
-
+        $hack_tags = stripChars($_POST['hack_tags']);
+        updateHackInDatabase($pdo,$hack_name,$hack_tags,$hack_description);
+        $hack = getHackFromDatabase($pdo, $hack_name);
+        foreach($hack as $entry) {
+            unrecommendPatchFromDatabase($pdo, intval($entry['hack_id']));
+            if(isset($_POST[$entry['hack_id']])) {
+                recommendPatchFromDatabase($pdo, intval($entry['hack_id']));
+            }
+        }
     }
     else {
         $hack_name = stripChars($_POST['hack_name']);
         $hack_version = stripChars($_POST['hack_version']);
         $hack_author = stripChars($_POST['hack_author']);
-        $hack_starcount = $_POST['hack_starcount'];
+        $hack_starcount = intval($_POST['hack_starcount']);
         $hack_release_date = $_POST['hack_release_date'];
-        $hack_tags = stripChars($_POST['hack_tags']);
 
         $hack_authors = explode(", ", $hack_author);
         $hack_author = "";
@@ -45,10 +50,7 @@ if(sizeof($_POST) != 0) {
             else $hack_author = $hack_author . $author . ', ';
         }
         $hack_author = substr_replace($hack_author, '', -2);
-
-
-        updatePatchInDatabase($pdo, $hack_id, $hack_name, $hack_version, $hack_author, $hack_starcount, $hack_release_date, $hack_tags);
-
+        updatePatchInDatabase($pdo, $hack_id, $hack_name, $hack_version, $hack_author, $hack_starcount, $hack_release_date, 1);
     }
 
     header("Location: /hacks/" . getURLEncodedName($hack_name));
@@ -79,7 +81,7 @@ else $hackdata = getPatchFromDatabase($pdo, $hack_id);
 			<div align="center">
                 <?php if(strlen($hack_name) != 0) { ?>
                 <form action="#" method="post">
-                    <table class="table">
+                    <table class="table table-bordered">
                     <tr>
                         <td class="text-right">
                             <label for="hack_name" class="col-form-label text-nowrap">Hack Name:</label>
@@ -90,6 +92,42 @@ else $hackdata = getPatchFromDatabase($pdo, $hack_id);
                         </td>
                     </tr>
                     <tr>
+                        <td class="text-right">
+                            <label for="hack_recommend" class="col-form-label text-nowrap">Recommend Versions:</label>
+                        </td>
+                        <td class="text-left">
+                            <?php 
+                            foreach($hackdata as $entry) {
+                                $version = $entry['hack_version'];
+                                $id = $entry['hack_id'];
+                                print("<input class=\"col-form-input\" type=\"checkbox\" name=\"$id\" id=\"flexCheckDefault\">");
+                                print("<label class=\"col-form-label\" for=\"flexCheckDefault\">$version</label><br/>");
+                            }
+                            ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-right">
+                            <label for="hack_tags" class="col-form-label text-nowrap">Hack Tags:</label>
+                        </td>
+                        <td>
+                        <input class="form-control" list="hack_tags_options" name="hack_tags" value="<?php print($hackdata[0]['hack_tags']);?>">  
+                            <datalist id="hack_tags_options">                          
+                            <?php 
+                                $data = getAllTagsFromDatabase($pdo);
+                                foreach($data as $entry) {
+                                    $tag = $entry['hack_tags'];
+                                    $tag = explode(", ", $tag);
+                                    foreach($tag as $t) {
+                                        print("<option value=\"$t\">");
+                                    }
+                                }
+                            ?>
+                            </datalist>
+                        </td>
+                    </tr>
+
+                    <tr>
                     <td class="text-right">
                         <label for="hack_description" class="col-form-label text-nowrap">Description:</label>
                         </td>
@@ -99,7 +137,7 @@ else $hackdata = getPatchFromDatabase($pdo, $hack_id);
                     </tr>
                     <tr>
                         <td>&nbsp;</td>
-                        <td class="text-center"><button type="submit" class="btn btn-secondary align-middle">Add Description!</button></td>
+                        <td class="text-center"><button type="submit" class="btn btn-secondary align-middle">Save Changes!</button></td>
                     </tr>
                     </table>
                 </form>
@@ -157,28 +195,8 @@ else $hackdata = getPatchFromDatabase($pdo, $hack_id);
                         </td>
                     </tr>
                     <tr>
-                        <td colspan=2><input type="hidden" class="form-control" name="hack_id" id="hack_id" value="<?php print($hackdata[0]['hack_id']); ?>"> </td>
-                        <td>
-                            <label for="hack_tags" class="col-form-label text-nowrap">Tags:</label>
-                        </td>
-                        <td colspan=2>
-                            <input class="form-control" list="hack_tags_options" name="hack_tags" value="<?php print($hackdata[0]['hack_tags']);?>">  
-                            <datalist id="hack_tags_options">                          
-                            <?php 
-                                $data = getAllTagsFromDatabase($pdo);
-                                foreach($data as $entry) {
-                                    $tag = $entry['hack_tags'];
-                                    print("<option value=\"$tag\">");
-                                }
-                            ?>
-                            </datalist>
-                            <small id="hack_author_help" class="form-text text-muted">Seperate multiple author with &quot;&lt;Tag&gt;,&nbsp;&lt;Tag&gt;&quot;</small>                        
-                        </td>
-                       <td>&nbsp;</td>
-                    </tr>
-                    <tr>
                         <td colspan=2>&nbsp;</td>
-                        <td colspan=2 class="text-center"><button type="submit" class="btn btn-secondary align-middle">Add Hack!</button></td>
+                        <td colspan=2 class="text-center"><button type="submit" class="btn btn-secondary align-middle">Save Changes!</button></td>
                         <td colspan=2>&nbsp;</td>
                     </tr>
                     </table>
