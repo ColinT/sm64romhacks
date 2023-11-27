@@ -15,4 +15,6 @@ define("DISCORD_REDIRECT_URI", "http://localhost/login/process-oauth.php");
 define("TWITCH_CLIENT_ID", "YOUR_TWITCH_CLIENT_ID");
 define("TWITCH_CLIENT_SECRET", "YOUR_TWITCH_CLIENT_SECRET");
 
+error_reporting(E_ERROR);
+
 ?>

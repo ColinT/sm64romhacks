@@ -14,7 +14,6 @@ if(strlen($hack_name) == 0 && $hack_id == 0 || strlen($hack_name) != 0 && $hack_
 if(isset($hack_name)) {
 	$data = getHackFromDatabase($pdo, $hack_name);
 	foreach($data as $entry) {
-		var_dump($entry);
 	unlink($_SERVER['DOCUMENT_ROOT'] . '/patch/' . $entry['hack_patchname'] . '.zip');
 	}	
 	deleteHackFromDatabase($pdo, $hack_name);
