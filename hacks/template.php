@@ -1,3 +1,9 @@
+<?php 
+if($_SESSION['logged_in'] && (in_array($_SESSION['userData']['discord_id'], ADMIN_SITE))) {
+	$admin_HTMLLoad = "&nbsp;<a class=\"btn btn-danger text-nowrap\" href=\"deleteHack.php?hack_name=$hack_name\"><img src=\"/_assets/_img/delete.svg\"></a>&nbsp;<a class=\"btn btn-info text-nowrap\" href=\"editHack.php?hack_name=$hack_name\"><img src=\"/_assets/_img/edit.svg\"></a>";
+}
+
+?>
 <!DOCTYPE HTML>
 	<html>
 		<!--BEGINNING OF HEAD-->
@@ -16,8 +22,7 @@
 
 				<div align="center">
 					<!--HTML CONTENT HERE-->
-					
-					<h1><u><?php print($hack_name);?></u></h1>
+					<h1><u><?php print($hack_name);?></u><?php print($admin_HTMLLoad);?></h1>
 					<div class="table-responsive">
 		        	<table class="table-sm table-bordered">
 					<?php $admin_HTMLLoad =  ($_SESSION['logged_in'] && in_array($_SESSION['userData']['discord_id'], ADMIN_SITE)) ? "" : " hidden";?>
