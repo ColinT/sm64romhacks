@@ -36,10 +36,12 @@
                         $ref="'/patch/$link'"; 
 						$tag = $entry['hack_tags'];
 						$download = $entry['hack_downloads'];
+						$is_recommend = $entry['hack_recommend'];
 						$is_author = str_contains(getPatchFromDatabase($pdo, $id)[0]['hack_author'], $_SESSION['userData']['discord_id']) || str_contains(getHackFromDatabase($pdo, $hack_name)[0]['hack_author'], $_SESSION['userData']['discord_id']);
 
 						$admin_buttons = ($_SESSION['logged_in'] && (in_array($_SESSION['userData']['discord_id'], ADMIN_SITE) || $is_author)) ? "<a class=\"btn btn-danger btn-block text-nowrap\" href=\"deleteHack.php?hack_id=$id\"><img src=\"/_assets/_img/delete.svg\"></a></th><th class=\"border-0\"><a class=\"btn btn-info btn-block text-nowrap\" href=\"editHack.php?hack_id=$id\"><img src=\"/_assets/_img/edit.svg\"></a>" : "&nbsp;";
 						$user_button = $_SESSION['logged_in'] && !areAllAuthorsAnId($creator) ? "<a class=\"btn btn-warning btn-block text-nowrap\" href=\"/hacks/claim.php?hack_id=$id\"><img src=\"/_assets/_img/claim.svg\"></a>" : "&nbsp;";
+						$recommend_class = $is_recommend == 1 ? "class=table-primary" : "";
 
 						$authors = explode(", ", $creator);
 						$hack_author = "";
@@ -50,7 +52,7 @@
 						}
 						$hack_author = substr_replace($hack_author, '', -2);
 			   
-                        print "<tr><td $admin_HTMLLoad>$id</td><td>$hack_name</td><td>$version</td><td><u><a href=download.php?hack_id=$id>Download</a></u><br/><small class=\"text-muted\">Downloads: $download</small></td><td>$hack_author</td><td>$amount</td><td>$date</td><td $admin_HTMLLoad>$tag</td><td class=\"border-0\">$user_button</td><td class=\"border-0\">$admin_buttons</td></tr>\n";
+                        print "<tr><td $recommend_class $admin_HTMLLoad>$id</td><td $recommend_class>$hack_name</td><td $recommend_class>$version</td><td $recommend_class><u><a href=download.php?hack_id=$id>Download</a></u><br/><small class=\"text-muted\">Downloads: $download</small></td><td $recommend_class>$hack_author</td><td $recommend_class>$amount</td><td $recommend_class>$date</td><td $recommend_class $admin_HTMLLoad>$tag</td><td class=\"border-0\">$user_button</td><td class=\"border-0\">$admin_buttons</td></tr>\n";
                     }?>
 			    </table></div> <br/>
                 <div><table>

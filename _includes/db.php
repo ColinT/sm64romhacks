@@ -201,15 +201,16 @@ function createHacksDatabase($pdo) {
     $sql = "CREATE TABLE IF NOT EXISTS `hacks` (
         `hack_id` int(11) NOT NULL AUTO_INCREMENT,
         `hack_name` varchar(255) NOT NULL,
-        `hack_version` varchar(255) NULL,
-        `hack_author` varchar(255) NULL,
-        `hack_starcount` int(11) NULL,
-        `hack_release_date` date NULL,
+        `hack_version` varchar(255) DEFAULT NULL,
+        `hack_author` varchar(255) DEFAULT NULL,
+        `hack_starcount` int(11) DEFAULT NULL,
+        `hack_release_date` date DEFAULT NULL,
         `hack_patchname` varchar(255) NOT NULL,
         `hack_downloads` int(11) NOT NULL,
-        `hack_tags` varchar(255) NULL,
-        `hack_description` text NULL,
+        `hack_tags` varchar(255) DEFAULT NULL,
+        `hack_description` text DEFAULT NULL,
         `hack_verified` tinyint(1) NOT NULL,
+        `hack_recommend` tinyint(1) NOT NULL,
         PRIMARY KEY (`hack_id`)
       ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4";
       try {
@@ -241,7 +242,7 @@ function addHackToDatabase($pdo,$hack_name,$hack_version,$hack_author,$hack_star
 }
 
 function getHackFromDatabase($pdo, $hack_name) {
-    $sql = "SELECT * FROM hacks WHERE hack_name=:hack_name AND hack_verified=1 ORDER BY hack_version DESC";
+    $sql = "SELECT * FROM hacks WHERE hack_name=:hack_name AND hack_verified=1 ORDER BY hack_recommend DESC, CASE WHEN hack_release_date = '9999-12-31' THEN 2 ELSE 1 END, hack_release_date DESC";
     try {
         $stmt = $pdo->prepare($sql);
         $stmt->execute([
@@ -346,14 +347,13 @@ function getTotalDownloadCountForHackFromDatabase($pdo, $hack_name) {
     }
 }
 
-function updatePatchInDatabase($pdo,$hack_id,$hack_name,$hack_version,$hack_author,$hack_starcount,$hack_release_date,$hack_tags,$hack_verified){
+function updatePatchInDatabase($pdo,$hack_id,$hack_name,$hack_version,$hack_author,$hack_starcount,$hack_release_date,$hack_verified){
     $sql = "UPDATE hacks SET 
             hack_name = \"$hack_name\",
             hack_version = \"$hack_version\",
             hack_author = \"$hack_author\",
             hack_starcount = $hack_starcount,
             hack_release_date = '$hack_release_date',
-            hack_tags = \"$hack_tags\",
             hack_verified = $hack_verified
             WHERE hack_id = $hack_id";
     try {
@@ -386,8 +386,11 @@ function updateDownloadCounter($pdo, $hack_id) {
     }
 }
 
-function updateHackInDatabase($pdo, $hack_name, $hack_description) {
-    $sql = "UPDATE hacks SET hack_description = \"$hack_description\" WHERE hack_name = \"$hack_name\"";
+function updateHackInDatabase($pdo, $hack_name,$hack_tags, $hack_description) {
+    $sql = "UPDATE hacks SET 
+            hack_description = \"$hack_description\",
+            hack_tags = \"$hack_tags\"
+            WHERE hack_name = \"$hack_name\"";
     try {
         $stmt = $pdo->prepare($sql);
         $stmt->execute();
