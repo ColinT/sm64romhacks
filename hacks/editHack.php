@@ -100,7 +100,8 @@ else $hackdata = getPatchFromDatabase($pdo, $hack_id);
                             foreach($hackdata as $entry) {
                                 $version = $entry['hack_version'];
                                 $id = $entry['hack_id'];
-                                print("<input class=\"col-form-input\" type=\"checkbox\" name=\"$id\" id=\"flexCheckDefault\">");
+                                $checked = $entry['hack_recommend'] == 1 ? "checked" : "";
+                                print("<input class=\"col-form-input\" type=\"checkbox\" name=\"$id\" id=\"flexCheckDefault\" $checked>");
                                 print("<label class=\"col-form-label\" for=\"flexCheckDefault\">$version</label><br/>");
                             }
                             ?>
