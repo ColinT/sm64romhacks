@@ -269,18 +269,6 @@ function getHackByUserFromDatabase($pdo, $user_id) {
     }
 }
 
-function getAllHacksFromDatabase($pdo){
-    $sql = "SELECT * FROM hacks WHERE hack_verified=0 ORDER BY hack_name";
-    try {
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute();
-        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        return $data;
-    } catch (Exception $e) {
-        echo $e;
-    }
-}
-
 function getAllPendingHacksFromDatabase($pdo){
     $sql = "SELECT * FROM hacks WHERE hack_verified=0 ORDER BY hack_name";
     try {
