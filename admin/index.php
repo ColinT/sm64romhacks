@@ -22,11 +22,10 @@ if(sizeof($_GET) != 0 && (intval($_GET['claim_id']) != 0 || intval($_GET['hack_i
 			$hack_author = $hack['hack_author'];
 			$hack_starcount = $hack['hack_starcount'];
 			$hack_release_date = $hack['hack_release_date'];
-			$hack_tags = $hack['hack_tags'];
 
 
 			$hack_author = str_replace($claimed_author, $user_id, $hack_author);
-			updatePatchInDatabase($pdo,$hack_id,$hack_name,$hack_version,$hack_author,$hack_starcount,$hack_release_date,$hack_tags, 1);
+			updatePatchInDatabase($pdo,$hack_id,$hack_name,$hack_version,$hack_author,$hack_starcount,$hack_release_date, 1);
 
 
 			deleteClaimFromDatabase($pdo, $claim_id);
