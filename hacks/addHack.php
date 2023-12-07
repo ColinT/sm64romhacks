@@ -16,6 +16,7 @@ if(sizeof($_POST) != 0) {
     $hack_patchname = stripChars($_FILES['hack_patchname']["name"]);
     $hack_tags = stripChars($_POST['hack_tags']);
     $hack_description = stripChars($_POST['hack_description']);
+    $hack_logo = stripChars($_FILES['hack_logo']["name"]);
 
     $hack_authors = explode(", ", $hack_author);
     $hack_author = "";
@@ -29,6 +30,7 @@ if(sizeof($_POST) != 0) {
 
     if(in_array($_SESSION['userData']['discord_id'], ADMIN_SITE)) {
         $result = move_uploaded_file($_FILES['hack_patchname']['tmp_name'], $_SERVER['DOCUMENT_ROOT'].'/patch/'.$hack_patchname);
+        $logo_result = move_uploaded_file($_FILES['hack_logo']['tmp_name'], $_SERVER['DOCUMENT_ROOT'].'/_assets/_img/hacks/logo_' . $hack_name . '.jpg');
         $hack_patchname = substr($hack_patchname, 0, -4);
         addHackToDatabase($pdo, $hack_name, $hack_version, $hack_author, $hack_starcount, $hack_release_date, $hack_patchname, $hack_tags, $hack_description, 1, 0);
     }
@@ -36,7 +38,7 @@ if(sizeof($_POST) != 0) {
     else {
         $result = move_uploaded_file($_FILES['hack_patchname']['tmp_name'], $_SERVER['DOCUMENT_ROOT'].'/admin/'.$hack_patchname);
         $hack_patchname = substr($hack_patchname, 0, -4);
-        addHackToDatabase($pdo, $hack_name, $hack_version, $hack_author, $hack_starcount, $hack_release_date, $hack_patchname, $hack_tags, $hack_description, 0, 0);
+        addHackToDatabase($pdo, $hack_name, $hack_version, $hack_author, $hack_starcount, $hack_release_date, $hack_patchname, $hack_tags, $hack_description, 0, 0, $hack_logo);
     }
 
     if(!$result) {header("Location: /404.php"); die();}
@@ -142,6 +144,12 @@ if(sizeof($_POST) != 0) {
                         <td colspan=3>
                             <textarea name="hack_description" class="form-control"></textarea>
                         </td>
+                    </tr>
+                    <tr>
+                    <td colspan=2>&nbsp;</td>
+                    <td><label for="hack_logo" class="col-form-label text-nowrap">Logo:</label></td>
+                    <td><input type="file" name="hack_logo" class="form-control"></td>
+                    <td colspan=2>&nbsp;</td>
                     </tr>
                     <tr>
                         <td colspan=2>&nbsp;</td>

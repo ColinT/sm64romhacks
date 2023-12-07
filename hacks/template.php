@@ -1,7 +1,11 @@
 <?php 
 if($_SESSION['logged_in'] && (in_array($_SESSION['userData']['discord_id'], ADMIN_SITE))) {
-	$admin_HTMLLoad = "&nbsp;<a class=\"btn btn-danger text-nowrap\" href=\"deleteHack.php?hack_name=$hack_name\"><img src=\"/_assets/_img/delete.svg\"></a>&nbsp;<a class=\"btn btn-info text-nowrap\" href=\"editHack.php?hack_name=$hack_name\"><img src=\"/_assets/_img/edit.svg\"></a>";
+	$admin_HTMLLoad = "&nbsp;<a class=\"btn btn-danger text-nowrap\" href=\"deleteHack.php?hack_name=$hack_name\"><img src=\"/_assets/_img/icons/delete.svg\"></a>&nbsp;<a class=\"btn btn-info text-nowrap\" href=\"editHack.php?hack_name=$hack_name\"><img src=\"/_assets/_img/icons/edit.svg\"></a>";
 }
+
+$logo_HTMLLoad = "";
+$hacks_logo = "logo_" . stripChars($hack_name) . ".jpg";
+if(file_exists($_SERVER['DOCUMENT_ROOT'] . "/_assets/_img/hacks/$hacks_logo")) $logo_HTMLLoad = "<img src=\"/_assets/_img/hacks/$hacks_logo\" width=80 height=60>&nbsp;";
 
 ?>
 <!DOCTYPE HTML>
@@ -22,7 +26,7 @@ if($_SESSION['logged_in'] && (in_array($_SESSION['userData']['discord_id'], ADMI
 
 				<div align="center">
 					<!--HTML CONTENT HERE-->
-					<h1><u><?php print($hack_name);?></u><?php print($admin_HTMLLoad);?></h1>
+					<h1><?php print($logo_HTMLLoad);?><u><?php print($hack_name);?></u><?php print($admin_HTMLLoad);?></h1>
 					<div class="table-responsive">
 		        	<table class="table-sm table-bordered">
 					<?php $admin_HTMLLoad =  ($_SESSION['logged_in'] && in_array($_SESSION['userData']['discord_id'], ADMIN_SITE)) ? "" : " hidden";?>
@@ -44,8 +48,8 @@ if($_SESSION['logged_in'] && (in_array($_SESSION['userData']['discord_id'], ADMI
 						$is_recommend = $entry['hack_recommend'];
 						$is_author = str_contains(getPatchFromDatabase($pdo, $id)[0]['hack_author'], $_SESSION['userData']['discord_id']) || str_contains(getHackFromDatabase($pdo, $hack_name)[0]['hack_author'], $_SESSION['userData']['discord_id']);
 
-						$admin_buttons = ($_SESSION['logged_in'] && (in_array($_SESSION['userData']['discord_id'], ADMIN_SITE) || $is_author)) ? "<a class=\"btn btn-danger btn-block text-nowrap\" href=\"deleteHack.php?hack_id=$id\"><img src=\"/_assets/_img/delete.svg\"></a></th><th class=\"border-0\"><a class=\"btn btn-info btn-block text-nowrap\" href=\"editHack.php?hack_id=$id\"><img src=\"/_assets/_img/edit.svg\"></a>" : "&nbsp;";
-						$user_button = $_SESSION['logged_in'] && !areAllAuthorsAnId($creator) ? "<a class=\"btn btn-warning btn-block text-nowrap\" href=\"/hacks/claim.php?hack_id=$id\"><img src=\"/_assets/_img/claim.svg\"></a>" : "&nbsp;";
+						$admin_buttons = ($_SESSION['logged_in'] && (in_array($_SESSION['userData']['discord_id'], ADMIN_SITE) || $is_author)) ? "<a class=\"btn btn-danger btn-block text-nowrap\" href=\"deleteHack.php?hack_id=$id\"><img src=\"/_assets/_img/icons/delete.svg\"></a></th><th class=\"border-0\"><a class=\"btn btn-info btn-block text-nowrap\" href=\"editHack.php?hack_id=$id\"><img src=\"/_assets/_img/icons/edit.svg\"></a>" : "&nbsp;";
+						$user_button = $_SESSION['logged_in'] && !areAllAuthorsAnId($creator) ? "<a class=\"btn btn-warning btn-block text-nowrap\" href=\"/hacks/claim.php?hack_id=$id\"><img src=\"/_assets/_img/icons/claim.svg\"></a>" : "&nbsp;";
 						$recommend_class = $is_recommend == 1 ? "class=table-primary" : "";
 
 						$authors = explode(", ", $creator);
@@ -62,7 +66,7 @@ if($_SESSION['logged_in'] && (in_array($_SESSION['userData']['discord_id'], ADMI
 			    </table></div> <br/>
                 <div><table>
 					<?php
-						$description_button_text = strlen($data[0]['hack_description']) == 0 ? "Add Description" : "<img src=\"/_assets/_img/edit.svg\">";
+						$description_button_text = strlen($data[0]['hack_description']) == 0 ? "Add Description" : "<img src=\"/_assets/_img/icons/edit.svg\">";
 						$description_button = ($_SESSION['logged_in'] && in_array($_SESSION['userData']['discord_id'], ADMIN_SITE)) ? "<a class=\"btn btn-info text-nowrap\" href=\"editHack.php?hack_name=$hack_name\">$description_button_text</a>" : "&nbsp;";
 
 					?>
