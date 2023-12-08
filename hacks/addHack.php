@@ -14,8 +14,16 @@ if(sizeof($_POST) != 0) {
     $hack_starcount = isset($_POST['hack_amount']) ? intval($_POST['hack_amount']) : 0;
     $hack_release_date = $_POST['hack_release_date'];
     $hack_patchname = stripChars($_FILES['hack_patchname']["name"]);
-    $hack_tags = stripChars($_POST['hack_tags']);
-    $hack_description = stripChars($_POST['hack_description']);
+
+    $hack = getHackFromDatabase($pdo, $hack_name);
+    if($hack) {
+        foreach($hack as $entry) {
+            if($entry['hack_version'] == $hack_version || $entry['hack_patchname'] == $hack_patchname) {
+                header("Location: /404.php");
+                die();
+            }
+        }
+    }
 
     $hack_authors = explode(", ", $hack_author);
     $hack_author = "";
@@ -29,15 +37,8 @@ if(sizeof($_POST) != 0) {
 
     if(in_array($_SESSION['userData']['discord_id'], ADMIN_SITE)) {
         $result = move_uploaded_file($_FILES['hack_patchname']['tmp_name'], $_SERVER['DOCUMENT_ROOT'].'/patch/'.$hack_patchname);
-
-        $i = 0;
-        foreach($_FILES['hack_logo']['tmp_name'] as $tmp_name) {
-            $logo_result = move_uploaded_file($tmp_name, $_SERVER['DOCUMENT_ROOT'].'/_assets/_img/hacks/img_' . getURLEncodedName($hack_name) . "_$i.jpg");
-            $i = $i + 1;
-        }
-
         $hack_patchname = substr($hack_patchname, 0, -4);
-        addHackToDatabase($pdo, $hack_name, $hack_version, $hack_author, $hack_starcount, $hack_release_date, $hack_patchname, $hack_tags, $hack_description, 1, 0);
+        addHackToDatabase($pdo, $hack_name, $hack_version, $hack_author, $hack_starcount, $hack_release_date, $hack_patchname, NULL, NULL, 1, 0);
     }
 
     else {
@@ -123,38 +124,6 @@ if(sizeof($_POST) != 0) {
                         <td>
                             <input type="file" name="hack_patchname" class="form-control" required>
                         </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label for="hack_tags" class="col-form-label text-nowrap">Tags:</label>
-
-                        </td>
-                        <td>
-                            <input class="form-control" list="hack_tags_options" name="hack_tags" placeholder="Type to search...">  
-                            <datalist id="hack_tags_options">                          
-                            <?php 
-                                $data = getAllTagsFromDatabase($pdo);
-                                foreach($data as $entry) {
-                                    $tag = $entry['hack_tags'];
-                                    print("<option value=\"$tag\">");
-                                }
-                            ?>
-                            </datalist>
-                            <small id="hack_tags_help" class="form-text text-muted">Seperate multiple tags with &quot;&lt;Tag&gt;,&nbsp;&lt;Tag&gt;&quot;</small>                        </td>
-
-                        </td>
-                        <td>
-                            <label for="hack_description" class="col-form-label text-nowrap">Description:</label>
-                        </td>
-                        <td colspan=3>
-                            <textarea name="hack_description" class="form-control"></textarea>
-                        </td>
-                    </tr>
-                    <tr>
-                    <td colspan=2>&nbsp;</td>
-                    <td><label for="hack_logo" class="col-form-label text-nowrap">Logo:</label></td>
-                    <td><input type="file" name="hack_logo[]" class="form-control" multiple></td>
-                    <td colspan=2>&nbsp;</td>
                     </tr>
                     <tr>
                         <td colspan=2>&nbsp;</td>

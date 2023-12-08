@@ -34,6 +34,13 @@ if(sizeof($_POST) != 0) {
                 recommendPatchFromDatabase($pdo, intval($entry['hack_id']));
             }
         }
+        var_dump($_FILES);
+        $i = 0;
+        foreach($_FILES['hack_images']['tmp_name'] as $tmp_name) {
+            $logo_result = move_uploaded_file($tmp_name, $_SERVER['DOCUMENT_ROOT'].'/_assets/_img/hacks/img_' . getURLEncodedName($hack_name) . "_$i.jpg");
+            $i = $i + 1;
+        }
+
     }
     else {
         $hack_name = stripChars($_POST['hack_name']);
@@ -80,7 +87,7 @@ else $hackdata = getPatchFromDatabase($pdo, $hack_id);
 	<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/header.php'); ?>
 			<div align="center">
                 <?php if(strlen($hack_name) != 0) { ?>
-                <form action="#" method="post">
+                <form action="#" method="post" enctype="multipart/form-data">
                     <table class="table table-bordered">
                     <tr>
                         <td class="text-right">
@@ -128,6 +135,12 @@ else $hackdata = getPatchFromDatabase($pdo, $hack_id);
                         </td>
                     </tr>
 
+                    <tr>
+                        <td class="text-right">
+                            <label for="hack_images" class="col-form-label text-nowrap">Images:</label>
+                        </td>
+                        <td><input type="file" name="hack_images[]" class="form-control" multiple></td>
+                            </tr>
                     <tr>
                     <td class="text-right">
                         <label for="hack_description" class="col-form-label text-nowrap">Description:</label>
