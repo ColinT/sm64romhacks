@@ -11,12 +11,13 @@ if(strlen($hack_name) == 0 && $hack_id == 0 || strlen($hack_name) != 0 && $hack_
 	die();
 }
 
-if(isset($hack_name)) {
+if(strlen($hack_name) != 0) {
 	$data = getHackFromDatabase($pdo, $hack_name);
 	foreach($data as $entry) {
 	unlink($_SERVER['DOCUMENT_ROOT'] . '/patch/' . $entry['hack_patchname'] . '.zip');
 	}	
 	deleteHackFromDatabase($pdo, $hack_name);
+	unlink($_SERVER['DOCUMENT_ROOT'] . '/_assets/_img/hacks/logo_' . getURLEncodedName($hack_name) . '.jpg');
 	header("Location: /hacks");
 }
 
