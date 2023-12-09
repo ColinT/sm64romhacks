@@ -34,8 +34,10 @@ if(sizeof($_POST) != 0) {
                 recommendPatchFromDatabase($pdo, intval($entry['hack_id']));
             }
         }
-        var_dump($_FILES);
         $i = 0;
+        while(file_exists($_SERVER['DOCUMENT_ROOT'] . "/_assets/_img/hacks/img_" . stripChars(getURLEncodedName($hack_name)) . "_$i.jpg")) {
+            $i = $i + 1;
+        }
         foreach($_FILES['hack_images']['tmp_name'] as $tmp_name) {
             $logo_result = move_uploaded_file($tmp_name, $_SERVER['DOCUMENT_ROOT'].'/_assets/_img/hacks/img_' . getURLEncodedName($hack_name) . "_$i.jpg");
             $i = $i + 1;
@@ -139,8 +141,23 @@ else $hackdata = getPatchFromDatabase($pdo, $hack_id);
                         <td class="text-right">
                             <label for="hack_images" class="col-form-label text-nowrap">Images:</label>
                         </td>
-                        <td><input type="file" name="hack_images[]" class="form-control" multiple></td>
-                            </tr>
+                        <td><input type="file" name="hack_images[]" class="form-control" multiple>
+                        <table class="table-borderless table-sm table-responsive-sm"><tr>
+                        <?php $i = 0;
+							while(file_exists($_SERVER['DOCUMENT_ROOT'] . "/_assets/_img/hacks/img_" . stripChars(getURLEncodedName($hack_name)) . "_$i.jpg")) {
+								print("<td><img class=p-2 width=160 height=120 src=\"/_assets/_img/hacks/img_" . stripChars(getURLEncodedName($hack_name)) . "_$i.jpg\"></td>");
+								$i = $i + 1;
+							} ?></tr>
+                            <tr>
+                            <?php $i = 0;
+                            	while(file_exists($_SERVER['DOCUMENT_ROOT'] . "/_assets/_img/hacks/img_" . stripChars(getURLEncodedName($hack_name)) . "_$i.jpg")) {
+								print("<td class=\"text-center\"><input class=\"col-form-input\" type=\"checkbox\" name=\"$id\" id=\"flexCheckDefault\"></td>");
+								$i = $i + 1;
+							} ?>
+                            </tr></table>
+
+                        </td>
+                    </tr>
                     <tr>
                     <td class="text-right">
                         <label for="hack_description" class="col-form-label text-nowrap">Description:</label>
