@@ -21,6 +21,15 @@ if(sizeof($_POST) != 0) {
     }
 
     if(strlen($hack_description) != 0) {
+
+        $i = 0;
+        while(file_exists($_SERVER['DOCUMENT_ROOT'] . "/_assets/_img/hacks/img_" . stripChars(getURLEncodedName($hack_name)) . "_$i.jpg")) {
+            if(!isset($_POST["img_" . stripChars(getURLEncodedName($hack_name)) . "_$i"])) {
+                unlink($_SERVER['DOCUMENT_ROOT'] . "/_assets/_img/hacks/img_" . stripChars(getURLEncodedName($hack_name)) . "_$i.jpg");
+            }
+            $i = $i + 1;
+        }
+
         $hack_name = stripChars($_POST['hack_name']);
         $hack_description = str_replace("\r\n", "<br/>", $hack_description);
         $hack_description = stripChars($hack_description);
@@ -142,22 +151,15 @@ else $hackdata = getPatchFromDatabase($pdo, $hack_id);
                             <label for="hack_images" class="col-form-label text-nowrap">Images:</label>
                         </td>
                         <td><input type="file" name="hack_images[]" class="form-control" multiple>
-                        <table class="table-borderless table-sm table-responsive-sm"><tr>
+                        <div class="container">
+                            <div class="row">
                         <?php $i = 0;
 							while(file_exists($_SERVER['DOCUMENT_ROOT'] . "/_assets/_img/hacks/img_" . stripChars(getURLEncodedName($hack_name)) . "_$i.jpg")) {
-								print("<td><img class=p-2 width=160 height=120 src=\"/_assets/_img/hacks/img_" . stripChars(getURLEncodedName($hack_name)) . "_$i.jpg\"></td>");
-								$i = $i + 1;
-							} ?></tr>
-                            <tr>
-                            <?php $i = 0;
-                            	while(file_exists($_SERVER['DOCUMENT_ROOT'] . "/_assets/_img/hacks/img_" . stripChars(getURLEncodedName($hack_name)) . "_$i.jpg")) {
-								print("<td class=\"text-center\"><input class=\"col-form-input\" type=\"checkbox\" name=\"$id\" id=\"flexCheckDefault\"></td>");
+								print("<div class=\"col text-center\"><img class=p-2 width=160 height=120 src=\"/_assets/_img/hacks/img_" . stripChars(getURLEncodedName($hack_name)) . "_$i.jpg\"><br/><input class=\"col-form-input\" type=\"checkbox\" name=\"img_" . stripChars(getURLEncodedName($hack_name)) . "_$i\" id=\"flexCheckDefault\" checked></div>");
 								$i = $i + 1;
 							} ?>
-                            </tr></table>
-
-                        </td>
-                    </tr>
+                            </div>
+                        </div>
                     <tr>
                     <td class="text-right">
                         <label for="hack_description" class="col-form-label text-nowrap">Description:</label>
