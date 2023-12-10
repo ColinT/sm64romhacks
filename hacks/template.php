@@ -89,10 +89,12 @@ if(file_exists($_SERVER['DOCUMENT_ROOT'] . "/_assets/_img/hacks/$hacks_logo")) $
                 <div>
 					<div class="text-nowrap">
 						<?php 
-							$i = 0;
-							while(file_exists($_SERVER['DOCUMENT_ROOT'] . "/_assets/_img/hacks/img_" . stripChars(getURLEncodedName($hack_name)) . "_$i.jpg")) {
-								print("<img class=p-3 width=320 height=240 src=\"/_assets/_img/hacks/img_" . stripChars(getURLEncodedName($hack_name)) . "_$i.jpg\">");
-								$i = $i + 1;
+				            $images = (glob($_SERVER['DOCUMENT_ROOT'] . "/_assets/_img/hacks/img_" . stripChars(getURLEncodedName($hack_name)) . "_*.{png,jpg}", GLOB_NOSORT|GLOB_BRACE));
+                            foreach($images as $image) {
+                                $image = explode("/",$image)[sizeof(explode("/",$image)) - 1];
+								$ext = substr($image, -3);
+                                $image = substr_replace($image, "", -4);
+								print("<img class=p-3 width=320 height=240 src=\"/_assets/_img/hacks/$image.$ext\">");
 							}
 						?>
 				</div>

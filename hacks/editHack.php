@@ -21,15 +21,18 @@ if(sizeof($_POST) != 0) {
     }
 
     if(strlen($hack_description) != 0) {
+        $images = (glob($_SERVER['DOCUMENT_ROOT'] . "/_assets/_img/hacks/img_" . stripChars(getURLEncodedName($hack_name)) . "_*.{png,jpg}", GLOB_NOSORT|GLOB_BRACE));
 
-        $i = 0;
-        while(file_exists($_SERVER['DOCUMENT_ROOT'] . "/_assets/_img/hacks/img_" . stripChars(getURLEncodedName($hack_name)) . "_$i.jpg")) {
-            if(!isset($_POST["img_" . stripChars(getURLEncodedName($hack_name)) . "_$i"])) {
-                unlink($_SERVER['DOCUMENT_ROOT'] . "/_assets/_img/hacks/img_" . stripChars(getURLEncodedName($hack_name)) . "_$i.jpg");
+        foreach($images as $image) {
+            $image = explode("/",$image)[sizeof(explode("/",$image)) - 1];
+            $ext = substr($image, -3);
+            $image = substr_replace($image, "", -4);
+
+            if(!isset($_POST[$image])) {
+                unlink($_SERVER['DOCUMENT_ROOT'] . "/_assets/_img/hacks/$image.$ext");
             }
-            $i = $i + 1;
         }
-
+        
         $hack_name = stripChars($_POST['hack_name']);
         $hack_description = str_replace("\r\n", "<br/>", $hack_description);
         $hack_description = stripChars($hack_description);
@@ -43,15 +46,21 @@ if(sizeof($_POST) != 0) {
                 recommendPatchFromDatabase($pdo, intval($entry['hack_id']));
             }
         }
-        $i = 0;
-        while(file_exists($_SERVER['DOCUMENT_ROOT'] . "/_assets/_img/hacks/img_" . stripChars(getURLEncodedName($hack_name)) . "_$i.jpg")) {
-            $i = $i + 1;
-        }
-        foreach($_FILES['hack_images']['tmp_name'] as $tmp_name) {
-            $logo_result = move_uploaded_file($tmp_name, $_SERVER['DOCUMENT_ROOT'].'/_assets/_img/hacks/img_' . getURLEncodedName($hack_name) . "_$i.jpg");
-            $i = $i + 1;
-        }
+        for($i = 0; $i < sizeof($_FILES['hack_images']['tmp_name']); $i++) {
+            $image_name = $_FILES['hack_images']['name'][$i];
+            $ext = pathinfo($_FILES['hack_images']['name'][$i], PATHINFO_EXTENSION);
+            $tmp_name = $_FILES['hack_images']['tmp_name'][$i];
 
+
+            $images = (glob($_SERVER['DOCUMENT_ROOT'] . "/_assets/_img/hacks/img_" . stripChars(getURLEncodedName($hack_name)) . "_*.{png,jpg}", GLOB_NOSORT|GLOB_BRACE));
+            $counter = 0;
+            if(sizeof($images) != 0) {
+                $image = explode("/",$images[sizeof($images) - 1])[sizeof(explode("/",$images[sizeof($images) - 1])) - 1];
+                $image = substr_replace($image, "", -4); 
+                $counter = sizeof($images);
+            }
+            $logo_result = move_uploaded_file($tmp_name, $_SERVER['DOCUMENT_ROOT'].'/_assets/_img/hacks/img_' . getURLEncodedName($hack_name) . "_$counter.$ext");
+        }
     }
     else {
         $hack_name = stripChars($_POST['hack_name']);
@@ -153,10 +162,13 @@ else $hackdata = getPatchFromDatabase($pdo, $hack_id);
                         <td><input type="file" name="hack_images[]" class="form-control" multiple>
                         <div class="container">
                             <div class="row">
-                        <?php $i = 0;
-							while(file_exists($_SERVER['DOCUMENT_ROOT'] . "/_assets/_img/hacks/img_" . stripChars(getURLEncodedName($hack_name)) . "_$i.jpg")) {
-								print("<div class=\"col text-center\"><img class=p-2 width=160 height=120 src=\"/_assets/_img/hacks/img_" . stripChars(getURLEncodedName($hack_name)) . "_$i.jpg\"><br/><input class=\"col-form-input\" type=\"checkbox\" name=\"img_" . stripChars(getURLEncodedName($hack_name)) . "_$i\" id=\"flexCheckDefault\" checked></div>");
-								$i = $i + 1;
+                        <?php
+				            $images = (glob($_SERVER['DOCUMENT_ROOT'] . "/_assets/_img/hacks/img_" . stripChars(getURLEncodedName($hack_name)) . "_*.{png,jpg}", GLOB_NOSORT|GLOB_BRACE));
+                            foreach($images as $image) {
+                                $image = explode("/",$image)[sizeof(explode("/",$image)) - 1];
+                                $ext = substr($image, -3);
+                                $image = substr_replace($image, "", -4);
+                                print("<div class=\"col text-center\"><img class=p-2 width=160 height=120 src=\"/_assets/_img/hacks/$image.$ext\"><br/><input class=\"col-form-input\" type=\"checkbox\" name=\"$image\" id=\"flexCheckDefault\" checked></div>");
 							} ?>
                             </div>
                         </div>
