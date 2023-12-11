@@ -15,10 +15,25 @@ if(sizeof($_POST) != 0) {
     $user_id = $_SESSION['userData']['discord_id'];
     $claimed_author = $_POST['hack_author_claim'];
 
-    createClaimsDatabase($pdo);
-    addClaimToDatabase($pdo, $hack_id, $user_id, $claimed_author);
+	if(in_array($_SESSION['userData']['discord_id'], ADMIN_SITE)) {
 
+		$hack = getPatchFromDatabase($pdo, $hack_id)[0];
+		$hack_name = $hack['hack_name'];
+		$hack_version = $hack['hack_version'];
+		$hack_author = $hack['hack_author'];
+		$hack_starcount = $hack['hack_starcount'];
+		$hack_release_date = $hack['hack_release_date'];
+		$hack_author = str_replace($claimed_author, $user_id, $hack_author);
+		updatePatchInDatabase($pdo,$hack_id,$hack_name,$hack_version,$hack_author,$hack_starcount,$hack_release_date, 1);
+	}
+
+	else {
+		createClaimsDatabase($pdo);
+		addClaimToDatabase($pdo, $hack_id, $user_id, $claimed_author);
+	}
+	
     header("Location: /hacks");
+	die();
 }
 
 ?>
