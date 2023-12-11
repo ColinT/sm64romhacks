@@ -23,19 +23,21 @@ if(!$_SESSION['logged_in'] || !in_array($_SESSION['userData']['discord_id'], ADM
 	<body>		<div class="container">
 	<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/header.php'); ?>
 			<div align="center">
+				<h1>Add Newspost!</h1>
+				<span class="text-muted">Hint: Currently no Markup is possible, therefore please only insert plain text here.</span>
 				<form action="processInput.php" method="post">
-					<table>
+					<table class="table">
 						<tr>
-							<td><label for="post_title" class="form-label">Title</label></td>
+							<td class="text-right"><label for="post_title" class="form-label">Title</label></td>
 							<td><input type="text" id="post_title" class="form-control" name="post_title"></td>
 						</tr>
 						<tr>
-							<td style="vertical-align: top;"><label for="post_text" class="form-label">Text</label></td>
+							<td class="text-right" style="vertical-align: top;"><label for="post_text" class="form-label">Text</label></td>
 							<td><textarea name="post_text" id="post_text" cols="30" rows="10" class="form-control"></textarea></td>
 						</tr>
 						<tr>
 							<td>&nbsp;</td>
-							<td><button class="btn btn-primary" type="submit">Add Newspost!</button></td>
+							<td class="text-center"><button class="btn btn-primary" type="submit">Add Newspost!</button></td>
 						</tr>
 					</table>
 				</form>
