@@ -13,7 +13,7 @@ $usersMarkup='';
 
 foreach ($all_users as $key => $userData) {
     $usersMarkup.='<tr>
-    <td><img src="https://cdn.discordapp.com/avatars/'.$userData['discord_id'].'/'.$userData['discord_avatar'].'.jpg"/ height=32 width=32></td>
+    <td class="text-center"><img src="https://cdn.discordapp.com/avatars/'.$userData['discord_id'].'/'.$userData['discord_avatar'].'.jpg"/ height=32 width=32></td>
     <td><a href="'.$userData['discord_id'] .'">'.$userData['discord_id'].'</a></td>    
     <td>'.$userData['discord_username'].'</td>
     <td>'.$userData['discord_email'].'</td>
@@ -40,7 +40,7 @@ foreach ($all_users as $key => $userData) {
     <?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/header.php'); ?>
         <div align="center">
             <h3>Users:</h3>
-            <table class="table table-bordered">
+            <table class="table-sm table-bordered">
                 <tr><td>Profile Picture</td><td>ID</td><td>Username</td><td>E-Mail</td><td>Created at</tr>
             <?php echo $usersMarkup;?>
 </table>
