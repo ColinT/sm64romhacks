@@ -4,7 +4,7 @@ if($_SESSION['logged_in'] && (in_array($_SESSION['userData']['discord_id'], ADMI
 }
 
 $logo_HTMLLoad = "";
-$hacks_logo = "img_" . stripChars(getURLEncodedName($hack_name)) . "_0.jpg";
+//$hacks_logo = "img_" . stripChars(getURLEncodedName($hack_name)) . "_0.jpg";
 if(file_exists($_SERVER['DOCUMENT_ROOT'] . "/_assets/_img/hacks/$hacks_logo")) $logo_HTMLLoad = "<img src=\"/_assets/_img/hacks/$hacks_logo\" width=80 height=60>&nbsp;";
 
 ?>
@@ -23,10 +23,18 @@ if(file_exists($_SERVER['DOCUMENT_ROOT'] . "/_assets/_img/hacks/$hacks_logo")) $
 			<meta property="og:title" content="sm64romhacks - <?php print($hack_name);?>" />
 			<meta property="og:type" content="website" />
 			<meta property="og:url" content="https://sm64romhacks.com/hacks/<?php print(getURLEncodedName($hack_name));?>" />
-			<meta property="og:image:url" content="https://sm64romhacks.com/_assets/_img/hacks/<?php print($hacks_logo);?>" />
-			<meta property="og:image:type" content="image/jpg">
-			<meta property="og:image:height" content="120">
-			<meta property="og:image:width" content="160">
+			<?php 
+				$images = (glob($_SERVER['DOCUMENT_ROOT'] . "/_assets/_img/hacks/img_" . stripChars(getURLEncodedName($hack_name)) . "_*.{png,jpg}", GLOB_NOSORT|GLOB_BRACE));
+				foreach($images as $image) {
+					$image = explode("/",$image)[sizeof(explode("/",$image)) - 1];
+					$ext = substr($image, -3);
+					$image = substr_replace($image, "", -4);
+					print("<meta property=\"og:image:url\" content=\"https://sm64romhacks.com/_assets/_img/hacks/$image.$ext\" />\n\t\t\t");
+					print("<meta property=\"og:image:type\" content=\"image/$ext\" />\n\t\t\t");
+					print("<meta property=\"og:image:height\" content=\"120\" />\n\t\t\t");
+					print("<meta property=\"og:image:width\" content=\"160\" />\n\t\t\t");
+				}
+			?>
 			<meta property="og:site_name" content="sm64romhacks.com" />
 			<meta property="og:description" content="<?php print($data[0]['hack_description']);?>" />
 
@@ -36,7 +44,14 @@ if(file_exists($_SERVER['DOCUMENT_ROOT'] . "/_assets/_img/hacks/$hacks_logo")) $
 			<meta property="twitter:url" content="https://sm64romhacks.com/hacks/<?php print(getURLEncodedName($hack_name));?>">
 			<meta name="twitter:title" content="sm64romhacks - <?php print($hack_name);?>">
 			<meta name="twitter:description" content="<?php print($data[0]['hack_description']);?>">
-			<meta name="twitter:image" content="https://sm64romhacks.com/_assets/_img/hacks/<?php print($hacks_logo);?>">
+			<?php
+			foreach($images as $image) {
+					$image = explode("/",$image)[sizeof(explode("/",$image)) - 1];
+					$ext = substr($image, -3);
+					$image = substr_replace($image, "", -4);
+					print("<meta property=\"twitter:image\" content=\"https://sm64romhacks.com/_assets/_img/hacks/$image.$ext\" />\n\t\t\t");
+				}
+			?>
 			
 			<link rel="stylesheet" type="text/css" href="/_assets/_css/bootstrap.css">
 			<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
