@@ -75,6 +75,7 @@ $pending_hacks = getAllPendingHacksFromDatabase($pdo);
 	<body>		<div class="container">
 	<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/header.php'); ?>
 			<div align="center">
+			<?php if(sizeof($claims) != 0) { ?>
 				<div class="table-responsive">
 				<!--HTML CONTENT HERE-->
 				<table class="table-sm table-bordered">
@@ -86,7 +87,10 @@ $pending_hacks = getAllPendingHacksFromDatabase($pdo);
 					<?php } ?>
 					</table>
 					</div>
+					<?php } else print("Currently No Claims for review available!");?>
 					<br/>
+					<hr/>
+					<?php if(sizeof($pending_hacks) != 0) { ?>
 					<div class="table-responsive">
 				<table class="table-sm table-bordered">
 					<tr><th>Hack Name</th><th>Version</th><th>Hack Author</th><th>Star Count</th><th>Release Date</th><th>Tag</th><th>Description</th><th class="border-0">&nbsp;</th></tr>
@@ -95,6 +99,7 @@ $pending_hacks = getAllPendingHacksFromDatabase($pdo);
 					<?php } ?>
 					</table>
 					</div>
+					<?php } else print("Currently No Hacks for review available!");?>
 
 
 			<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/footer.php'); ?>	
