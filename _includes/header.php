@@ -58,20 +58,19 @@ setInterval(() => {
             <li><a class="dropdown-item" href="/events/ssrm2020">SSRM2020</a></li>
           </ul>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/codes">Codes</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/stardisplay">Stardisplay</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/patcher">Patcher</a>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Gameplay Tools
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="/codes">Codes </a></li>
+            <li><a class="dropdown-item" href="/stardisplay">Star Display</a></li>
+            <li><a class="dropdown-item" href="/patcher">Online Patcher</a></li>
+            <li><a class="dropdown-item" href="/plugins">Plugin Guide</a></li>
+          </ul>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="/faq">FAQ</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/plugins">Plugins Guide</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="http://discord.sm64romhacks.com">Discord</a>
@@ -104,7 +103,6 @@ setInterval(() => {
           </ul></li><?php } ?>
       </ul>
     </div>
-  <!--</div>-->
 </nav>
 
 
