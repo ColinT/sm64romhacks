@@ -30,7 +30,7 @@ include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php';
 				<h1>Plugins for playing SM64 ROM Hacks</h1>
 				<div align="center" id="opsys">Firstly, select your operating system for which you intend to play on!
 					<table>
-						<tr><td><img id="windows" src="../_assets/_img/windows.svg" width="360" height="360"></td><td><img id="linux" src="../_assets/_img/linux.png" width="360" height="360"/></td></tr>
+						<tr><td><img id="windows" src="../_assets/_img/windows.png" width="360" height="360"></td><td><img id="linux" src="../_assets/_img/linux.png" width="360" height="360"/></td></tr>
 						<tr><td align="center">Windows</td><td align="center">Linux</td></tr>
 					</table>
 					Note: The instructions given in this page are only intended to be used in the operating systems and emulators mentioned here.<br/>
