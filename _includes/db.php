@@ -94,6 +94,17 @@ function getUserByNameFromDatabase($pdo,$discord_username){
     }
 }
 
+function deleteUserFromDatabase($pdo, $discord_id) {
+    $sql = "DELETE FROM users WHERE discord_id = $discord_id";
+    try {
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+    } catch (Exception $e) {
+        echo $e;
+    }
+}
+
 
 function getAllUsersFromDatabase($pdo){
     $sql = "SELECT * FROM users";
@@ -267,6 +278,21 @@ function getHackByUserFromDatabase($pdo, $user_id) {
     } catch(Exception $e) {
         echo $e;
     }
+}
+
+function getPatchesByUserFromDatabase($pdo, $user_id) {
+    $sql = "SELECT * FROM hacks WHERE hack_author LIKE '%$user_id%'";
+    var_dump($sql);
+
+    try {
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $data;
+    } catch(Exception $e) {
+        echo $e;
+    }
+
 }
 
 function getAllPendingHacksFromDatabase($pdo){

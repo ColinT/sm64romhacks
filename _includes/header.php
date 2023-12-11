@@ -98,6 +98,7 @@ setInterval(() => {
           <li><a class="dropdown-item" href="/users/<?php print($_SESSION['userData']['discord_id']);?>">Profile</a></li>
           <hr/>
           <li><a class="dropdown-item" href="/login/logout.php">Logout</a></li>
+          <li><a class="dropdown-item text-danger" href="/login/deleteAccount.php">Delete Account</a></li>
           </ul></li><?php } ?>
       </ul>
     </div>
