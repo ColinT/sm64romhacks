@@ -21,6 +21,6 @@ foreach($patches as $patch) {
 
 deleteUserFromDatabase($pdo, $_SESSION['userData']['discord_id']);
 session_destroy();
-header("Location: " . $_SESSION['redirect']);
+header("Location: /");
 die();
 ?>

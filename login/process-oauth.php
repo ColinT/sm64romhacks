@@ -20,8 +20,6 @@ $payload = [
     'scope'=>'identify%20guids',
 ];
 
-print_r($payload);
-
 $payload_string = http_build_query($payload);
 $discord_token_url = "https://discordapp.com/api/oauth2/token";
 

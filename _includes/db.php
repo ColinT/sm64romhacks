@@ -282,8 +282,6 @@ function getHackByUserFromDatabase($pdo, $user_id) {
 
 function getPatchesByUserFromDatabase($pdo, $user_id) {
     $sql = "SELECT * FROM hacks WHERE hack_author LIKE '%$user_id%'";
-    var_dump($sql);
-
     try {
         $stmt = $pdo->prepare($sql);
         $stmt->execute();
