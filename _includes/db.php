@@ -306,7 +306,7 @@ function getAllPendingHacksFromDatabase($pdo){
 }
 
 function getAllUniqueHacksFromDatabase($pdo){
-    $sql = "SELECT hack_name, MIN(hack_release_date) AS release_date, MIN(hack_author) AS author, hack_tags FROM hacks WHERE hack_verified=1 GROUP BY hack_name";
+    $sql = "SELECT hack_name, MIN(hack_release_date) AS release_date, MIN(hack_author) AS author, hack_tags FROM hacks WHERE hack_verified=1 GROUP BY hack_name ORDER BY hack_name";
     try {
         $stmt = $pdo->prepare($sql);
         $stmt->execute();
