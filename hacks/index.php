@@ -6,6 +6,7 @@ createHacksDatabase($pdo);
 $path = ltrim($_SERVER['REQUEST_URI'], '/');
 $hack_name = explode('/', $path);
 $hack_name = $hack_name[1];
+
 if(strlen($hack_name) == 0) {
 	include("home.php");
 }

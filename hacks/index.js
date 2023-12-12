@@ -5,7 +5,7 @@ const DEBOUNCE_DELAY = 200;
 const HACK_NAME_COLUMN_INDEX = 0;
 const AUTHOR_NAME_COLUMN_INDEX = 1;
 const HACK_DATE_COLUMN_INDEX = 2;
-const TAG_COLUMN_INDEX = 4;
+const TAG_COLUMN_INDEX = 3;
 
 /**
  * @typedef {Object} HackTableRowContent
@@ -41,6 +41,10 @@ const TAG_COLUMN_INDEX = 4;
  */
 
 async function main() {
+  const allHacks = await getAllHacks();
+  const hacksTable = getHacksTable(allHacks);
+  const hacksCollectionDiv = document.querySelector("#hacksCollection");
+  hacksCollectionDiv.innerHTML = hacksTable;
   const myTable = document.getElementById("myTable");
 
   if(document.getElementById("hack_release_date") != null)   document.getElementById("hack_release_date").setAttribute("max", new Date().toISOString().slice(0, 10));
@@ -71,6 +75,76 @@ async function main() {
   const tagInput = document.getElementById("tagInput");
   setTagFilterHandler(tagInput, tableRowContents);
 }
+
+/**
+ * @returns {Hack[]}
+ */
+async function getAllHacks() {
+  const response = await fetch("/hacks.json"); // relative to root
+  const data = await response.json();
+  return data.hacks;
+}
+
+/**
+ * @param {Hack[]} hacks
+ * @returns {string}
+ */
+function getHacksTable(hacks) {
+  const headerRow = getHacksTableHeaderRow();
+  const hackTableRows = hacks.map((hack) => getTableRowFromHack(hack)).join("");
+
+  return `
+    <table class='table-sm' id='myTable' border='1' align='center'>
+      ${headerRow}
+      ${hackTableRows}
+    </table>
+  `;
+}
+
+/**
+ * @returns {string}
+ */
+function getHacksTableHeaderRow() {
+  return `
+    <tr>
+      <th><b>Hackname</b></th>
+      <th class="creator"><b>Creator</b></th>
+      <th>Initial Release Date (yyyy-mm-dd)</th>
+      <th hidden>Tag</th>
+    </tr>
+  `;
+}
+
+/**
+ * @param {Hack} hack
+ * @returns {string}
+ */
+function getTableRowFromHack(hack) {
+  const hackName = hack.hack_name;
+  const hackCreators = hack.hack_author;
+  const releaseDate = hack.hack_release_date;
+  const tag = hack.hack_tag;
+
+  // TODO: use the correct relative url path
+  // Might need to add this to data.json or use single page app framework
+
+  return `
+    <tr>
+      <td><a href="/hacks/${getURLName(hackName)}">${hackName}</a></td>
+      <td>${hackCreators}</td>
+      <td class="text-nowrap">${releaseDate}</td>
+      <td hidden>${tag}</td>
+    </tr>
+  `;
+}
+
+function getURLName(hackName)
+{
+  hackName = hackName.split(":").join("_");
+  hackName = encodeURI(hackName);
+  return hackName;
+}
+
 
 /**
  * @param {HTMLInputElement} hackNamesInput

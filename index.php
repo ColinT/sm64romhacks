@@ -6,7 +6,6 @@ createUsersDatabase($pdo);
 createNewspostDatabase($pdo);
 createHacksDatabase($pdo);
 createClaimsDatabase($pdo);
-
 ?>
 
 <!DOCTYPE HTML>
@@ -55,8 +54,8 @@ createClaimsDatabase($pdo);
 					print("</div><br/>");
 				}
 				?>
+
 			<?php include $_SERVER['DOCUMENT_ROOT'].'/_includes/footer.php'; ?>	
 			</div>		</div>
-
 	</body>
 </html>
