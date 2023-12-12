@@ -74,6 +74,8 @@ async function main() {
 
   const tagInput = document.getElementById("tagInput");
   setTagFilterHandler(tagInput, tableRowContents);
+
+  addButtons();
 }
 
 /**
@@ -94,7 +96,7 @@ function getHacksTable(hacks) {
   const hackTableRows = hacks.map((hack) => getTableRowFromHack(hack)).join("");
 
   return `
-    <table class='table-sm' id='myTable' border='1' align='center'>
+    <table class="table-sm table-bordered" id="myTable">
       ${headerRow}
       ${hackTableRows}
     </table>
@@ -109,9 +111,10 @@ function getHacksTableHeaderRow() {
     <tr>
       <th><b>Hackname</b></th>
       <th class="creator"><b>Creator</b></th>
-      <th>Initial Release Date (yyyy-mm-dd)</th>
+      <th class="text-nowrap">Initial Release Date</th>
       <th>Downloads</th>
       <th hidden>Tag</th>
+      <th class="border-0 add-button" colspan="2"></th>
     </tr>
   `;
 }
@@ -137,6 +140,8 @@ function getTableRowFromHack(hack) {
       <td class="text-nowrap">${releaseDate}</td>
       <td class="text-nowrap text-muted">Downloads: ${downloads}</td>
       <td hidden>${tag}</td>
+      <td class="border-0 delete-button"></td>
+      <td class="border-0 edit-button"></td>
     </tr>
   `;
 }

@@ -62,12 +62,14 @@ if($amount == 0){
 				<a class="btn btn-primary" href="/hacks/random.php">Random</a><br/><br/>
 
 
-				<div class="table-responsive">
-					<div id="hacksCollection"></div>
+					<div class="table-responsive" id="hacksCollection"></div>
 				<?php 
 
-				/*$data = (getAllUniqueHacksFromDatabase($pdo));
-				foreach($data as $entry) {
+				$data = (getAllUniqueHacksFromDatabase($pdo));
+				for($i = 1; $i < sizeof($data); $i++) {
+
+				}
+				/*foreach($data as $entry) {
 					$hack_name = $entry['hack_name'];
 					$dir_name = getURLEncodedName($hack_name);
 
@@ -92,9 +94,23 @@ if($amount == 0){
 					//print("<tr><td><a href=\"/hacks/$dir_name\">$hack_name</a></td><td class=\"creator\">$hack_author</td><td>$hack_release_date</td><td class=\"text-nowrap text-muted\">Downloads: $total_downloads</td><td hidden>$hack_tags</td><td class=\"border-0\">$edit_button</td><td class=\"border-0\">$delete_button</td></tr>\n");
 				}*/
 				?>
-				</table>
-			</div>
 	<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/footer.php'); ?>
 			</div>		</div>
+			<script type="text/javascript">
+				function addButtons() {
+				document.getElementById('myTable')['rows'][0]['cells'][5].innerHTML = '<?php print($add_button);?>'
+				<?php $i = 1; ?>
+				for(i = 1; i < document.getElementById('myTable')['rows'].length; i++) {
+					<?php
+						$hack_author = getAllUniqueHacksFromDatabase($pdo)[$i]['author'];
+						$delete_button = ($_SESSION['logged_in'] && (in_array($_SESSION['userData']['discord_id'], ADMIN_SITE) || str_contains($hack_author, $_SESSION['userData']['discord_id']))) ? "<a class=\"btn btn-danger btn-block text-nowrap\" href=\"deleteHack.php?hack_name=$hack_name\"><img src=\"/_assets/_img/icons/delete.svg\"></a>" : "&nbsp;";
+						$edit_button = ($_SESSION['logged_in'] && (in_array($_SESSION['userData']['discord_id'], ADMIN_SITE) || str_contains($hack_author, $_SESSION['userData']['discord_id']))) ? "<a class=\"btn btn-info btn-block text-nowrap\" href=\"editHack.php?hack_name=$hack_name\"><img src=\"/_assets/_img/icons/edit.svg\"></a>" : "&nbsp;";
+						$i++;
+					?>
+					document.getElementById('myTable')['rows'][i]['cells'][5].innerHTML = '<?php print($delete_button);?>'
+					document.getElementById('myTable')['rows'][i]['cells'][6].innerHTML = '<?php print($edit_button);?>'
+				}
+				}
+				</script>
 	</body>
 </html>
