@@ -36,13 +36,15 @@ function writeJson($pdo)
 		$hack_release_date = $hack['release_date'];
 		$hack_author = $hack['author'];
 		$hack_tag = $hack['hack_tags'];
+		$hack_downloads = $hack['total_downloads'];
 
 		$json_content .= "
 		{
-			\"hack_name\" : \"$hack_name\",
-			\"hack_release_date\" : \"$hack_release_date\",
-			\"hack_author\" : \"$hack_author\",
-			\"hack_tag\" : \"$hack_tag\"
+			\"name\" : \"$hack_name\",
+			\"release_date\" : \"$hack_release_date\",
+			\"author\" : \"$hack_author\",
+			\"tag\" : \"$hack_tag\",
+			\"downloads\" : $hack_downloads
 		},
 		";
 	}

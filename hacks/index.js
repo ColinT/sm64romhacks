@@ -5,7 +5,7 @@ const DEBOUNCE_DELAY = 200;
 const HACK_NAME_COLUMN_INDEX = 0;
 const AUTHOR_NAME_COLUMN_INDEX = 1;
 const HACK_DATE_COLUMN_INDEX = 2;
-const TAG_COLUMN_INDEX = 3;
+const TAG_COLUMN_INDEX = 4;
 
 /**
  * @typedef {Object} HackTableRowContent
@@ -110,6 +110,7 @@ function getHacksTableHeaderRow() {
       <th><b>Hackname</b></th>
       <th class="creator"><b>Creator</b></th>
       <th>Initial Release Date (yyyy-mm-dd)</th>
+      <th>Downloads</th>
       <th hidden>Tag</th>
     </tr>
   `;
@@ -120,10 +121,11 @@ function getHacksTableHeaderRow() {
  * @returns {string}
  */
 function getTableRowFromHack(hack) {
-  const hackName = hack.hack_name;
-  const hackCreators = hack.hack_author;
-  const releaseDate = hack.hack_release_date;
-  const tag = hack.hack_tag;
+  const hackName = hack.name;
+  const hackCreators = hack.author;
+  const releaseDate = hack.release_date;
+  const tag = hack.tag;
+  const downloads = hack.downloads;
 
   // TODO: use the correct relative url path
   // Might need to add this to data.json or use single page app framework
@@ -133,6 +135,7 @@ function getTableRowFromHack(hack) {
       <td><a href="/hacks/${getURLName(hackName)}">${hackName}</a></td>
       <td>${hackCreators}</td>
       <td class="text-nowrap">${releaseDate}</td>
+      <td class="text-nowrap text-muted">Downloads: ${downloads}</td>
       <td hidden>${tag}</td>
     </tr>
   `;
