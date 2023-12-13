@@ -1,26 +1,26 @@
 <?php 
 $add_button = ($_SESSION['logged_in']) ? "<a class=\"btn btn-success text-nowrap\" href=\"addHack.php\"><img src=\"/_assets/_img/icons/add.svg\"></a>" : "&nbsp;"; 
 $amount = getAmountOfHacksInDatabase($pdo)[0]['count'];
-writeJson($pdo);
 if($amount == 0){
 	$a_patch=file($_SERVER['DOCUMENT_ROOT']. "/_assets/_data/patches.csv");
+	$hack_id = 1;
 	foreach($a_patch as $patch)
 	{
 		list($name, $version, $creator, $amount, $date, $dl, $tag)=explode(',',$patch);
-		$creator = explode(" & ", $creator);
-		$authors = "";
-		foreach($creator as $author) {
-			$authors = $authors . $author . ', ';
-		}
-		$authors = substr_replace($authors, '', -2);
-		$creator = $authors;
 		$tag=str_replace("\n", "", $tag);
 		$tag=substr_replace($tag, "", -1);
 		$description="";
 		if(strlen($date) == 0) $date = "9999-12-31";
-		addHackToDatabase($pdo, $name, $version, $creator, $amount, $date, $dl, $tag,$description, 1, 0);
+		addHackToDatabase($pdo, $name, $version, $amount, $date, $dl, $tag,$description, 1, 0);
+		
+		$creator = explode(" & ", $creator);
+		foreach($creator as $author) {
+			if(sizeof(getAuthorFromDatabase($pdo, $author)) == 0) addAuthorToDatabase($pdo, $author);
+			$author_id = getAuthorFromDatabase($pdo, $author)[0]['author_id'];
+			addHackAuthorToDatabase($pdo, $hack_id, $author_id);
+		}
+		$hack_id++;
 	}
-
 }
 ?>
 
@@ -61,39 +61,7 @@ if($amount == 0){
 				</select>	
 				<a class="btn btn-primary" href="/hacks/random.php">Random</a><br/><br/>
 
-
 					<div class="table-responsive" id="hacksCollection"></div>
-				<?php 
-
-				$data = (getAllUniqueHacksFromDatabase($pdo));
-				for($i = 1; $i < sizeof($data); $i++) {
-
-				}
-				/*foreach($data as $entry) {
-					$hack_name = $entry['hack_name'];
-					$dir_name = getURLEncodedName($hack_name);
-
-					$hack_author = $entry['author'];
-					$hack_release_date = $entry['release_date'];
-					$hack_tags = $entry['hack_tags'];
-
-					$total_downloads = getTotalDownloadCountForHackFromDatabase($pdo, $hack_name)[0]['total_downloads'];
-
-					$authors = explode(", ", $hack_author);
-						$hack_author = "";
-						foreach($authors as $author) {
-						  $user = getUserFromDatabase($pdo, $author);
-						  if($user) $hack_author = $hack_author . '<a href="/users/' . $author . '">' . $user['discord_username'] . '</a>, ';
-						  else $hack_author = $hack_author . $author . ', ';
-						}
-						$hack_author = substr_replace($hack_author, '', -2);
-
-					$delete_button = ($_SESSION['logged_in'] && (in_array($_SESSION['userData']['discord_id'], ADMIN_SITE) || str_contains($hack_author, $_SESSION['userData']['discord_id']))) ? "<a class=\"btn btn-danger btn-block text-nowrap\" href=\"deleteHack.php?hack_name=$hack_name\"><img src=\"/_assets/_img/icons/delete.svg\"></a>" : "&nbsp;";
-					$edit_button = ($_SESSION['logged_in'] && (in_array($_SESSION['userData']['discord_id'], ADMIN_SITE) || str_contains($hack_author, $_SESSION['userData']['discord_id']))) ? "<a class=\"btn btn-info btn-block text-nowrap\" href=\"editHack.php?hack_name=$hack_name\"><img src=\"/_assets/_img/icons/edit.svg\"></a>" : "&nbsp;";
-
-					//print("<tr><td><a href=\"/hacks/$dir_name\">$hack_name</a></td><td class=\"creator\">$hack_author</td><td>$hack_release_date</td><td class=\"text-nowrap text-muted\">Downloads: $total_downloads</td><td hidden>$hack_tags</td><td class=\"border-0\">$edit_button</td><td class=\"border-0\">$delete_button</td></tr>\n");
-				}*/
-				?>
 	<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/footer.php'); ?>
 			</div>		</div>
 			<script type="text/javascript">

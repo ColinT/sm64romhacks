@@ -22,42 +22,6 @@ function getURLDecodedName($hackname)
 	return urldecode($hackname);
 }
 
-function writeJson($pdo)
-{
-	$f_json = fopen($_SERVER['DOCUMENT_ROOT'] . "/hacks.json", "w+");
-	$json_content = "";
-	$json_content .= 
-	"{
-		\"hacks\" : [";
-	$hacks = getAllUniqueHacksFromDatabase($pdo);
-
-	foreach($hacks as $hack) {
-		$hack_name = $hack['hack_name'];
-		$hack_release_date = $hack['release_date'];
-		$hack_author = $hack['author'];
-		$hack_tag = $hack['hack_tags'];
-		$hack_downloads = $hack['total_downloads'];
-
-		$json_content .= "
-		{
-			\"name\" : \"$hack_name\",
-			\"release_date\" : \"$hack_release_date\",
-			\"author\" : \"$hack_author\",
-			\"tag\" : \"$hack_tag\",
-			\"downloads\" : $hack_downloads
-		},
-		";
-	}
-	$json_content = substr_replace($json_content, '', strrpos($json_content, ','));
-	$json_content .= "
-	]
-}
-	";
-	fwrite($f_json, $json_content);
-	fclose($f_json);
-}
-
-
 function getAllAuthorsNames($pdo, $string_of_ids) {
 	$authors = explode(", ", $string_of_ids);
 	$result_string = "";

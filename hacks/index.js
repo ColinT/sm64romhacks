@@ -82,9 +82,10 @@ async function main() {
  * @returns {Hack[]}
  */
 async function getAllHacks() {
-  const response = await fetch("/hacks.json"); // relative to root
+  const response = await fetch("/api?hack_name=all"); // relative to root
   const data = await response.json();
-  return data.hacks;
+  console.log(data)
+  return data;
 }
 
 /**
@@ -124,19 +125,20 @@ function getHacksTableHeaderRow() {
  * @returns {string}
  */
 function getTableRowFromHack(hack) {
-  const hackName = hack.name;
-  const hackCreators = hack.author;
+  const hackName = hack.hack_name;
+  const creators = hack.hack_author
   const releaseDate = hack.release_date;
   const tag = hack.tag;
-  const downloads = hack.downloads;
+  const downloads = hack.total_downloads;
+  const link = getURLName(hackName)
 
   // TODO: use the correct relative url path
   // Might need to add this to data.json or use single page app framework
 
   return `
     <tr>
-      <td><a href="/hacks/${getURLName(hackName)}">${hackName}</a></td>
-      <td>${hackCreators}</td>
+      <td><a href="/hacks/${link}">${hackName}</a></td>
+      <td>${creators}</td>
       <td class="text-nowrap">${releaseDate}</td>
       <td class="text-nowrap text-muted">Downloads: ${downloads}</td>
       <td hidden>${tag}</td>
@@ -148,9 +150,32 @@ function getTableRowFromHack(hack) {
 
 function getURLName(hackName)
 {
-  hackName = hackName.split(":").join("_");
-  hackName = encodeURI(hackName);
-  return hackName;
+  hackName = hackName.replace(':', '_');
+  let newStr = '';
+  const len = hackName.length;
+
+  for (let i = 0; i < len; i++) {
+    let c = hackName.charAt(i);
+    let code = hackName.charCodeAt(i);
+
+    // Spaces
+    if (c === ' ') {
+      newStr += '+';
+    }
+    // Non-alphanumeric characters except "-", "_", and "."
+    else if ((code < 48 && code !== 45 && code !== 46) ||
+             (code < 65 && code > 57) ||
+             (code > 90 && code < 97 && code !== 95) ||
+             (code > 122)) {
+      newStr += '%' + code.toString(16);
+    }
+    // Alphanumeric characters
+    else {
+      newStr += c;
+    }
+  }
+
+  return newStr;
 }
 
 
