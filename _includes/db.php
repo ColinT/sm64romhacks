@@ -213,7 +213,6 @@ function createHacksDatabase($pdo) {
         `hack_id` int(11) NOT NULL AUTO_INCREMENT,
         `hack_name` varchar(255) NOT NULL,
         `hack_version` varchar(255) DEFAULT NULL,
-        `hack_author` varchar(255) DEFAULT NULL,
         `hack_starcount` int(11) DEFAULT NULL,
         `hack_release_date` date DEFAULT NULL,
         `hack_patchname` varchar(255) NOT NULL,
@@ -232,14 +231,43 @@ function createHacksDatabase($pdo) {
       }
 }
 
-function addHackToDatabase($pdo,$hack_name,$hack_version,$hack_author,$hack_starcount,$hack_release_date,$hack_patchname,$hack_tags,$hack_description,$hack_verified){
-    $sql = "INSERT INTO hacks (hack_name,hack_version,hack_author,hack_starcount,hack_release_date,hack_patchname,hack_tags,hack_description,hack_verified) VALUES (:hack_name,:hack_version,:hack_author,:hack_starcount,:hack_release_date,:hack_patchname,:hack_tags,:hack_description,:hack_verified)";
+function createHackAuthorsDatabase($pdo) {
+    $sql = "CREATE TABLE IF NOT EXISTS `hacks_authors` ( 
+        hack_id INT(11) NOT NULL, 
+        author_id INT(11) NOT NULL, 
+        CONSTRAINT fk_hack_id FOREIGN KEY (hack_id) REFERENCES hacks(hack_id),
+        CONSTRAINT fk_author_id FOREIGN KEY (author_id) REFERENCES author(author_id)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
+        try {
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute();
+        } catch(Exception $e) {
+            echo $e;
+        }     
+}
+
+function createAuthorsDatabase($pdo) {
+    $sql = "CREATE TABLE IF NOT EXISTS `author` (
+        author_id INT(11) NOT NULL AUTO_INCREMENT,
+        author_name VARCHAR(255) NOT NULL,
+        PRIMARY KEY(`author_id`)
+        ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4";
+                try {
+                    $stmt = $pdo->prepare($sql);
+                    $stmt->execute();
+                } catch(Exception $e) {
+                    echo $e;
+                }     
+        
+}
+
+function addHackToDatabase($pdo,$hack_name,$hack_version,$hack_starcount,$hack_release_date,$hack_patchname,$hack_tags,$hack_description,$hack_verified){
+    $sql = "INSERT INTO hacks (hack_name,hack_version,hack_starcount,hack_release_date,hack_patchname,hack_tags,hack_description,hack_verified) VALUES (:hack_name,:hack_version,:hack_starcount,:hack_release_date,:hack_patchname,:hack_tags,:hack_description,:hack_verified)";
     try {
         $stmt = $pdo->prepare($sql);
         $stmt->execute([
             'hack_name'=>$hack_name,
             'hack_version'=>$hack_version,
-            'hack_author'=>$hack_author,
             'hack_starcount'=>$hack_starcount,
             'hack_release_date'=>$hack_release_date,
             'hack_patchname'=>$hack_patchname,
@@ -252,8 +280,65 @@ function addHackToDatabase($pdo,$hack_name,$hack_version,$hack_author,$hack_star
     }
 }
 
+function getAuthorFromDatabase($pdo, $author_name) {
+    $sql = "SELECT * FROM author WHERE author_name=:author_name";
+    try {
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([
+            'author_name'=>$author_name
+        ]);
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC); 
+        return $data;
+    } catch (Exception $e) {
+        echo $e;
+    }
+
+}
+
+function addAuthorToDatabase($pdo, $author_name) {
+    $sql = "INSERT INTO author (author_name) VALUES (:author_name)";
+    try {
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([
+            'author_name'=>$author_name
+        ]);
+    } catch (Exception $e) {
+        echo $e;
+    }
+}
+
+function addHackAuthorToDatabase($pdo, $hack_id, $author_id) {
+    $sql = "INSERT INTO hacks_authors (hack_id, author_id) VALUES (:hack_id,:author_id)";
+    try {
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([
+            'hack_id'=>$hack_id,
+            'author_id'=>$author_id
+        ]);
+    } catch (Exception $e) {
+        echo $e;
+    }
+}
+
+function getAmountOfHacksInDatabase($pdo){
+    $sql = "SELECT COUNT(*) AS 'count' FROM hacks";
+    try {
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC); 
+        return $data;
+    } catch (Exception $e) {
+        echo $e;
+    }
+}
+
 function getHackFromDatabase($pdo, $hack_name) {
-    $sql = "SELECT * FROM hacks WHERE hack_name=:hack_name AND hack_verified=1 ORDER BY hack_recommend DESC, CASE WHEN hack_release_date = '9999-12-31' THEN 2 ELSE 1 END, hack_release_date DESC";
+    $sql = "SELECT * FROM hacks h 
+    LEFT JOIN hacks_authors ha ON (h.hack_id = ha.hack_id) 
+    LEFT JOIN author a ON (ha.author_id = a.author_id) 
+    WHERE hack_name=:hack_name AND hack_verified=1 
+    ORDER BY hack_recommend DESC, CASE WHEN hack_release_date = '9999-12-31' THEN 2 ELSE 1 END, hack_release_date DESC";
+    
     try {
         $stmt = $pdo->prepare($sql);
         $stmt->execute([
@@ -264,11 +349,15 @@ function getHackFromDatabase($pdo, $hack_name) {
     } catch (Exception $e) {
         echo $e;
     }
-
 }
 
-function getHackByUserFromDatabase($pdo, $user_id) {
-    $sql = "SELECT hack_name, MIN(hack_release_date) AS release_date, MIN(hack_author) AS author FROM hacks WHERE hack_author LIKE '%$user_id%' AND hack_verified=1 GROUP BY hack_name";
+
+
+function getHackByUserFromDatabase($pdo, $user_name) {
+    $sql = "SELECT * FROM hacks h
+    LEFT JOIN hacks_authors ha ON (h.hack_id = ha.hack_id)
+    LEFT JOIN author a ON (ha.author_id = a.author_id) 
+    WHERE a.author_name = $user_name AND hack_verified=1 GROUP BY hack_name";
 
     try {
         $stmt = $pdo->prepare($sql);
@@ -278,10 +367,15 @@ function getHackByUserFromDatabase($pdo, $user_id) {
     } catch(Exception $e) {
         echo $e;
     }
-}
+} 
+
+
 
 function getPatchesByUserFromDatabase($pdo, $user_id) {
-    $sql = "SELECT * FROM hacks WHERE hack_author LIKE '%$user_id%'";
+    $sql = "SELECT * FROM hacks h
+    LEFT JOIN hacks_authors ha ON (h.hack_id = ha.hack_id)
+    LEFT JOIN author a ON (ha.author_id = a.author_id) 
+    WHERE a.author_name = $user_name AND hack_verified=1";
     try {
         $stmt = $pdo->prepare($sql);
         $stmt->execute();
@@ -293,8 +387,13 @@ function getPatchesByUserFromDatabase($pdo, $user_id) {
 
 }
 
+
+
 function getAllPendingHacksFromDatabase($pdo){
-    $sql = "SELECT * FROM hacks WHERE hack_verified=0 ORDER BY hack_name";
+    $sql = "SELECT * FROM hacks h
+    LEFT JOIN hacks_authors ha ON (h.hack_id = ha.hack_id)
+    LEFT JOIN author a ON (ha.author_id = a.author_id) 
+    WHERE hack_verified=0 GROUP BY hack_name";
     try {
         $stmt = $pdo->prepare($sql);
         $stmt->execute();
@@ -305,8 +404,13 @@ function getAllPendingHacksFromDatabase($pdo){
     }
 }
 
+
 function getAllUniqueHacksFromDatabase($pdo){
-    $sql = "SELECT hack_name, MIN(hack_release_date) AS release_date, MIN(hack_author) AS author, SUM(hack_downloads) AS total_downloads, hack_tags FROM hacks WHERE hack_verified=1 GROUP BY hack_name ORDER BY hack_name";
+    $sql = "SELECT h.hack_name, GROUP_CONCAT(DISTINCT a.author_name SEPARATOR ', ') AS hack_author, MIN(h.hack_release_date) AS release_date, SUM(h.hack_downloads) AS total_downloads, h.hack_tags FROM hacks h 
+    LEFT JOIN hacks_authors ha ON (h.hack_id = ha.hack_id) 
+    LEFT JOIN author a ON (ha.author_id = a.author_id) 
+    WHERE hack_verified=1 GROUP BY h.hack_name
+    ORDER BY h.hack_name;";
     try {
         $stmt = $pdo->prepare($sql);
         $stmt->execute();
@@ -319,7 +423,10 @@ function getAllUniqueHacksFromDatabase($pdo){
 
 
 function getPatchFromDatabase($pdo, $hack_id) {
-    $sql = "SELECT * FROM hacks WHERE hack_id=:hack_id";
+    $sql = "SELECT * FROM hacks h 
+    LEFT JOIN hacks_authors ha ON (h.hack_id = ha.hack_id) 
+    LEFT JOIN author a ON (ha.author_id = a.author_id) 
+    WHERE h.hack_id=:hack_id AND hack_verified=1;";
     try {
         $stmt = $pdo->prepare($sql);
         $stmt->execute([
@@ -331,6 +438,7 @@ function getPatchFromDatabase($pdo, $hack_id) {
         echo $e;
     }
 }
+
 
 function getRandomHackFromDatabase($pdo) {
     $sql = "SELECT * FROM hacks WHERE hack_verified=1 ORDER BY RAND() LIMIT 1";
@@ -344,6 +452,7 @@ function getRandomHackFromDatabase($pdo) {
     }
 
 }
+
 
 function getTotalDownloadCountForHackFromDatabase($pdo, $hack_name) {
     $sql = "SELECT SUM(hack_downloads) AS total_downloads FROM hacks WHERE hack_name = :hack_name";
@@ -359,11 +468,10 @@ function getTotalDownloadCountForHackFromDatabase($pdo, $hack_name) {
     }
 }
 
-function updatePatchInDatabase($pdo,$hack_id,$hack_name,$hack_version,$hack_author,$hack_starcount,$hack_release_date,$hack_verified){
+function updatePatchInDatabase($pdo,$hack_id,$hack_name,$hack_version,$hack_starcount,$hack_release_date,$hack_verified){
     $sql = "UPDATE hacks SET 
             hack_name = \"$hack_name\",
             hack_version = \"$hack_version\",
-            hack_author = \"$hack_author\",
             hack_starcount = $hack_starcount,
             hack_release_date = '$hack_release_date',
             hack_verified = $hack_verified
@@ -375,6 +483,21 @@ function updatePatchInDatabase($pdo,$hack_id,$hack_name,$hack_version,$hack_auth
         echo $e;
     }
 }
+
+function updateAuthorInDatabase($pdo, $hack_id, $author_id, $author_name) {
+    $sql = "UPDATE authors a, hacks_authors ha
+    SET a.author_name=$user_id, ha.author_name=$user_id
+    WHERE h.hack_id=$hack_id AND a.author_name=$author_name";
+        try {
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute();
+        } catch (Exception $e) {
+            echo $e;
+        }
+    
+}
+
+
 
 function recommendPatchFromDatabase($pdo, $hack_id) {
     $sql = "UPDATE hacks SET hack_recommend = 1 WHERE hack_id = $hack_id";
@@ -434,18 +557,6 @@ function updateHackInDatabase($pdo, $hack_name,$hack_tags, $hack_description) {
 
 function getAllTagsFromDatabase($pdo) {
     $sql = "SELECT hack_tags FROM hacks WHERE hack_tags <> \"\" AND hack_verified=1 GROUP BY hack_tags ORDER BY hack_tags";
-    try {
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute();
-        $data = $stmt->fetchAll(PDO::FETCH_ASSOC); 
-        return $data;
-    } catch (Exception $e) {
-        echo $e;
-    }
-}
-
-function getAmountOfHacksInDatabase($pdo){
-    $sql = "SELECT COUNT(*) AS 'count' FROM hacks";
     try {
         $stmt = $pdo->prepare($sql);
         $stmt->execute();
