@@ -2,11 +2,6 @@
 if($_SESSION['logged_in'] && (in_array($_SESSION['userData']['discord_id'], ADMIN_SITE))) {
 	$admin_HTMLLoad = "&nbsp;<a class=\"btn btn-danger text-nowrap\" href=\"deleteHack.php?hack_name=$hack_name\"><img src=\"/_assets/_img/icons/delete.svg\"></a>&nbsp;<a class=\"btn btn-info text-nowrap\" href=\"editHack.php?hack_name=$hack_name\"><img src=\"/_assets/_img/icons/edit.svg\"></a>";
 }
-
-$logo_HTMLLoad = "";
-//$hacks_logo = "img_" . stripChars(getURLEncodedName($hack_name)) . "_0.jpg";
-if(file_exists($_SERVER['DOCUMENT_ROOT'] . "/_assets/_img/hacks/$hacks_logo")) $logo_HTMLLoad = "<img src=\"/_assets/_img/hacks/$hacks_logo\" width=80 height=60>&nbsp;";
-
 ?>
 <!DOCTYPE HTML>
 	<html>
@@ -57,6 +52,7 @@ if(file_exists($_SERVER['DOCUMENT_ROOT'] . "/_assets/_img/hacks/$hacks_logo")) $
 			<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 			<link rel="shortcut icon" href="/_assets/_img/icon.ico" />
 			<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+			<script src="template.js">
 		</head>
 		<body>		<div class="container">
 		<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/header.php'); ?>
