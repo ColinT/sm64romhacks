@@ -28,8 +28,11 @@ const DEBOUNCE_DELAY = 200;
  */
 
 async function main() {
+  const request = await fetch("/api?check=user");
+  const response = await request.json()
+
   const allHacks = await getAllHacks();
-  const hacksTable = getHacksTable(allHacks);
+  const hacksTable = getHacksTable(allHacks, response);
   const hacksCollectionDiv = document.querySelector("#hacksCollection");
   const hacksDescriptionDiv = document.querySelector("#hacksDescription");
   hacksCollectionDiv.innerHTML += hacksTable;
@@ -62,12 +65,12 @@ async function getAllImages() {
  * @param {Hack[]} hacks
  * @returns {string}
  */
-function getHacksTable(hacks) {
+function getHacksTable(hacks, adminCheck) {
   const headerRow = getHacksTableHeaderRow();
-  const hackTableRows = hacks.map((hack) => getTableRowFromHack(hack)).join("");
+  const hackTableRows = hacks.map((hack) => getTableRowFromHack(hack, adminCheck)).join("");
 
   return `
-    <table class="table-sm table-bordered" id="myTable">
+    <table class="table-sm table-bordered">
       ${headerRow}
       ${hackTableRows}
     </table>
@@ -97,6 +100,7 @@ function getHacksTableHeaderRow() {
       <th><b>Starcount</b></th>
       <th><b>Date</b></th>
       <th><b>Tag</b></th>
+      <th class="border-0" colspan="3">&nbsp;</th>
     </tr>
   `;
 }
@@ -105,20 +109,18 @@ function getHacksTableHeaderRow() {
  * @param {Hack} hack
  * @returns {string}
  */
-function getTableRowFromHack(hack) {
+function getTableRowFromHack(hack, adminCheck) {
   const hackID = hack.hack_id;
   const hackName = hack.hack_name;
   const hackVersion = hack.hack_version;
-  const hackPatchName = hack.hack_patchname;
   const hackDownloads = hack.hack_downloads;
   const hackCreator = hack.authors;
   const hackStarcount = hack.hack_starcount;
   const hackReleaseDate = hack.hack_release_date;
   const hackTags = hack.hack_tags; 
+  const adminLoad = adminCheck ? `<a class="btn btn-warning btn-block text-nowrap" href="/hacks/claim.php?hack_id=${hackID}"><img src="/_assets/_img/icons/claim.svg"></a></td><td class="border-0"><a class="btn btn-danger btn-block text-nowrap" href="deleteHack.php?hack_id=${hackID}"><img src="/_assets/_img/icons/delete.svg"></a></td><td class="border-0"><a class="btn btn-info btn-block text-nowrap" href="editHack.php?hack_id=${hackID}"><img src="/_assets/_img/icons/edit.svg"></a>` : `&nbsp;`
 
-  // TODO: use the correct relative url path
-  // Might need to add this to data.json or use single page app framework
-
+  console.log(adminCheck)
   return `
     <tr>
       <td>${hackID}</td>
@@ -129,6 +131,7 @@ function getTableRowFromHack(hack) {
       <td>${hackStarcount}</td>
       <td>${hackReleaseDate}</td>
       <td>${hackTags}</td>
+      <td class="border-0">${adminLoad}</td>
     </tr>
   `;
 }

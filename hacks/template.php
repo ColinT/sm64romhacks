@@ -60,9 +60,7 @@ if($_SESSION['logged_in'] && (in_array($_SESSION['userData']['discord_id'], ADMI
 				<div align="center">
 					<!--HTML CONTENT HERE-->
 					<h1><u><?php print($hack_name);?></u><?php print($admin_HTMLLoad);?></h1>
-					<div id="hacksCollection">
-						<div class="table-responsive"></div>
-					</div>
+						<div class="table-responsive" id="hacksCollection"></div>
 						<div class="text-nowrap" id="hacksImages"></div>
 				<br/>
 				

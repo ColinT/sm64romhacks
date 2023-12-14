@@ -163,7 +163,7 @@ else $hackdata = getPatchFromDatabase($pdo, $hack_id);
                         <div class="container">
                             <div class="row">
                         <?php
-				            $images = (glob($_SERVER['DOCUMENT_ROOT'] . "/_assets/_img/hacks/img_" . stripChars(getURLEncodedName($hack_name)) . "_*.{png,jpg}", GLOB_NOSORT|GLOB_BRACE));
+				            $images = (glob($_SERVER['DOCUMENT_ROOT'] . "/_assets/_img/hacks/img_" . stripChars($hack_name) . "_*.{png,jpg}", GLOB_NOSORT|GLOB_BRACE));
                             foreach($images as $image) {
                                 $image = explode("/",$image)[sizeof(explode("/",$image)) - 1];
                                 $ext = substr($image, -3);
