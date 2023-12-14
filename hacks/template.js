@@ -31,7 +31,14 @@ async function main() {
   const allHacks = await getAllHacks();
   const hacksTable = getHacksTable(allHacks);
   const hacksCollectionDiv = document.querySelector("#hacksCollection");
+  const hacksDescriptionDiv = document.querySelector("#hacksDescription");
   hacksCollectionDiv.innerHTML += hacksTable;
+  hacksDescriptionDiv.innerHTML = allHacks[0].hack_description;
+
+  const allImages = await getAllImages();
+  const hacksImagesContent = getHacksImagesContent(allImages);
+  const hacksImagesDiv = document.querySelector("#hacksImages");
+  hacksImagesDiv.innerHTML = hacksImagesContent;
 }
 
 /**
@@ -41,7 +48,13 @@ async function getAllHacks() {
   const urlName = window.location.pathname.split("/")[window.location.pathname.split("/").length - 1]
   const response = await fetch(`/api?hack_name=${urlName}`); // relative to root
   const data = await response.json();
-  console.log(data)
+  return data;
+}
+
+async function getAllImages() {
+  const urlName = window.location.pathname.split("/")[window.location.pathname.split("/").length - 1]
+  const response = await fetch(`/api?images=${urlName}`);
+  const data = await response.json();
   return data;
 }
 
@@ -59,6 +72,15 @@ function getHacksTable(hacks) {
       ${hackTableRows}
     </table>
   `;
+}
+
+function getHacksImagesContent(images) {
+  const imagesContent = images.map((image) => getImage(image)).join("")
+  return imagesContent
+}
+
+function getImage(image) {
+  return  `<img class=p-3 width=320 height=240 src="/_assets/_img/hacks/${image}">`
 }
 
 /**

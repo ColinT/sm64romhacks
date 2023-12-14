@@ -52,7 +52,7 @@ if($_SESSION['logged_in'] && (in_array($_SESSION['userData']['discord_id'], ADMI
 			<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 			<link rel="shortcut icon" href="/_assets/_img/icon.ico" />
 			<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
-			<script src="template.js">
+			<script src="template.js"></script>
 		</head>
 		<body>		<div class="container">
 		<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/header.php'); ?>
@@ -63,20 +63,11 @@ if($_SESSION['logged_in'] && (in_array($_SESSION['userData']['discord_id'], ADMI
 					<div id="hacksCollection">
 						<div class="table-responsive"></div>
 					</div>
-					<div class="text-nowrap">
-						<?php 
-				            $images = (glob($_SERVER['DOCUMENT_ROOT'] . "/_assets/_img/hacks/img_" . stripChars(getURLEncodedName($hack_name)) . "_*.{png,jpg}", GLOB_NOSORT|GLOB_BRACE));
-                            foreach($images as $image) {
-                                $image = explode("/",$image)[sizeof(explode("/",$image)) - 1];
-								$ext = substr($image, -3);
-                                $image = substr_replace($image, "", -4);
-								print("<img class=p-3 width=320 height=240 src=\"/_assets/_img/hacks/$image.$ext\">");
-							}
-						?>
-				</div>
-				<table>
-                <tr><td class="bg-dark" id="hack_description"><?php $hack_description = $data[0]['hack_description']; print($hack_description); ?></td>
-                </tr></table></div>
+						<div class="text-nowrap" id="hacksImages"></div>
+				<br/>
+				
+                <div class="bg-dark text-left" id="hacksDescription"></div>
+                </div>
 
 			<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/footer.php'); ?>
 				</div>		</div>
