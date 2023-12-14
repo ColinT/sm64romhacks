@@ -60,44 +60,9 @@ if($_SESSION['logged_in'] && (in_array($_SESSION['userData']['discord_id'], ADMI
 				<div align="center">
 					<!--HTML CONTENT HERE-->
 					<h1><u><?php print($hack_name);?></u><?php print($admin_HTMLLoad);?></h1>
-					<div class="table-responsive">
-		        	<table class="table-sm table-bordered">
-					<?php $admin_HTMLLoad =  ($_SESSION['logged_in'] && in_array($_SESSION['userData']['discord_id'], ADMIN_SITE)) ? "" : " hidden";?>
-			        <tr><th <?php print($admin_HTMLLoad);?>><b>Hack ID</b></th><th><b>Hackname</b></th><th>Version</th><th><b>Downloadlink</b></th><th><b>Creator</b></th><th><b>Starcount</b></th><th>Date</th><th <?php print($admin_HTMLLoad);?>>Tag</th><th colspan=2 class="border-0">&nbsp;</th></tr>
-				    <?php 
-					$fileending=".zip";
-                    foreach($data as $entry) 
-                    {
-                        $id = $entry['hack_id'];
-                        $version = $entry['hack_version'];
-                        $dl = $entry['hack_patchname'];
-                        $creator = $entry['hack_author'];
-                        $amount = $entry['hack_starcount'];
-                        $date = $entry['hack_release_date'];
-                        $link=$dl.$fileending;
-                        $ref="'/patch/$link'"; 
-						$tag = $entry['hack_tags'];
-						$download = $entry['hack_downloads'];
-						$is_recommend = $entry['hack_recommend'];
-						$is_author = str_contains(getPatchFromDatabase($pdo, $id)[0]['hack_author'], $_SESSION['userData']['discord_id']) || str_contains(getHackFromDatabase($pdo, $hack_name)[0]['hack_author'], $_SESSION['userData']['discord_id']);
-
-						$admin_buttons = ($_SESSION['logged_in'] && (in_array($_SESSION['userData']['discord_id'], ADMIN_SITE) || $is_author)) ? "<a class=\"btn btn-danger btn-block text-nowrap\" href=\"deleteHack.php?hack_id=$id\"><img src=\"/_assets/_img/icons/delete.svg\"></a></td><td class=\"border-0\"><a class=\"btn btn-info btn-block text-nowrap\" href=\"editHack.php?hack_id=$id\"><img src=\"/_assets/_img/icons/edit.svg\"></a>" : "&nbsp;";
-						$user_button = $_SESSION['logged_in'] && !areAllAuthorsAnId($creator) ? "<a class=\"btn btn-warning btn-block text-nowrap\" href=\"/hacks/claim.php?hack_id=$id\"><img src=\"/_assets/_img/icons/claim.svg\"></a>" : "&nbsp;";
-						$recommend_class = $is_recommend == 1 ? "class=table-primary" : "";
-
-						$authors = explode(", ", $creator);
-						$hack_author = "";
-						foreach($authors as $author) {
-						  $user = getUserFromDatabase($pdo, $author);
-						  if($user) $hack_author = $hack_author . '<a href="/users/' . $author . '">' . $user['discord_username'] . '</a>, ';
-						  else $hack_author = $hack_author . $author . ', ';
-						}
-						$hack_author = substr_replace($hack_author, '', -2);
-			   
-                        print "<tr><td $recommend_class $admin_HTMLLoad>$id</td><td $recommend_class>$hack_name</td><td $recommend_class>$version</td><td $recommend_class><u><a href=\"download.php?hack_id=$id\">Download</a></u><br/><small class=\"text-muted\">Downloads: $download</small></td><td $recommend_class>$hack_author</td><td $recommend_class>$amount</td><td $recommend_class>$date</td><td $recommend_class $admin_HTMLLoad>$tag</td><td class=\"border-0\">$user_button</td><td class=\"border-0\">$admin_buttons</td></tr>\n";
-                    }?>
-			    </table></div> <br/>
-                <div>
+					<div id="hacksCollection">
+						<div class="table-responsive"></div>
+					</div>
 					<div class="text-nowrap">
 						<?php 
 				            $images = (glob($_SERVER['DOCUMENT_ROOT'] . "/_assets/_img/hacks/img_" . stripChars(getURLEncodedName($hack_name)) . "_*.{png,jpg}", GLOB_NOSORT|GLOB_BRACE));

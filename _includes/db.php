@@ -333,11 +333,12 @@ function getAmountOfHacksInDatabase($pdo){
 }
 
 function getHackFromDatabase($pdo, $hack_name) {
-    $sql = "SELECT * FROM hacks h 
+    $sql = "SELECT h.hack_id, h.hack_name, h.hack_version, h.hack_starcount, h.hack_release_date, h.hack_patchname, h.hack_downloads, h.hack_tags, h.hack_description, h.hack_verified, h.hack_recommend, GROUP_CONCAT(DISTINCT a.author_name SEPARATOR ', ') AS authors  FROM hacks h 
     LEFT JOIN hacks_authors ha ON (h.hack_id = ha.hack_id) 
     LEFT JOIN author a ON (ha.author_id = a.author_id) 
-    WHERE hack_name=:hack_name AND hack_verified=1 
-    ORDER BY hack_recommend DESC, CASE WHEN hack_release_date = '9999-12-31' THEN 2 ELSE 1 END, hack_release_date DESC";
+    WHERE h.hack_name=:hack_name AND hack_verified=1
+    GROUP BY h.hack_id
+    ORDER BY h.hack_recommend DESC, CASE WHEN h.hack_release_date = '9999-12-31' THEN 2 ELSE 1 END, h.hack_release_date DESC";
     
     try {
         $stmt = $pdo->prepare($sql);
