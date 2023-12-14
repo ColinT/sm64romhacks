@@ -84,7 +84,6 @@ async function main() {
 async function getAllHacks() {
   const response = await fetch("/api?hack_name=all"); // relative to root
   const data = await response.json();
-  console.log(data)
   return data;
 }
 
@@ -128,7 +127,7 @@ function getTableRowFromHack(hack) {
   const hackName = hack.hack_name;
   const creators = hack.hack_author
   const releaseDate = hack.release_date;
-  const tag = hack.tag;
+  const tag = hack.hack_tags;
   const downloads = hack.total_downloads;
   const link = getURLName(hackName)
 
