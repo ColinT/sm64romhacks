@@ -119,18 +119,19 @@ function getTableRowFromHack(hack, adminCheck) {
   const hackReleaseDate = hack.hack_release_date;
   const hackTags = hack.hack_tags; 
   const adminLoad = adminCheck ? `<a class="btn btn-warning btn-block text-nowrap" href="/hacks/claim.php?hack_id=${hackID}"><img src="/_assets/_img/icons/claim.svg"></a></td><td class="border-0"><a class="btn btn-danger btn-block text-nowrap" href="deleteHack.php?hack_id=${hackID}"><img src="/_assets/_img/icons/delete.svg"></a></td><td class="border-0"><a class="btn btn-info btn-block text-nowrap" href="editHack.php?hack_id=${hackID}"><img src="/_assets/_img/icons/edit.svg"></a>` : `&nbsp;`
+  const hackRecommend = hack.hack_recommend
+  const recommendRow = hackRecommend == 1 ? `class=table-primary` : ``
 
-  console.log(adminCheck)
   return `
     <tr>
-      <td>${hackID}</td>
-      <td>${hackName}</td>
-      <td>${hackVersion}</td>
-      <td><a href="/hacks/download.php?hack_id=${hackID}">Download</a><br><span class="text-muted">Downloads: ${hackDownloads}</span></td>
-      <td>${hackCreator}</td>
-      <td>${hackStarcount}</td>
-      <td>${hackReleaseDate}</td>
-      <td>${hackTags}</td>
+      <td ${recommendRow}>${hackID}</td>
+      <td ${recommendRow}>${hackName}</td>
+      <td ${recommendRow}>${hackVersion}</td>
+      <td ${recommendRow}><a href="/hacks/download.php?hack_id=${hackID}">Download</a><br><span class="text-muted">Downloads: ${hackDownloads}</span></td>
+      <td ${recommendRow}>${hackCreator}</td>
+      <td ${recommendRow}>${hackStarcount}</td>
+      <td ${recommendRow}>${hackReleaseDate}</td>
+      <td ${recommendRow}>${hackTags}</td>
       <td class="border-0">${adminLoad}</td>
     </tr>
   `;
