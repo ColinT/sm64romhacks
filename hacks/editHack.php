@@ -21,13 +21,11 @@ if(sizeof($_POST) != 0) {
     }
 
     if(strlen($hack_description) != 0) {
-        $images = (glob($_SERVER['DOCUMENT_ROOT'] . "/_assets/_img/hacks/img_" . stripChars($hack_name) . "_*.{png,jpg}", GLOB_NOSORT|GLOB_BRACE));
-
+        $images = (glob($_SERVER['DOCUMENT_ROOT'] . "/_assets/_img/hacks/img_" . stripChars(getURLEncodedName($hack_name)) . "_*.{png,jpg}", GLOB_NOSORT|GLOB_BRACE));
         foreach($images as $image) {
             $image = explode("/",$image)[sizeof(explode("/",$image)) - 1];
             $ext = substr($image, -3);
             $image = substr_replace($image, "", -4);
-
             if(!isset($_POST[$image])) {
                 unlink($_SERVER['DOCUMENT_ROOT'] . "/_assets/_img/hacks/$image.$ext");
             }
@@ -52,14 +50,14 @@ if(sizeof($_POST) != 0) {
             $tmp_name = $_FILES['hack_images']['tmp_name'][$i];
 
 
-            $images = (glob($_SERVER['DOCUMENT_ROOT'] . "/_assets/_img/hacks/img_" . stripChars($hack_name) . "_*.{png,jpg}", GLOB_NOSORT|GLOB_BRACE));
+            $images = (glob($_SERVER['DOCUMENT_ROOT'] . "/_assets/_img/hacks/img_" . stripChars(getURLEncodedName($hack_name)) . "_*.{png,jpg}", GLOB_NOSORT|GLOB_BRACE));
             $counter = 0;
             if(sizeof($images) != 0) {
                 $image = explode("/",$images[sizeof($images) - 1])[sizeof(explode("/",$images[sizeof($images) - 1])) - 1];
                 $image = substr_replace($image, "", -4); 
                 $counter = sizeof($images);
             }
-            $logo_result = move_uploaded_file($tmp_name, $_SERVER['DOCUMENT_ROOT'].'/_assets/_img/hacks/img_' . stripChars($hack_name) . "_$counter.$ext");
+            $logo_result = move_uploaded_file($tmp_name, $_SERVER['DOCUMENT_ROOT'].'/_assets/_img/hacks/img_' . stripChars(getURLEncodedName($hack_name)) . "_$counter.$ext");
         }
     }
     else {
@@ -163,7 +161,7 @@ else $hackdata = getPatchFromDatabase($pdo, $hack_id);
                         <div class="container">
                             <div class="row">
                         <?php
-				            $images = (glob($_SERVER['DOCUMENT_ROOT'] . "/_assets/_img/hacks/img_" . stripChars($hack_name) . "_*.{png,jpg}", GLOB_NOSORT|GLOB_BRACE));
+				            $images = (glob($_SERVER['DOCUMENT_ROOT'] . "/_assets/_img/hacks/img_" . stripChars(getURLEncodedName($hack_name)) . "_*.{png,jpg}", GLOB_NOSORT|GLOB_BRACE));
                             foreach($images as $image) {
                                 $image = explode("/",$image)[sizeof(explode("/",$image)) - 1];
                                 $ext = substr($image, -3);
