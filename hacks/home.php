@@ -46,7 +46,7 @@ if($amount == 0){
 			<div align="center">
 				<!--HTML CONTENT HERE-->
 				<input type="text" id="hackNamesInput" placeholder="Search for hacknames.."/><input type="text" id="authorNamesInput" placeholder="Search for hackcreators.." style="align-self: center;" /><input type="text" id="hackDatesInput" placeholder="Search for Date (yyyy-mm-dd)..." style="align-self: center; width: 215px;"/>
-				<select id=tagInput>
+				<select class="form-select form-select-sm" id=tagInput>
 					<option value="">Select a Tag</option>
 				</select>	
 				<a class="btn btn-primary" href="/hacks/random.php">Random</a><br/><br/>

@@ -110,12 +110,12 @@ function getTagsDropdownMenu(tags) {
     tag = tag.split(", ");
     const ta = tag.map((t) => {
       return `<option value="${t}">${t}</option>`
-    });
+    }).join("");
     return ta.toString()
-  });
+  }).join("") 
 
 
-  return tagsDropdownMenu;
+  return tagsDropdownMenu
 }
 
 /**
