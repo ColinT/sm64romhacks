@@ -28,17 +28,15 @@ const DEBOUNCE_DELAY = 200;
  */
 
 async function main() {
-  const request = await fetch("/api?check=user");
-  const response = await request.json()
 
-  const allHacks = await getAllHacks();
-  const hacksTable = getHacksTable(allHacks, response);
+  const data = await getData();
+  const hacksTable = getHacksTable(data[0], data[2]);
   const hacksCollectionDiv = document.querySelector("#hacksCollection");
   const hacksDescriptionDiv = document.querySelector("#hacksDescription");
   hacksCollectionDiv.innerHTML += hacksTable;
-  hacksDescriptionDiv.innerHTML = allHacks[0].hack_description;
+  hacksDescriptionDiv.innerHTML = data[0][0].hack_description;
 
-  const allImages = await getAllImages();
+  const allImages = data[1]
   const hacksImagesContent = getHacksImagesContent(allImages);
   const hacksImagesDiv = document.querySelector("#hacksImages");
   hacksImagesDiv.innerHTML = hacksImagesContent;
@@ -47,16 +45,9 @@ async function main() {
 /**
  * @returns {Hack[]}
  */
-async function getAllHacks() {
+async function getData() {
   const urlName = window.location.pathname.split("/")[window.location.pathname.split("/").length - 1]
   const response = await fetch(`/api?hack_name=${getURLName(urlName)}`); // relative to root
-  const data = await response.json();
-  return data;
-}
-
-async function getAllImages() {
-  const urlName = window.location.pathname.split("/")[window.location.pathname.split("/").length - 1]
-  const response = await fetch(`/api?images=${urlName}`);
   const data = await response.json();
   return data;
 }

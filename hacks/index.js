@@ -41,8 +41,8 @@ const TAG_COLUMN_INDEX = 4;
  */
 
 async function main() {
-  const allHacks = await getAllHacks();
-  const hacksTable = getHacksTable(allHacks);
+  const data = await getData();
+  const hacksTable = getHacksTable(data[0], data[1]);
   const hacksCollectionDiv = document.querySelector("#hacksCollection");
   hacksCollectionDiv.innerHTML = hacksTable;
   const myTable = document.getElementById("myTable");
@@ -74,14 +74,12 @@ async function main() {
 
   const tagInput = document.getElementById("tagInput");
   setTagFilterHandler(tagInput, tableRowContents);
-
-  addButtons();
 }
 
 /**
  * @returns {Hack[]}
  */
-async function getAllHacks() {
+async function getData() {
   const response = await fetch("/api?hack_name=all"); // relative to root
   const data = await response.json();
   return data;
@@ -91,9 +89,9 @@ async function getAllHacks() {
  * @param {Hack[]} hacks
  * @returns {string}
  */
-function getHacksTable(hacks) {
+function getHacksTable(hacks, adminCheck) {
   const headerRow = getHacksTableHeaderRow();
-  const hackTableRows = hacks.map((hack) => getTableRowFromHack(hack)).join("");
+  const hackTableRows = hacks.map((hack) => getTableRowFromHack(hack, adminCheck)).join("");
 
   return `
     <table class="table-sm table-bordered" id="myTable">
@@ -123,13 +121,16 @@ function getHacksTableHeaderRow() {
  * @param {Hack} hack
  * @returns {string}
  */
-function getTableRowFromHack(hack) {
+function getTableRowFromHack(hack, adminCheck) {
   const hackName = hack.hack_name;
   const creators = hack.hack_author
   const releaseDate = hack.release_date;
   const tag = hack.hack_tags;
   const downloads = hack.total_downloads;
-  const link = getURLName(hackName)
+  const link = getURLName(hackName);
+  const deleteButton = adminCheck ? `<a class="btn btn-danger btn-block text-nowrap" href="deleteHack.php?hack_name=${hackName}"><img src="/_assets/_img/icons/delete.svg"></a>` : "&nbsp;"
+  const editButton = adminCheck ? `<a class="btn btn-info btn-block text-nowrap" href="editHack.php?hack_name=${hackName}"><img src="/_assets/_img/icons/edit.svg"></a>` : "&nbsp;";
+
 
   // TODO: use the correct relative url path
   // Might need to add this to data.json or use single page app framework
@@ -141,8 +142,8 @@ function getTableRowFromHack(hack) {
       <td class="text-nowrap">${releaseDate}</td>
       <td class="text-nowrap text-muted">Downloads: ${downloads}</td>
       <td hidden>${tag}</td>
-      <td class="border-0 delete-button"></td>
-      <td class="border-0 edit-button"></td>
+      <td class="border-0 delete-button">${deleteButton}</td>
+      <td class="border-0 edit-button">${editButton}</td>
     </tr>
   `;
 }

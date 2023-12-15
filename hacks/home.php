@@ -64,21 +64,5 @@ if($amount == 0){
 					<div class="table-responsive" id="hacksCollection"></div>
 	<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/footer.php'); ?>
 			</div>		</div>
-			<script type="text/javascript">
-				function addButtons() {
-				document.getElementById('myTable')['rows'][0]['cells'][5].innerHTML = '<?php print($add_button);?>'
-				<?php $i = 1; ?>
-				for(i = 1; i < document.getElementById('myTable')['rows'].length; i++) {
-					<?php
-						$hack_author = getAllUniqueHacksFromDatabase($pdo)[$i]['author'];
-						$delete_button = ($_SESSION['logged_in'] && (in_array($_SESSION['userData']['discord_id'], ADMIN_SITE) || str_contains($hack_author, $_SESSION['userData']['discord_id']))) ? "<a class=\"btn btn-danger btn-block text-nowrap\" href=\"deleteHack.php?hack_name=$hack_name\"><img src=\"/_assets/_img/icons/delete.svg\"></a>" : "&nbsp;";
-						$edit_button = ($_SESSION['logged_in'] && (in_array($_SESSION['userData']['discord_id'], ADMIN_SITE) || str_contains($hack_author, $_SESSION['userData']['discord_id']))) ? "<a class=\"btn btn-info btn-block text-nowrap\" href=\"editHack.php?hack_name=$hack_name\"><img src=\"/_assets/_img/icons/edit.svg\"></a>" : "&nbsp;";
-						$i++;
-					?>
-					document.getElementById('myTable')['rows'][i]['cells'][5].innerHTML = '<?php print($delete_button);?>'
-					document.getElementById('myTable')['rows'][i]['cells'][6].innerHTML = '<?php print($edit_button);?>'
-				}
-				}
-				</script>
 	</body>
 </html>
