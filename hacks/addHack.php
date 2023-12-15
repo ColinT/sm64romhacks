@@ -67,7 +67,7 @@ if(sizeof($_POST) != 0) {
 		<link rel="stylesheet" type="text/css" href="/_assets/_css/bootstrap.css">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 		<link rel="shortcut icon" href="/_assets/_img/icon.ico" />
-        <script src="index.js"></script>
+        <script src="addHack.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
 	</head>
 	<body>		<div class="container">
@@ -82,13 +82,6 @@ if(sizeof($_POST) != 0) {
                         <td>
                             <input class="form-control" list="hack_name_options" name="hack_name" placeholder="Type to search..." required>                            
                             <datalist id="hack_name_options">
-                                <?php 
-                                $data = getAllUniqueHacksFromDatabase($pdo);
-                                foreach($data as $entry) {
-                                    $name = $entry['hack_name'];
-                                    print("<option value=\"$name\">");
-                                }
-                                ?>
                             </datalist>
                         </td>
                         <td>
