@@ -48,16 +48,6 @@ if($amount == 0){
 				<input type="text" id="hackNamesInput" placeholder="Search for hacknames.."/><input type="text" id="authorNamesInput" placeholder="Search for hackcreators.." style="align-self: center;" /><input type="text" id="hackDatesInput" placeholder="Search for Date (yyyy-mm-dd)..." style="align-self: center; width: 215px;"/>
 				<select id=tagInput>
 					<option value="">Select a Tag</option>
-					<?php 
-						$all_tags = getAllTagsFromDatabase($pdo);
-						foreach($all_tags as $tag) {
-							$tag = $tag['hack_tags'];
-							$tag = explode(", ", $tag);
-							foreach($tag as $t) { ?>
-							<option value="<?php print($t);?>"><?php print($t);?></option>
-					<?php }
-						}
-					?>
 				</select>	
 				<a class="btn btn-primary" href="/hacks/random.php">Random</a><br/><br/>
 

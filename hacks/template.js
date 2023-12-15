@@ -30,13 +30,14 @@ const DEBOUNCE_DELAY = 200;
 async function main() {
 
   const data = await getData();
-  const hacksTable = getHacksTable(data[0], data[2]);
+  console.log(data)
+  const hacksTable = getHacksTable(data.patches, data.admin);
   const hacksCollectionDiv = document.querySelector("#hacksCollection");
   const hacksDescriptionDiv = document.querySelector("#hacksDescription");
   hacksCollectionDiv.innerHTML += hacksTable;
-  hacksDescriptionDiv.innerHTML = data[0][0].hack_description;
+  hacksDescriptionDiv.innerHTML = data.patches[0].hack_description;
 
-  const allImages = data[1]
+  const allImages = data.images
   const hacksImagesContent = getHacksImagesContent(allImages);
   const hacksImagesDiv = document.querySelector("#hacksImages");
   hacksImagesDiv.innerHTML = hacksImagesContent;

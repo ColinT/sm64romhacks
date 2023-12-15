@@ -42,10 +42,13 @@ const TAG_COLUMN_INDEX = 4;
 
 async function main() {
   const data = await getData();
-  const hacksTable = getHacksTable(data[0], data[1]);
+  const tagsDropdownMenu = getTagsDropdownMenu(data.tags);
+  const hacksTable = getHacksTable(data.hacks, data.user);
   const hacksCollectionDiv = document.querySelector("#hacksCollection");
   hacksCollectionDiv.innerHTML = hacksTable;
   const myTable = document.getElementById("myTable");
+  const tagsDropDownElement = document.getElementById('tagInput');
+  tagsDropDownElement.innerHTML += tagsDropdownMenu;
 
   if(document.getElementById("hack_release_date") != null)   document.getElementById("hack_release_date").setAttribute("max", new Date().toISOString().slice(0, 10));
 
@@ -89,9 +92,9 @@ async function getData() {
  * @param {Hack[]} hacks
  * @returns {string}
  */
-function getHacksTable(hacks, adminCheck) {
-  const headerRow = getHacksTableHeaderRow();
-  const hackTableRows = hacks.map((hack) => getTableRowFromHack(hack, adminCheck)).join("");
+function getHacksTable(hacks, user) {
+  const headerRow = getHacksTableHeaderRow(user);
+  const hackTableRows = hacks.map((hack) => getTableRowFromHack(hack, user)).join("");
 
   return `
     <table class="table-sm table-bordered" id="myTable">
@@ -101,10 +104,27 @@ function getHacksTable(hacks, adminCheck) {
   `;
 }
 
+function getTagsDropdownMenu(tags) {
+  const tagsDropdownMenu = tags.map((tag) => {
+    tag = tag.hack_tags
+    tag = tag.split(", ");
+    const ta = tag.map((t) => {
+      return `<option value="${t}">${t}</option>`
+    });
+    return ta.toString()
+  });
+
+
+  return tagsDropdownMenu;
+}
+
 /**
  * @returns {string}
  */
-function getHacksTableHeaderRow() {
+function getHacksTableHeaderRow(user) {
+
+  const addButton = user.logged_in ? `<a class="btn btn-success text-nowrap" href="addHack.php"><img src="/_assets/_img/icons/add.svg"></a>` : `&nbsp;`
+
   return `
     <tr>
       <th><b>Hackname</b></th>
@@ -112,7 +132,7 @@ function getHacksTableHeaderRow() {
       <th class="text-nowrap">Initial Release Date</th>
       <th>Downloads</th>
       <th hidden>Tag</th>
-      <th class="border-0 add-button" colspan="2"></th>
+      <th class="border-0 add-button" colspan="2">${addButton}</th>
     </tr>
   `;
 }
@@ -121,15 +141,15 @@ function getHacksTableHeaderRow() {
  * @param {Hack} hack
  * @returns {string}
  */
-function getTableRowFromHack(hack, adminCheck) {
+function getTableRowFromHack(hack, user) {
   const hackName = hack.hack_name;
   const creators = hack.hack_author
   const releaseDate = hack.release_date;
   const tag = hack.hack_tags;
   const downloads = hack.total_downloads;
   const link = getURLName(hackName);
-  const deleteButton = adminCheck ? `<a class="btn btn-danger btn-block text-nowrap" href="deleteHack.php?hack_name=${hackName}"><img src="/_assets/_img/icons/delete.svg"></a>` : "&nbsp;"
-  const editButton = adminCheck ? `<a class="btn btn-info btn-block text-nowrap" href="editHack.php?hack_name=${hackName}"><img src="/_assets/_img/icons/edit.svg"></a>` : "&nbsp;";
+  const deleteButton = user.admin ? `<a class="btn btn-danger btn-block text-nowrap" href="deleteHack.php?hack_name=${hackName}"><img src="/_assets/_img/icons/delete.svg"></a>` : "&nbsp;"
+  const editButton = user.admin ? `<a class="btn btn-info btn-block text-nowrap" href="editHack.php?hack_name=${hackName}"><img src="/_assets/_img/icons/edit.svg"></a>` : "&nbsp;";
 
 
   // TODO: use the correct relative url path

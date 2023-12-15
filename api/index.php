@@ -9,13 +9,13 @@ if(isset($_GET['hack_name'])) {
     $is_Admin = in_array($user_id, ADMIN_SITE) ? true : false;
 
     if($hack_name == 'all') {
-        print(json_encode(array(getAllUniqueHacksFromDatabase($pdo), $is_Admin)));
+        print(json_encode(array("hacks" => getAllUniqueHacksFromDatabase($pdo), "tags" => getAllTagsFromDatabase($pdo), "user" => array("logged_in" => $_SESSION['logged_in'] ,"admin" => $is_Admin))));
     }
     else {
         $images = (glob($_SERVER['DOCUMENT_ROOT'] . "/_assets/_img/hacks/img_" . stripChars(getURLEncodedName($hack_name)) . "_*.{png,jpg}", GLOB_NOSORT|GLOB_BRACE));
         $images = array_map(fn($image) => explode("/",$image)[sizeof(explode("/",$image)) - 1], $images);
     
-        print(json_encode(array(getHackFromDatabase($pdo, $hack_name), $images, $is_Admin)));
+        print(json_encode(array("patches" => getHackFromDatabase($pdo, $hack_name), "images" => $images, "admin" => $is_Admin)));
     }
 }
 
