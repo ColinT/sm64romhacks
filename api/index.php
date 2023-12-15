@@ -19,4 +19,9 @@ if(isset($_GET['hack_name'])) {
     }
 }
 
+else if(isset($_GET['hack_id'])) {
+    $hack_id = intval($_GET['hack_id']);
+    print(json_encode(getPatchFromDatabase($pdo, $hack_id)));
+}
+
 ?>

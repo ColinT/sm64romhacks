@@ -1,0 +1,192 @@
+document.addEventListener("DOMContentLoaded", main);
+
+async function main() {
+    const container = document.querySelector("#content");
+    const params = new Proxy(new URLSearchParams(window.location.search), {
+        get: (searchParams, prop) => searchParams.get(prop),
+      });
+    const hack_name = params.hack_name;
+    const hack_id = params.hack_id;
+    container.innerHTML = await getHTMLContent(hack_name, hack_id)
+
+}
+
+async function getHackData(hack_name) {
+    const request = await fetch(`/api?hack_name=${hack_name}`);
+    const response = await request.json();
+    return response;
+}
+
+async function getPatchData(hack_id) {
+    const request = await fetch(`/api?hack_id=${hack_id}`);
+    const response = await request.json();
+    return response;
+}
+
+async function getHTMLContent(hack_name, hack_id) {
+    if(hack_name != null) {
+        const hackData = await getHackData(hack_name);
+        const hacks = await(getHackData("all"));
+        const allTags = hacks.tags;
+        const patches = hackData.patches;
+        const recommendVersions = patches.map((patch) => {
+            const version = patch.hack_version;
+            const id = patch.hack_id;
+            const checked = patch.hack_recommend == 1 ? "checked" : "";
+            return `
+                <input class="col-form-input" type="checkbox" name="${id}" id="flexCheckDefault" ${checked}>
+                <label class="col-form-label" for="flexCheckDefault">${version}</label><br/>`;
+        }).join("");
+
+        const tags = patches[0].hack_tags;
+
+        const tagsDataList = allTags.map((tag) => {
+            tag = tag.hack_tags
+            tag = tag.split(", ");
+            const ta = tag.map((t) => {
+              return `<option value="${t}">${t}</option>`
+            }).join("");
+            return ta.toString()
+          }).join("");
+
+          const hackImages = hackData.images;
+          const hackImagesCheck = hackImages.map((image) => {
+            return `
+            <div class="col text-center"><img class=p-2 width=160 height=120 src=\"/_assets/_img/hacks/${image}"><br/><input class="col-form-input" type="checkbox" name="${image}" id="flexCheckDefault" checked></div>
+            `
+          }).join("");
+
+          let description = patches[0].hack_description;
+          description = description.replaceAll("<br/>", "\r\n");
+        
+        return `
+        <form action="#" method="post" enctype="multipart/form-data">
+        <table class="table table-bordered">
+        <tr>
+            <td class="text-right">
+                <label for="hack_name" class="col-form-label text-nowrap">Hack Name:</label>
+            </td>
+            <td>
+                <input type="hidden" class="form-control" name="hack_name" id="hack_name" value="${hack_name}">  
+                <input type="text" class="form-control" value="${hack_name}" disabled>  
+            </td>
+        </tr>
+        <tr>
+            <td class="text-right">
+                <label for="hack_recommend" class="col-form-label text-nowrap">Recommend Versions:</label>
+            </td>
+            <td class="text-left">
+                ${recommendVersions}
+            </td>
+        </tr>
+        <tr>
+            <td class="text-right">
+                <label for="hack_tags" class="col-form-label text-nowrap">Hack Tags:</label>
+            </td>
+            <td>
+            <input class="form-control" list="hack_tags_options" name="hack_tags" value="${tags}">  
+                <datalist id="hack_tags_options">
+                    ${tagsDataList}                       
+                </datalist>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="text-right">
+                <label for="hack_images" class="col-form-label text-nowrap">Images:</label>
+            </td>
+            <td><input type="file" name="hack_images[]" class="form-control" multiple>
+            <div class="container">
+                <div class="row">
+                    ${hackImagesCheck}
+                </div>
+            </div>
+        <tr>
+        <td class="text-right">
+            <label for="hack_description" class="col-form-label text-nowrap">Description:</label>
+            </td>
+            <td colspan=3>
+                <textarea name="hack_description" class="form-control" rows="10" required>${description}</textarea>
+            </td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td class="text-center"><button type="submit" class="btn btn-secondary align-middle">Save Changes!</button></td>
+        </tr>
+        </table>
+    </form>
+
+    `
+    }
+    else if(hack_id != null) {
+
+        const patchData = (await getPatchData(hack_id))[0];
+        const allHacks = (await getHackData("all")).hacks;
+
+        const dataList = allHacks.map((hack) => {
+            return `<option value="${hack.hack_name}">`
+        }).join("").toString()
+
+        const hackName = patchData.hack_name;
+        const hackVersion = patchData.hack_version;
+        const hackAuthor = patchData.author_name;
+        const hackStarcount = patchData.hack_starcount;
+        const hackReleaseDate = patchData.hack_release_date;
+
+        return `
+        <form action="#" method="post">
+                    <table class="table">
+                    <tr>
+                        <td>
+                            <label for="hack_name" class="col-form-label text-nowrap">Hack Name:</label>
+                        </td>
+                        <td>
+                            <input class="form-control" list="hack_name_options" name="hack_name" value="${hackName}" required>                            
+                            <datalist id="hack_name_options">
+                                ${dataList}    
+                            </datalist>
+                        </td>
+                        <td>
+                            <label for="hack_version" class="col-form-label text-nowrap">Version:</label>
+                        </td>
+                        <td>
+                            <input type="text" name="hack_version" class="form-control" value="${hackVersion}" required>
+                        </td>
+                        <td>
+                            <label for="hack_author" class="col-form-label text-nowrap">Author:</label>
+                        </td>
+                        <td>
+                            <input type="text" name="hack_author" class="form-control" value="${hackAuthor}">
+                            <small id="hack_author_help" class="form-text text-muted">Seperate multiple author with &quot;&lt;Name&gt;,&nbsp;&lt;Name&gt;&quot;</small>                        
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="hack_starcount" class="col-form-label text-nowrap">Starcount:</label>
+                        </td>
+                        <td>
+                            <input type="number" name="hack_starcount" class="form-control" min="0" value="${hackStarcount}">
+                        </td>
+                        <td>
+                            <label for="hack_release_date" class="col-form-label text-nowrap">Release Date:</label>
+                        </td>
+                        <td>
+                            <input type="date" name="hack_release_date" class="form-control" value="${hackReleaseDate}">
+                        </td>
+                        <td>
+                            <label for="hack_patchname" class="col-form-label text-nowrap">Patchname:</label>
+                        </td>
+                        <td>
+                            <input type="file" name="hack_patchname" class="form-control" disabled>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan=2>&nbsp;</td>
+                        <td colspan=2 class="text-center"><button type="submit" class="btn btn-secondary align-middle">Save Changes!</button></td>
+                        <td colspan=2>&nbsp;</td>
+                    </tr>
+                    </table>
+                </form>
+        `
+    }
+}
