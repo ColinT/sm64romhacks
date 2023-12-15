@@ -21,12 +21,12 @@ if(sizeof($_POST) != 0) {
     }
 
     if(strlen($hack_description) != 0) {
-        $images = (glob($_SERVER['DOCUMENT_ROOT'] . "/_assets/_img/hacks/img_" . stripChars(getURLEncodedName($hack_name)) . "_*.{png,jpg}", GLOB_NOSORT|GLOB_BRACE));
+        $images = (glob($_SERVER['DOCUMENT_ROOT'] . "/_assets/_img/hacks/img_" . stripChars(getURLDecodedName($hack_name)) . "_*.{png,jpg}", GLOB_NOSORT|GLOB_BRACE));
         foreach($images as $image) {
             $image = explode("/",$image)[sizeof(explode("/",$image)) - 1];
             $ext = substr($image, -3);
             $image = substr_replace($image, "", -4);
-            if(!isset($_POST[$image])) {
+            if(!in_array($image, $_POST['hack_images_checked'])) {
                 unlink($_SERVER['DOCUMENT_ROOT'] . "/_assets/_img/hacks/$image.$ext");
             }
         }
@@ -50,14 +50,14 @@ if(sizeof($_POST) != 0) {
             $tmp_name = $_FILES['hack_images']['tmp_name'][$i];
 
 
-            $images = (glob($_SERVER['DOCUMENT_ROOT'] . "/_assets/_img/hacks/img_" . stripChars(getURLEncodedName($hack_name)) . "_*.{png,jpg}", GLOB_NOSORT|GLOB_BRACE));
+            $images = (glob($_SERVER['DOCUMENT_ROOT'] . "/_assets/_img/hacks/img_" . stripChars(getURLDecodedName($hack_name)) . "_*.{png,jpg}", GLOB_NOSORT|GLOB_BRACE));
             $counter = 0;
             if(sizeof($images) != 0) {
                 $image = explode("/",$images[sizeof($images) - 1])[sizeof(explode("/",$images[sizeof($images) - 1])) - 1];
                 $image = substr_replace($image, "", -4); 
                 $counter = sizeof($images);
             }
-            $logo_result = move_uploaded_file($tmp_name, $_SERVER['DOCUMENT_ROOT'].'/_assets/_img/hacks/img_' . stripChars(getURLEncodedName($hack_name)) . "_$counter.$ext");
+            $logo_result = move_uploaded_file($tmp_name, $_SERVER['DOCUMENT_ROOT'].'/_assets/_img/hacks/img_' . stripChars(getURLDecodedName($hack_name)) . "_$counter.$ext");
         }
     }
     else {
@@ -68,14 +68,10 @@ if(sizeof($_POST) != 0) {
         $hack_release_date = $_POST['hack_release_date'];
 
         $hack_authors = explode(", ", $hack_author);
-        $hack_author = "";
         foreach($hack_authors as $author) {
-            $user = getUserByNameFromDatabase($pdo, $author);
-            if($user) $hack_author = $hack_author . $user['discord_id'] . ', ';
-            else $hack_author = $hack_author . $author . ', ';
+
         }
-        $hack_author = substr_replace($hack_author, '', -2);
-        updatePatchInDatabase($pdo, $hack_id, $hack_name, $hack_version, $hack_author, $hack_starcount, $hack_release_date, 1);
+        updatePatchInDatabase($pdo, $hack_id, $hack_name, $hack_version, $hack_starcount, $hack_release_date, 1);
     }
 
     header("Location: /hacks/" . getURLEncodedName($hack_name));
