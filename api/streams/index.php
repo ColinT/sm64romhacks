@@ -1,4 +1,7 @@
-<?php				
+<?php	
+
+	include($_SERVER['DOCUMENT_ROOT'] . "/_includes/includes.php");
+
 	function getEndPoint() {
 		$endPoint = "game_id=2692&first=100";
 		return "https://api.twitch.tv/helix/streams?" . $endPoint; 
@@ -14,7 +17,6 @@
 
 		curl_setopt($ch, CURLOPT_POST, 1);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		//curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 
 		$res = curl_exec($ch);
 		curl_close($ch);
@@ -87,7 +89,7 @@
 								//preg_replace("/\B(?=(\d{3})+(?!\d))/",",",$viewer_count). ' 
 				'</p>
 				</div>';
-				print($content);
+				print(json_encode($content));
 	
 			}
 		}
@@ -104,5 +106,6 @@
 		return false;
 	}
 
-    renderStreams(getStreams());
+    print(json_encode(getStreams()));
+	//renderStreams(getStreams());
 ?>

@@ -19,13 +19,14 @@ include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php';
 		<link rel="stylesheet" type="text/css" href="/_assets/_css/style.css">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 		<link rel="shortcut icon" href="/_assets/_img/icon.ico" />
+		<script src="streams.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
 	</head>
 	<body>		<div class="container">
 	<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/header.php'); ?>
 			<div align="center">
 				<!--HTML CONTENT HERE-->
-				<?php include 'streams.php'; ?>
+				<div class="streams"></div>
 				<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/footer.php'); ?>
 			</div>		</div>
 	</body>
