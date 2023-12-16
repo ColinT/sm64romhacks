@@ -25,35 +25,9 @@ createClaimsDatabase($pdo);
 	<body>		<div class="container">
 			<?php include $_SERVER['DOCUMENT_ROOT'].'/_includes/header.php'; ?>
 			<div align="center">
-				<!--HTML CONTENT HERE-->
-				<?php
-				if($_SESSION['logged_in']) $user_id = $_SESSION['userData']['discord_id'];
-
-				if($_SESSION['logged_in'] && in_array($user_id, ADMIN_NEWS)){
-					print("<a href=\"/news/addNews.php\" class=\"btn btn-primary\">Add Newspost!</a><br/><br/>");
-				}
-				?>
-				<?php $newsposts = getAllNewspostsFromDatabase($pdo); ?>
-				<?php foreach($newsposts as $newspost) { 
-					$newspost_id = $newspost['post_id'];
-					print("<div class=\"bg-dark\">");
-					$author_id = $newspost['post_author'];
-					$title = $newspost['post_title'];
-					$created_at = $newspost['created_at'];
-					$edited_at = $newspost['edited_at'];
-					$user = getUserFromDatabase($pdo, $author_id);
-					$avatar = $user['discord_avatar'];
-					$username = $user['discord_username']; 
-					$text = $newspost['post_text'];
-					$avatar_url = "https://cdn.discordapp.com/avatars/$author_id/$avatar.jpg";
-					$edit = ($_SESSION['logged_in'] && in_array($user_id, ADMIN_NEWS) && $user_id == $author_id) ? "<a class='btn btn-info text-nowrap' href='/news/editNewspost.php?id=$newspost_id'><img src=\"/_assets/_img/icons/edit.svg\"></a>" : "&nbsp;";
-					$edited_HTML = $created_at == $edited_at ? "&nbsp;" : "(last edited at: <span id=\"edited$newspost_id\"></span>)<script>convertEditedTime(\"$edited_at+00:00\", $newspost_id);</script>";
-					$delete = ($_SESSION['logged_in'] && in_array($user_id, ADMIN_SITE)) ? "<a class='btn btn-danger text-nowrap' href='/news/deleteNewspost.php?id=$newspost_id'><img src=\"/_assets/_img/icons/delete.svg\"></a>" : "&nbsp;";
-					print("<table><tr><td rowspan=2><img src=\"$avatar_url\" width=64 height=64/></td><td width=100%><h5>$title</h5></td><td class=\"text-nowrap\">$edit &nbsp; $delete</td></tr>");
-					print("<tr><td colspan=2>By $username on <span id=\"created$newspost_id\"></span> <script>convertCreatedTime(\"$created_at+00:00\", $newspost_id);</script> $edited_HTML </td></tr></table><hr/>$text<br/><br/>");
-					print("</div><br/>");
-				}
-				?>
+				<div id="addNews"></div>
+					<div class="text-left" id="news">
+				</div>
 
 			<?php include $_SERVER['DOCUMENT_ROOT'].'/_includes/footer.php'; ?>	
 			</div>		</div>
