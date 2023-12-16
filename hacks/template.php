@@ -19,7 +19,9 @@ if($_SESSION['logged_in'] && (in_array($_SESSION['userData']['discord_id'], ADMI
 			<meta property="og:type" content="website" />
 			<meta property="og:url" content="https://sm64romhacks.com/hacks/<?php print(getURLEncodedName($hack_name));?>" />
 			<?php 
-				$images = (glob($_SERVER['DOCUMENT_ROOT'] . "/_assets/_img/hacks/img_" . stripChars(getURLEncodedName($hack_name)) . "_*.{png,jpg}", GLOB_NOSORT|GLOB_BRACE));
+				$img_name = stripChars(getURLDecodedName($hack_name));
+				$img_name = str_replace(':', '_', $img_name);
+				$images = (glob($_SERVER['DOCUMENT_ROOT'] . "/_assets/_img/hacks/img_" . $img_name . "_*.{png,jpg}", GLOB_NOSORT|GLOB_BRACE));
 				foreach($images as $image) {
 					$image = explode("/",$image)[sizeof(explode("/",$image)) - 1];
 					$ext = substr($image, -3);

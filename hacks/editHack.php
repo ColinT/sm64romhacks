@@ -21,7 +21,9 @@ if(sizeof($_POST) != 0) {
     }
 
     if(strlen($hack_description) != 0) {
-        $images = (glob($_SERVER['DOCUMENT_ROOT'] . "/_assets/_img/hacks/img_" . stripChars(getURLDecodedName($hack_name)) . "_*.{png,jpg}", GLOB_NOSORT|GLOB_BRACE));
+        $img_name = stripChars(getURLDecodedName($hack_name));
+        $img_name = str_replace(':', '_', $img_name);
+        $images = (glob($_SERVER['DOCUMENT_ROOT'] . "/_assets/_img/hacks/img_" . $img_name . "_*.{png,jpg}", GLOB_NOSORT|GLOB_BRACE));
         foreach($images as $image) {
             $image = explode("/",$image)[sizeof(explode("/",$image)) - 1];
             $ext = substr($image, -3);
@@ -50,14 +52,15 @@ if(sizeof($_POST) != 0) {
             $tmp_name = $_FILES['hack_images']['tmp_name'][$i];
 
 
-            $images = (glob($_SERVER['DOCUMENT_ROOT'] . "/_assets/_img/hacks/img_" . stripChars(getURLDecodedName($hack_name)) . "_*.{png,jpg}", GLOB_NOSORT|GLOB_BRACE));
+            $images = (glob($_SERVER['DOCUMENT_ROOT'] . "/_assets/_img/hacks/img_" . $img_name . "_*.{png,jpg}", GLOB_NOSORT|GLOB_BRACE));
             $counter = 0;
             if(sizeof($images) != 0) {
                 $image = explode("/",$images[sizeof($images) - 1])[sizeof(explode("/",$images[sizeof($images) - 1])) - 1];
                 $image = substr_replace($image, "", -4); 
-                $counter = sizeof($images);
+                $counter = (int)substr($image, -1);
+                $counter++;
             }
-            $logo_result = move_uploaded_file($tmp_name, $_SERVER['DOCUMENT_ROOT'].'/_assets/_img/hacks/img_' . stripChars(getURLDecodedName($hack_name)) . "_$counter.$ext");
+            $logo_result = move_uploaded_file($tmp_name, $_SERVER['DOCUMENT_ROOT'].'/_assets/_img/hacks/img_' . $img_name . "_$counter.$ext");
         }
     }
     else {
