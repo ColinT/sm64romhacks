@@ -27,7 +27,7 @@ function getHTMLContentForStream(stream) {
             <div class="stream-container">
                 <a href="https://www.twitch.tv/${user_login}" target="_blank_"><img src="${thumbnail}"/></a>
                 <h2>${title}</h2>
-                <h2>${user_name}</h2>
+                <h2>${user_name} (${viewer_count} viewers)</h2>
             </div>
         `
     }
