@@ -25,21 +25,22 @@ if($id == 0 || !$_SESSION['logged_in'] || !in_array($user_id, ADMIN_NEWS) || $us
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 		<link rel="shortcut icon" href="/_assets/_img/icon.ico" />
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+		<script src="editNewspost.js"></script>
 	</head>
 	<body>		<div class="container">
 	<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/header.php'); ?>
 			<div align="center">
 				<!--HTML CONTENT HERE-->
                 <form action="updateNewspost.php" method="post">
-                    <input type="hidden"  id="post_id" class="form-control" name="post_id" value="<?php print($id); ?>">
+                    <input type="hidden"  id="post_id" class="form-control" name="post_id">
 					<table>
 						<tr>
 							<td><label for="post_title" class="form-label">Title</label></td>
-							<td><input type="text" id="post_title" class="form-control" name="post_title" value="<?php print($newspost['post_title']); ?>"></td>
+							<td><input type="text" id="post_title" class="form-control" name="post_title"></td>
 						</tr>
 						<tr>
 							<td style="vertical-align: top;"><label for="post_text" class="form-label">Text</label></td>
-							<td><textarea name="post_text" id="post_text" cols="30" rows="10" class="form-control"><?php print($newspost['post_text']); ?></textarea></td>
+							<td><textarea name="post_text" id="post_text" cols="100" rows="10" class="form-control"></textarea></td>
 						</tr>
 						<tr>
 							<td>&nbsp;</td>
