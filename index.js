@@ -36,11 +36,25 @@ function getNewspostContent(newspost, isAdmin, user_id) {
         </td>
       </tr>
     </table>
-    <hr/>${text}<br/><br/>
-    </div>
+    <hr/>${replaceURLs(text)}
+    </div><br/><br/>
   `;
 
   return HTMLContent;
+}
+
+function replaceURLs(text) {
+  // Put the URL to variable $1 after visiting the URL
+  const Rexp = new RegExp(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g);
+ 
+  // Replace the RegExp content by HTML element
+  const links = text.match(Rexp);
+  console.log(links)
+  if(links) {links.forEach(element => {
+    element[0] = element[0].replace(/[&\/\\#, +()$~%.'":*?<>{}]/g, '')
+    text = text.replaceAll(element, `<a href="${element}" target="_blank">${element}</a>`)
+  });}
+  return text;
 }
 
 async function getAllNews() {
