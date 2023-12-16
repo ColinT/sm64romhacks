@@ -83,7 +83,7 @@ async function main() {
  * @returns {Hack[]}
  */
 async function getData() {
-  const response = await fetch("/api?hack_name=all"); // relative to root
+  const response = await fetch("/api/hacks"); // relative to root
   const data = await response.json();
   return data;
 }

@@ -10,7 +10,7 @@ async function main() {
 }
 
 async function getData() {
-    const request = await fetch("/api?hack_name=all")
+    const request = await fetch("/api/hacks")
     const response = await request.json()
     return response
 }

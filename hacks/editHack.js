@@ -12,13 +12,13 @@ async function main() {
 }
 
 async function getHackData(hack_name) {
-    const request = await fetch(`/api?hack_name=${hack_name}`);
+    const request = hack_name == 'all' ? await fetch(`/api/hacks`) : await fetch(`/api/hacks?hack_name=${hack_name}`);
     const response = await request.json();
     return response;
 }
 
 async function getPatchData(hack_id) {
-    const request = await fetch(`/api?hack_id=${hack_id}`);
+    const request = await fetch(`/api/hacks?hack_id=${hack_id}`);
     const response = await request.json();
     return response;
 }
