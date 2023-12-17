@@ -126,7 +126,8 @@ function createNewspostDatabase($pdo) {
         `edited_at` datetime NOT NULL,
         `post_title` tinytext NOT NULL,
         `post_text` longtext NOT NULL,
-        PRIMARY KEY (`post_id`)
+        PRIMARY KEY (`post_id`),
+        CONSTRAINT fk_post_author FOREIGN KEY (post_author) REFERENCES users(discord_id)
       ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4";
       try {
         $stmt = $pdo->prepare($sql);
@@ -168,10 +169,9 @@ function updateNewspostInDatabase($pdo,$post_id,$post_title,$post_text) {
     $UTC_TIMESTAMP = "UTC_TIMESTAMP()";
     $sql = "UPDATE news SET
             post_title = '$post_title',
-            post_text = '$post_text',
+            post_text = \"$post_text\",
             edited_at = $UTC_TIMESTAMP
             WHERE post_id = $post_id";
-
     try {
             $stmt = $pdo->prepare($sql);
             $stmt->execute();
@@ -197,7 +197,9 @@ function getNewspostFromDatabase($pdo, $post_id){
 }
 
 function getAllNewspostsFromDatabase($pdo){
-    $sql = "SELECT * FROM news ORDER BY post_id desc";
+    $sql = "SELECT n.post_id, n.post_author, n.created_at, n.edited_at, n.post_title, n.post_text, u.discord_username, u.discord_avatar FROM news n
+            LEFT JOIN users u ON (n.post_author = u.discord_id) 
+            ORDER BY post_id desc";
     try {
         $stmt = $pdo->prepare($sql);
         $stmt->execute();
@@ -485,10 +487,10 @@ function updatePatchInDatabase($pdo,$hack_id,$hack_name,$hack_version,$hack_star
     }
 }
 
-function updateAuthorInDatabase($pdo, $hack_id, $author_id, $author_name) {
+function updateAuthorInDatabase($pdo, $hack_id, $author_id, $new_author_name) {
     $sql = "UPDATE authors a, hacks_authors ha
-    SET a.author_name=$user_id, ha.author_name=$user_id
-    WHERE h.hack_id=$hack_id AND a.author_name=$author_name";
+    SET a.author_name=$new_author_name, ha.author_name=$new_author_name
+    WHERE h.hack_id=$hack_id AND a.author_name=$old_author_name";
         try {
             $stmt = $pdo->prepare($sql);
             $stmt->execute();
