@@ -1,26 +1,9 @@
 <?php
 
-if($_SESSION['logged_in']) extract($_SESSION['userData']);
-
 if(!$_SESSION['logged_in'] || !in_array($_SESSION['userData']['discord_id'], ADMIN_SITE)) {
 	header("Location: /404.php");
 	die();
 }
-
-
-$all_users = getAllUsersFromDatabase($pdo);
-$usersMarkup='';
-
-foreach ($all_users as $key => $userData) {
-    $usersMarkup.='<tr>
-    <td class="text-center"><img src="https://cdn.discordapp.com/avatars/'.$userData['discord_id'].'/'.$userData['discord_avatar'].'.jpg"/ height=32 width=32></td>
-    <td><a href="'.$userData['discord_id'] .'">'.$userData['discord_id'].'</a></td>    
-    <td>'.$userData['discord_username'].'</td>
-    <td>'.$userData['discord_email'].'</td>
-    <td>'.$userData['created_at'].'</td>
-    </tr>'
-;}
-
 ?>
 <!DOCTYPE HTML>
 <html>
@@ -33,6 +16,7 @@ foreach ($all_users as $key => $userData) {
 		<link rel="stylesheet" type="text/css" href="/_assets/_css/bootstrap.css">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 		<link rel="shortcut icon" href="/_assets/_img/icon.ico" />
+        <script src="users.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
 	</head>
 <body>
@@ -40,10 +24,7 @@ foreach ($all_users as $key => $userData) {
     <?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/header.php'); ?>
         <div align="center">
             <h3>Users:</h3>
-            <table class="table-sm table-bordered">
-                <tr><td>Profile Picture</td><td>ID</td><td>Username</td><td>E-Mail</td><td>Created at</tr>
-            <?php echo $usersMarkup;?>
-</table>
+            <div class="table-responsive" id="users"></div>
 <?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/footer.php'); ?>
     </div></div>
 </body>
