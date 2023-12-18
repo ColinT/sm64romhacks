@@ -19,10 +19,10 @@ catch(PDOException $e){
 
 function createUsersDatabase($pdo) {
     $sql = "CREATE TABLE IF NOT EXISTS `users` (
-        `discord_email` varchar(255) NOT NULL,
+        `discord_email` varchar(255) NULL,
         `discord_username` varchar(255) NOT NULL,
         `discord_id` varchar(255) NOT NULL,
-        `discord_avatar` varchar(255) NOT NULL,
+        `discord_avatar` varchar(255) NULL,
         `twitch_handle` varchar(255) NULL,
         `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
         PRIMARY KEY (`discord_id`)
@@ -33,6 +33,7 @@ function createUsersDatabase($pdo) {
       } catch(Exception $e) {
         echo $e;
       }
+      if(!getUserFromDatabase($pdo, "0")) addUserToDatabase($pdo, "0", NULL, NULL, "Deleted User", NULL);
 }
 
 function addUserToDatabase($pdo,$discord_id,$discord_avatar,$discord_email,$discord_username, $twitch_handle){
@@ -168,9 +169,10 @@ function deleteNewspostFromDatabase($pdo, $post_id) {
 
 
 
-function updateNewspostInDatabase($pdo,$post_id,$post_title,$post_text) {
+function updateNewspostInDatabase($pdo,$post_id,$post_author,$post_title,$post_text) {
     $UTC_TIMESTAMP = "UTC_TIMESTAMP()";
     $sql = "UPDATE news SET
+            post_author = \"$post_author\",
             post_title = '$post_title',
             post_text = \"$post_text\",
             edited_at = $UTC_TIMESTAMP
@@ -381,6 +383,7 @@ function getHacksByUserFromDatabase($pdo, $user_id) {
             LEFT JOIN hacks_authors ha ON(a.author_id=ha.author_id)
             LEFT JOIN hacks h ON(ha.hack_id=h.hack_id)
             WHERE discord_id='$user_id'
+            GROUP BY h.hack_name
             ";
 
     try {

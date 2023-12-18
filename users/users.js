@@ -44,10 +44,11 @@ function getTableRowFromUser(user) {
     const user_email = user.discord_email;
     const user_created_at = user.created_at;
     const avatar = user.discord_avatar;
+    const avatar_url = avatar ? `https://cdn.discordapp.com/avatars/${user_id}/${avatar}.jpg` : `https://static-cdn.jtvnw.net/jtv_user_pictures/f6dd682a-ce61-40d1-ab3a-54dc6c174092-profile_image-70x70.png`
     
     return `
       <tr>
-        <td class="text-center"><img src="https://cdn.discordapp.com/avatars/${user_id}/${avatar}.jpg" height="48" width="48"></td>
+        <td class="text-center"><img src="${avatar_url}" height="48" width="48"></td>
         <td><a href="/users/${user_id}">${user_id}</a></td>
         <td>${user_name}</td>
         <td>${user_email}</td>

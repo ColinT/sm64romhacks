@@ -2,24 +2,22 @@
 
 include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php';
 
+$user_id = $_SESSION['userData']['discord_id'];
 
-$patches = getPatchesByUserFromDatabase($pdo, $_SESSION['userData']['discord_id']);
+$newsposts = getAllNewspostsFromDatabase($pdo);
 
-foreach($patches as $patch) {
-    $hack_id = $patch['hack_id'];
-    $hack_name = $patch['hack_name'];
-    $hack_version = $patch['hack_version'];
-    $hack_author = $patch['hack_author'];
-    $hack_starcount = $patch['hack_starcount'];
-    $hack_release_date = $patch['hack_release_date'];
-    $hack_verified = $patch['hack_verified'];
+foreach($newsposts as $newspost) {
+    $newspost_id = $newspost['post_id'];
+    $newspost_author = $newspost['post_author'];
+    $newspost_title = $newspost['post_title'];
+    $newspost_text = $newspost['post_text'];
 
-    $hack_author = str_replace($_SESSION['userData']['discord_id'], $_SESSION['userData']['global_name'], $hack_author);
-
-    updatePatchInDatabase($pdo,$hack_id,$hack_name,$hack_version,$hack_author,$hack_starcount,$hack_release_date,$hack_verified);
+    if($newspost_author == $user_id)  {
+        updateNewspostInDatabase($pdo, $newspost_id, "0", $newspost_title, $newspost_text);
+    }
 }
 
-deleteUserFromDatabase($pdo, $_SESSION['userData']['discord_id']);
+deleteUserFromDatabase($pdo, $user_id);
 session_destroy();
 header("Location: /");
 die();

@@ -19,9 +19,9 @@ function getNewspostContent(newspost, isAdmin, user_id) {
   const edited_at = newspost.edited_at;
   const avatar = newspost.discord_avatar;
   const username = newspost.discord_username;
-  const avatar_url = `https://cdn.discordapp.com/avatars/${author_id}/${avatar}.jpg`;
-  const editButton = isAdmin && author_id == user_id ? `<a class='btn btn-info text-nowrap' href='/news/editNewspost.php?id=${id}'><img src="/_assets/_img/icons/edit.svg"></a>` : `&nbsp;`;
-  const deleteButton = isAdmin && author_id == user_id ? `<a class='btn btn-danger text-nowrap' href='/news/deleteNewspost.php?id=${id}'><img src="/_assets/_img/icons/delete.svg"></a>` : `&nbsp;`;
+  const avatar_url = avatar ? `https://cdn.discordapp.com/avatars/${author_id}/${avatar}.jpg` : `https://static-cdn.jtvnw.net/jtv_user_pictures/f6dd682a-ce61-40d1-ab3a-54dc6c174092-profile_image-70x70.png`;
+  const editButton = isAdmin || author_id == user_id ? `<a class='btn btn-info text-nowrap' href='/news/editNewspost.php?id=${id}'><img src="/_assets/_img/icons/edit.svg"></a>` : `&nbsp;`;
+  const deleteButton = isAdmin || author_id == user_id ? `<a class='btn btn-danger text-nowrap' href='/news/deleteNewspost.php?id=${id}'><img src="/_assets/_img/icons/delete.svg"></a>` : `&nbsp;`;
   const editedHTML = created_at == edited_at ? `&nbsp;` : ` (last edited at: ${convertEditedTime(`${edited_at}+00:00`, id)})`;
 
   const HTMLContent = `
@@ -49,7 +49,6 @@ function replaceURLs(text) {
  
   // Replace the RegExp content by HTML element
   const links = text.match(Rexp);
-  console.log(links)
   if(links) {links.forEach(element => {
     element[0] = element[0].replace(/[&\/\\#, +()$~%.'":*?<>{}]/g, '')
     text = text.replaceAll(element, `<a href="${element}" target="_blank">${element}</a>`)

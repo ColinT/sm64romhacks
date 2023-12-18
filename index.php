@@ -2,10 +2,6 @@
 
 include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php';
 
-createUsersDatabase($pdo);
-createNewspostDatabase($pdo);
-createHacksDatabase($pdo);
-createClaimsDatabase($pdo);
 ?>
 
 <!DOCTYPE HTML>
