@@ -83,7 +83,7 @@ setInterval(() => {
     <?php }?>
     <?php if($_SESSION["logged_in"]) { 
       if(in_array($_SESSION['userData']['discord_id'], ADMIN_SITE)) {
-        $available_actions = "&nbsp;<span class=\"badge badge-light\">" . sizeof(getClaimsFromDatabase($pdo)) + sizeof(getAllPendingHacksFromDatabase($pdo)) . "</span>";
+        $available_actions = "&nbsp;<span class=\"badge badge-light\">" . sizeof(getAllPendingHacksFromDatabase($pdo)) . "</span>";
       }
       else {
         $available_actions = "&nbsp;";

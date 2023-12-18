@@ -7,39 +7,8 @@ if(!$_SESSION['logged_in'] || !in_array($_SESSION['userData']['discord_id'], ADM
 	die();
 }
 
-if(sizeof($_GET) != 0 && (intval($_GET['claim_id']) != 0 || intval($_GET['hack_id']) != 0)) {
-	if($_GET['type'] == 'claim') {
-		$claim_id = intval($_GET['claim_id']);
-		if(stripChars($_GET['mode']) == 'accept') {
-			$claim = getClaimFromDatabase($pdo, $claim_id);
-			$user_id = $claim[0]['user_id'];
-			$hack_id = intval($claim[0]['hack_id']);
-			$claimed_author = $claim[0]['claimed_author'];
-
-			$hack = getPatchFromDatabase($pdo, $hack_id)[0];
-			$hack_name = $hack['hack_name'];
-			$hack_version = $hack['hack_version'];
-			$hack_author = $hack['hack_author'];
-			$hack_starcount = $hack['hack_starcount'];
-			$hack_release_date = $hack['hack_release_date'];
-
-
-			$hack_author = str_replace($claimed_author, $user_id, $hack_author);
-			updatePatchInDatabase($pdo,$hack_id,$hack_name,$hack_version,$hack_author,$hack_starcount,$hack_release_date, 1);
-
-
-			deleteClaimFromDatabase($pdo, $claim_id);
-
-			header("Location: /admin");
-			die();
-		}
-		else if(stripChars($_GET['mode']) == 'reject') {
-			deleteClaimFromDatabase($pdo, $claim_id);
-			header("Location: /admin");
-			die();
-		}
-	}
-	else if(stripChars($_GET['type']) == 'submission') {
+if(sizeof($_GET) != 0 || intval($_GET['hack_id']) != 0) {
+	if(stripChars($_GET['type']) == 'submission') {
 		$hack_id = intval($_GET['hack_id']);
 		$patch = getPatchFromDatabase($pdo, $hack_id);
 		if($_GET['mode'] == 'accept') {
@@ -55,7 +24,6 @@ if(sizeof($_GET) != 0 && (intval($_GET['claim_id']) != 0 || intval($_GET['hack_i
 	}
 }
 
-$claims = getClaimsFromDatabase($pdo);
 $pending_hacks = getAllPendingHacksFromDatabase($pdo);
 ?>
 
@@ -75,21 +43,6 @@ $pending_hacks = getAllPendingHacksFromDatabase($pdo);
 	<body>		<div class="container">
 	<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/header.php'); ?>
 			<div align="center">
-			<?php if(sizeof($claims) != 0) { ?>
-				<div class="table-responsive">
-				<!--HTML CONTENT HERE-->
-				<table class="table-sm table-bordered">
-					<tr><th>Claim ID</th><th>Hack ID</th><th>User ID</th><th>Claimed Author</th><th class="border-0">&nbsp;</th></tr>
-					<?php foreach($claims as $entry) { 
-						$patch = getPatchFromDatabase($pdo, intval($entry['hack_id']));
-						$user = getUserFromDatabase($pdo, intval($entry['user_id']));?>
-					<tr><td><?php print($entry['claim_id']);?></td><td><?php print($entry['hack_id'] . "&nbsp;(" . $patch[0]['hack_name'] . ")");?></td><td><?php print($entry['user_id'] . "&nbsp;(" . $user['discord_username']. ")");?></td><td><?php print($entry['claimed_author']);?></td><td class="border-0"><a class="btn btn-success text-nowrap" href="/admin?type=claim&claim_id=<?php print($entry['claim_id']);?>&mode=accept"><img src="/_assets/_img/icons/accept.svg"></a>&nbsp;<a class="btn btn-danger text-nowrap" href="/admin?type=claim&claim_id=<?php print($entry['claim_id']);?>&mode=reject"><img src="/_assets/_img/icons/delete.svg"></a></td></tr>	
-					<?php } ?>
-					</table>
-					</div>
-					<?php } else print("Currently No Claims for review available!");?>
-					<br/>
-					<hr/>
 					<?php if(sizeof($pending_hacks) != 0) { ?>
 					<div class="table-responsive">
 				<table class="table-sm table-bordered">

@@ -128,7 +128,7 @@ function getTableRowFromHack(hack, adminCheck) {
   const hackStarcount = hack.hack_starcount;
   const hackReleaseDate = hack.hack_release_date;
   const hackTags = hack.hack_tags; 
-  const adminLoad = adminCheck ? `<a class="btn btn-warning btn-block text-nowrap" href="/hacks/claim.php?hack_id=${hackID}"><img src="/_assets/_img/icons/claim.svg"></a></td><td class="border-0"><a class="btn btn-danger btn-block text-nowrap" href="deleteHack.php?hack_id=${hackID}"><img src="/_assets/_img/icons/delete.svg"></a></td><td class="border-0"><a class="btn btn-info btn-block text-nowrap" href="editHack.php?hack_id=${hackID}"><img src="/_assets/_img/icons/edit.svg"></a>` : `&nbsp;`
+  const adminLoad = adminCheck ? `<td class="border-0"><a class="btn btn-danger btn-block text-nowrap" href="deleteHack.php?hack_id=${hackID}"><img src="/_assets/_img/icons/delete.svg"></a></td><td class="border-0"><a class="btn btn-info btn-block text-nowrap" href="editHack.php?hack_id=${hackID}"><img src="/_assets/_img/icons/edit.svg"></a>` : `&nbsp;`
   const hackRecommend = hack.hack_recommend
   const recommendRow = hackRecommend == 1 ? `class=table-primary` : ``
 
@@ -150,7 +150,7 @@ function getTableRowFromHack(hack, adminCheck) {
 function getURLName(hackName)
 {
   hackName = (hackName + '')
-  hackName = hackName.replaceAll(':', '_')
+  hackName = hackName.replaceAll(':', '_');
   return encodeURIComponent(hackName)
     .replace(/!/g, '%21')
     .replace(/'/g, '%27')
