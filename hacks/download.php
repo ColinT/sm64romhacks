@@ -8,7 +8,7 @@ if(!is_bot()) {
 
     $patchname = getPatchFromDatabase($pdo, $hack_id)[0]['hack_patchname'];
 
-    if(file_exists($_SERVER['DOCUMENT_ROOT'] . "/patch/$patchname.zip"))     updateDownloadCounter($pdo, $hack_id);
+    if(file_exists($_SERVER['DOCUMENT_ROOT'] . "/patch/$patchname.zip")) updateDownloadCounter($pdo, $hack_id);
 
 
     header("Location: /patch/" . $patchname . ".zip");
