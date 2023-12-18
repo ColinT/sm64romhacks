@@ -3,10 +3,12 @@
 
 include($_SERVER['DOCUMENT_ROOT'] . "/_includes/includes.php");
 
+
+$user_id = $_SESSION['userData']['discord_id'];
+$is_Admin = in_array($user_id, ADMIN_SITE) ? true : false;
+
 if(isset($_GET['hack_name'])) {
     $hack_name = getURLDecodedName($_GET['hack_name']);
-    $user_id = $_SESSION['userData']['discord_id'];
-    $is_Admin = in_array($user_id, ADMIN_SITE) ? true : false;
     $img_name = stripChars(getURLDecodedName($hack_name));
     $img_name = str_replace(':', '_', $img_name);
     $images = (glob($_SERVER['DOCUMENT_ROOT'] . "/_assets/_img/hacks/img_" . $img_name . "_*.{png,jpg}", GLOB_NOSORT|GLOB_BRACE));
