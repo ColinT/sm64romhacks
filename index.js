@@ -32,11 +32,11 @@ function getNewspostContent(newspost, isAdmin, user_id) {
         <td width=100%><h5>${title}</h5></td><td class="text-nowrap">${editButton} &nbsp; ${deleteButton}</td>
       </tr>
       <tr>
-        <td colspan=2>By ${username} on ${convertCreatedTime(`${created_at}+00:00`, id)}${editedHTML}
+        <td colspan=2>By <a href="/users/${author_id}">${username}</a> on ${convertCreatedTime(`${created_at}+00:00`, id)}${editedHTML}
         </td>
       </tr>
     </table>
-    <hr/>${replaceURLs(text)}
+    <hr/>${replaceURLs(text)}<br/><br/>
     </div><br/><br/>
   `;
 
