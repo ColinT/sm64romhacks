@@ -22,7 +22,7 @@ else if(isset($_GET['hack_id'])) {
 }
 
 else if(!$_GET['hack_name']) {
-    print(json_encode(array("hacks" => getAllUniqueHacksFromDatabase($pdo), "tags" => getAllTagsFromDatabase($pdo), "user" => array("logged_in" => $_SESSION['logged_in'] ,"admin" => $is_Admin))));
+    print(json_encode(array("hacks" => getAllUniqueHacksFromDatabase($pdo), "tags" => getAllTagsFromDatabase($pdo), "user" => array("logged_in" => $_SESSION['logged_in'],"users" => getAllUsersFromDatabase($pdo), "admin" => $is_Admin))));
 }
 
 

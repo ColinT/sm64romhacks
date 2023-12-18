@@ -142,7 +142,6 @@ function getHacksTableHeaderRow(user) {
  * @returns {string}
  */
 function getTableRowFromHack(hack, user) {
-  console.log(user)
   const hackName = hack.hack_name;
   const creators = hack.hack_author
   const releaseDate = hack.release_date;
@@ -151,6 +150,7 @@ function getTableRowFromHack(hack, user) {
   const link = getURLName(hackName);
   const deleteButton = user.admin ? `<a class="btn btn-danger btn-block text-nowrap" href="deleteHack.php?hack_name=${getURLName(hackName)}"><img src="/_assets/_img/icons/delete.svg"></a>` : "&nbsp;"
   const editButton = user.admin ? `<a class="btn btn-info btn-block text-nowrap" href="editHack.php?hack_name=${getURLName(hackName)}"><img src="/_assets/_img/icons/edit.svg"></a>` : "&nbsp;";
+  const creatorsMarkUp = getCreatorsMarkUp(creators, user.users);
 
 
   // TODO: use the correct relative url path
@@ -159,7 +159,7 @@ function getTableRowFromHack(hack, user) {
   return `
     <tr>
       <td><a href="/hacks/${link}">${hackName}</a></td>
-      <td>${creators}</td>
+      <td>${creatorsMarkUp}</td>
       <td class="text-nowrap">${releaseDate}</td>
       <td class="text-nowrap text-muted">Downloads: ${downloads}</td>
       <td hidden>${tag}</td>
@@ -167,6 +167,15 @@ function getTableRowFromHack(hack, user) {
       <td class="border-0 edit-button">${editButton}</td>
     </tr>
   `;
+}
+
+function getCreatorsMarkUp(creators, users) {
+  const data = creators.split(', ');
+  const userData = data.map((creator) => {
+    const x = users.filter(e => e.discord_username === creator | e.twitch_handle === creator)
+    return x.length != 0 ? `<a href="/users/${x[0].discord_id}" target="_blank">${creator}</a>` : creator
+  }).join(", ")
+  return userData
 }
 
 function getURLName(hackName)
