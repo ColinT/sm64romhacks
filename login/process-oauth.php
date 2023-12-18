@@ -17,7 +17,7 @@ $payload = [
     'client_secret'=>DISCORD_CLIENT_SECRET,
     'grant_type'=>'authorization_code',
     'redirect_uri'=>DISCORD_REDIRECT_URI,
-    'scope'=>'identify%20guids',
+    'scope'=>'identify+email+connections',
 ];
 
 $payload_string = http_build_query($payload);
@@ -43,6 +43,7 @@ $result = json_decode($result,true);
 $access_token = $result['access_token'];
 
 $discord_users_url = "https://discordapp.com/api/users/@me";
+$discord_users_connections_url = "https://discordapp.com/api/users/@me/connections";
 $header = array("Authorization: Bearer $access_token", "Content-Type: application/x-www-form-urlencoded");
 
 $ch = curl_init();
@@ -54,17 +55,32 @@ curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
 
-$result = curl_exec($ch);
+array_push($result, curl_exec($ch));
 
-$userData = json_decode($result,true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
+curl_setopt($ch, CURLOPT_URL, $discord_users_connections_url);
+curl_setopt($ch, CURLOPT_POST, false);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+
+array_push($result, curl_exec($ch));
+
+
+$userData = json_decode($result[0],true);
+
+$twitch_username = getTwitchUserName(json_decode($result[1],true));
+
+
 
 $user_data = getUserFromDatabase($pdo,$userData['id']);
 
 if(!$user_data){
-    addUserToDatabase($pdo,$userData['id'],$userData['avatar'],$userData['email'],$userData['global_name']);
+    addUserToDatabase($pdo,$userData['id'],$userData['avatar'],$userData['email'],$userData['global_name'], $twitch_username);
 }
 else {
-    updateUserInDatabase($pdo,$userData['id'],$userData['avatar'],stripChars($userData['email']),stripChars($userData['global_name']));
+    updateUserInDatabase($pdo,$userData['id'],$userData['avatar'],stripChars($userData['email']),stripChars($userData['global_name']), $twitch_username);
 }
 
 $_SESSION['logged_in'] = true;
@@ -77,5 +93,17 @@ $_SESSION['userData'] = [
 ];
 header("Location: " . $_SESSION['redirect']);
 exit();
+
+
+
+function getTwitchUserName($userData) {
+    foreach($userData as $entry) {
+        if($entry['type'] == 'twitch') {
+            return $entry['name'];
+        }
+    }
+    return NULL;
+}
+
 
 ?>

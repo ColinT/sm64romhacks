@@ -10,11 +10,10 @@ if(strlen($user_id) == 0) {
 }
 else {
 	$user = getUserFromDatabase($pdo, $user_id);
-	if(sizeof($user) == 0) {
+	if(!$user) {
 		header("Location: /404.php");
 		die();
 	}
-	$data = getHackByUserFromDatabase($pdo, $user_id);
 	include("template.php");
 }
 ?>

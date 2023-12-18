@@ -23,6 +23,7 @@ function createUsersDatabase($pdo) {
         `discord_username` varchar(255) NOT NULL,
         `discord_id` varchar(255) NOT NULL,
         `discord_avatar` varchar(255) NOT NULL,
+        `twitch_handle` varchar(255) NULL,
         `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
         PRIMARY KEY (`discord_id`)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
@@ -34,26 +35,28 @@ function createUsersDatabase($pdo) {
       }
 }
 
-function addUserToDatabase($pdo,$discord_id,$discord_avatar,$discord_email,$discord_username){
-    $sql = "INSERT INTO users (discord_email,discord_username,discord_id,discord_avatar) VALUES (:discord_email,:discord_username,:discord_id,:discord_avatar)";
+function addUserToDatabase($pdo,$discord_id,$discord_avatar,$discord_email,$discord_username, $twitch_handle){
+    $sql = "INSERT INTO users (discord_email,discord_username,discord_id,discord_avatar,twitch_handle) VALUES (:discord_email,:discord_username,:discord_id,:discord_avatar,:twitch_handle)";
     try {
         $stmt = $pdo->prepare($sql);
         $stmt->execute([
             'discord_id'=>$discord_id,
             'discord_avatar'=>$discord_avatar,
             'discord_email'=>$discord_email,
-            'discord_username'=>$discord_username
+            'discord_username'=>$discord_username,
+            'twitch_handle'=>$twitch_handle
         ]);
     } catch (Exception $e) {
         echo $e;
     }
 }
 
-function updateUserInDatabase($pdo,$discord_id,$discord_avatar,$discord_email,$discord_username) {
+function updateUserInDatabase($pdo,$discord_id,$discord_avatar,$discord_email,$discord_username,$twitch_handle) {
     $sql = "UPDATE users SET
             discord_avatar = '$discord_avatar',
             discord_email = '$discord_email',
-            discord_username = '$discord_username'
+            discord_username = '$discord_username',
+            twitch_handle ? '$twitch_handle'
             WHERE discord_id = '$discord_id'";
 
     try {
@@ -360,7 +363,7 @@ function getHackByUserFromDatabase($pdo, $user_name) {
     $sql = "SELECT * FROM hacks h
     LEFT JOIN hacks_authors ha ON (h.hack_id = ha.hack_id)
     LEFT JOIN author a ON (ha.author_id = a.author_id) 
-    WHERE a.author_name = $user_name AND hack_verified=1 GROUP BY hack_name";
+    WHERE a.author_name LIKE '%$user_name%' AND hack_verified=1 GROUP BY hack_name";
 
     try {
         $stmt = $pdo->prepare($sql);
@@ -371,6 +374,25 @@ function getHackByUserFromDatabase($pdo, $user_name) {
         echo $e;
     }
 } 
+
+function getHacksByUserFromDatabase($pdo, $user_id) {
+    $sql = "SELECT * FROM users u
+            LEFT JOIN author a ON(u.discord_username=a.author_name or u.twitch_handle=a.author_name)
+            LEFT JOIN hacks_authors ha ON(a.author_id=ha.author_id)
+            LEFT JOIN hacks h ON(ha.hack_id=h.hack_id)
+            WHERE discord_id='$user_id'
+            ";
+
+    try {
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $data;
+    } catch(Exception $e) {
+        echo $e;
+    }
+
+}
 
 
 
