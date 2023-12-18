@@ -6,13 +6,14 @@ async function main() {
         get: (searchParams, prop) => searchParams.get(prop),
       });
     const hack_name = params.hack_name;
+    console.log(hack_name)
     const hack_id = params.hack_id;
     container.innerHTML = await getHTMLContent(hack_name, hack_id)
 
 }
 
 async function getHackData(hack_name) {
-    const request = hack_name == 'all' ? await fetch(`/api/hacks`) : await fetch(`/api/hacks?hack_name=${hack_name}`);
+    const request = hack_name == 'all' ? await fetch(`/api/hacks`) : await fetch(`/api/hacks?hack_name=${hack_name.replaceAll('+', '%2B')}`);
     const response = await request.json();
     return response;
 }
@@ -63,13 +64,14 @@ async function getHTMLContent(hack_name, hack_id) {
         return `
         <form action="#" method="post" enctype="multipart/form-data">
         <table class="table table-bordered">
+        <input type="hidden" class="form-control" name="type" id="old_hack_name" value="editHack">  
         <tr>
             <td class="text-right">
                 <label for="hack_name" class="col-form-label text-nowrap">Hack Name:</label>
             </td>
             <td>
-                <input type="hidden" class="form-control" name="hack_name" id="hack_name" value="${hack_name}">  
-                <input type="text" class="form-control" value="${hack_name}" disabled>  
+                <input type="hidden" class="form-control" name="hack_old_name" id="old_hack_name" value="${hack_name}">  
+                <input type="text" class="form-control" name="hack_new_name" value="${hack_name}">  
             </td>
         </tr>
         <tr>
@@ -107,7 +109,7 @@ async function getHTMLContent(hack_name, hack_id) {
             <label for="hack_description" class="col-form-label text-nowrap">Description:</label>
             </td>
             <td colspan=3>
-                <textarea name="hack_description" class="form-control" rows="10" required>${description}</textarea>
+                <textarea name="hack_description" class="form-control" rows="10">${description}</textarea>
             </td>
         </tr>
         <tr>
@@ -130,12 +132,14 @@ async function getHTMLContent(hack_name, hack_id) {
 
         const hackName = patchData.hack_name;
         const hackVersion = patchData.hack_version;
-        const hackAuthor = patchData.author_name;
+        const hackAuthor = patchData.authors;
         const hackStarcount = patchData.hack_starcount;
         const hackReleaseDate = patchData.hack_release_date;
 
         return `
         <form action="#" method="post">
+        <input type="hidden" class="form-control" name="type" id="old_hack_name" value="editPatch">  
+
                     <table class="table">
                     <tr>
                         <td>

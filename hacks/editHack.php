@@ -20,7 +20,7 @@ if(sizeof($_POST) != 0) {
         die();
     }
 
-    if(strlen($hack_description) != 0) {
+    if($_POST['type'] == 'editHack') {
         $img_name = stripChars(getURLDecodedName($hack_name));
         $img_name = str_replace(':', '_', $img_name);
         $images = (glob($_SERVER['DOCUMENT_ROOT'] . "/_assets/_img/hacks/img_" . $img_name . "_*.{png,jpg}", GLOB_NOSORT|GLOB_BRACE));
@@ -33,12 +33,13 @@ if(sizeof($_POST) != 0) {
             }
         }
         
-        $hack_name = stripChars($_POST['hack_name']);
+        $hack_old_name = stripChars($_POST['hack_old_name']);
+        $hack_name = stripChars($_POST['hack_new_name']);
         $hack_description = str_replace("\r\n", "<br/>", $hack_description);
         $hack_description = stripChars($hack_description);
         $hack_description = str_replace("&lt;br/&gt;", "<br/>", $hack_description);
         $hack_tags = stripChars($_POST['hack_tags']);
-        updateHackInDatabase($pdo,$hack_name,$hack_tags,$hack_description);
+        updateHackInDatabase($pdo,$hack_old_name,$hack_name,$hack_tags,$hack_description);
         $hack = getHackFromDatabase($pdo, $hack_name);
         foreach($hack as $entry) {
             unrecommendPatchFromDatabase($pdo, intval($entry['hack_id']));
@@ -70,8 +71,17 @@ if(sizeof($_POST) != 0) {
         $hack_starcount = intval($_POST['hack_starcount']);
         $hack_release_date = $_POST['hack_release_date'];
 
+        deleteHackAuthorFromDatabase($pdo, $hack_id);
+
+
         $hack_authors = explode(", ", $hack_author);
         foreach($hack_authors as $author) {
+            $author_new_id = getAuthorFromDatabase($pdo, $author)[0]['author_id'];
+            if(!$author_new_id) {
+                addAuthorToDatabase($pdo, $author);
+                $author_new_id = getAuthorFromDatabase($pdo, $author)[0]['author_id'];
+            }
+            addHackAuthorToDatabase($pdo, $hack_id, $author_new_id);
 
         }
         updatePatchInDatabase($pdo, $hack_id, $hack_name, $hack_version, $hack_starcount, $hack_release_date, 1);
