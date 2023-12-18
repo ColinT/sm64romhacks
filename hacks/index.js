@@ -142,14 +142,15 @@ function getHacksTableHeaderRow(user) {
  * @returns {string}
  */
 function getTableRowFromHack(hack, user) {
+  console.log(user)
   const hackName = hack.hack_name;
   const creators = hack.hack_author
   const releaseDate = hack.release_date;
   const tag = hack.hack_tags;
   const downloads = hack.total_downloads;
   const link = getURLName(hackName);
-  const deleteButton = user.admin ? `<a class="btn btn-danger btn-block text-nowrap" href="deleteHack.php?hack_name=${hackName}"><img src="/_assets/_img/icons/delete.svg"></a>` : "&nbsp;"
-  const editButton = user.admin ? `<a class="btn btn-info btn-block text-nowrap" href="editHack.php?hack_name=${hackName}"><img src="/_assets/_img/icons/edit.svg"></a>` : "&nbsp;";
+  const deleteButton = user.admin ? `<a class="btn btn-danger btn-block text-nowrap" href="deleteHack.php?hack_name=${getURLName(hackName)}"><img src="/_assets/_img/icons/delete.svg"></a>` : "&nbsp;"
+  const editButton = user.admin ? `<a class="btn btn-info btn-block text-nowrap" href="editHack.php?hack_name=${getURLName(hackName)}"><img src="/_assets/_img/icons/edit.svg"></a>` : "&nbsp;";
 
 
   // TODO: use the correct relative url path

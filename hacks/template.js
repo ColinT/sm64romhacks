@@ -31,9 +31,13 @@ async function main() {
 
   const data = await getData();
   console.log(data)
+  const templatePageContainer = document.querySelector("#template-page");
+  templatePageContainer.innerHTML = getTemplatePageContent(data);
+
   const hacksTable = getHacksTable(data.patches, data.admin);
   const hacksCollectionDiv = document.querySelector("#hacksCollection");
   const hacksDescriptionDiv = document.querySelector("#hacksDescription");
+
   hacksCollectionDiv.innerHTML += hacksTable;
   hacksDescriptionDiv.innerHTML = data.patches[0].hack_description;
 
@@ -51,6 +55,20 @@ async function getData() {
   const response = await fetch(`/api/hacks?hack_name=${getURLName(urlName)}`); // relative to root
   const data = await response.json();
   return data;
+}
+
+function getTemplatePageContent(data) {
+  const hack_name = data.patches[0].hack_name;
+  const options = data.admin ? `&nbsp;<a class="btn btn-danger text-nowrap" href="deleteHack.php?hack_name=${hack_name}"><img src="/_assets/_img/icons/delete.svg"></a>&nbsp;<a class="btn btn-info text-nowrap" href="editHack.php?hack_name=${hack_name}"><img src="/_assets/_img/icons/edit.svg"></a>` : `&nbsp;`;
+
+  return `
+    <h1><u>${hack_name}</u>${options}</h1>
+    <div class="table-responsive" id="hacksCollection"></div>
+						<div class="text-nowrap" id="hacksImages"></div>
+				<br/>
+				
+                <div class="bg-dark text-left" id="hacksDescription"></div>
+  `; 
 }
 
 /**

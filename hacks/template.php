@@ -1,8 +1,3 @@
-<?php 
-if($_SESSION['logged_in'] && (in_array($_SESSION['userData']['discord_id'], ADMIN_SITE))) {
-	$admin_HTMLLoad = "&nbsp;<a class=\"btn btn-danger text-nowrap\" href=\"deleteHack.php?hack_name=$hack_name\"><img src=\"/_assets/_img/icons/delete.svg\"></a>&nbsp;<a class=\"btn btn-info text-nowrap\" href=\"editHack.php?hack_name=$hack_name\"><img src=\"/_assets/_img/icons/edit.svg\"></a>";
-}
-?>
 <!DOCTYPE HTML>
 	<html>
 		<!--BEGINNING OF HEAD-->
@@ -61,12 +56,7 @@ if($_SESSION['logged_in'] && (in_array($_SESSION['userData']['discord_id'], ADMI
 
 				<div align="center">
 					<!--HTML CONTENT HERE-->
-					<h1><u><?php print($hack_name);?></u><?php print($admin_HTMLLoad);?></h1>
-						<div class="table-responsive" id="hacksCollection"></div>
-						<div class="text-nowrap" id="hacksImages"></div>
-				<br/>
-				
-                <div class="bg-dark text-left" id="hacksDescription"></div>
+					<div id="template-page"></div>
                 </div>
 
 			<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/footer.php'); ?>
