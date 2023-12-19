@@ -49,7 +49,7 @@
 			<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 			<link rel="shortcut icon" href="/_assets/_img/icon.ico" />
 			<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
-			<script src="template.js"></script>
+			<script src="template.js?t=<?php print(filemtime('template.js')); ?>"></script>
 		</head>
 		<body>		<div class="container">
 		<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/header.php'); ?>

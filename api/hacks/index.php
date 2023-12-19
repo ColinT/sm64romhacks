@@ -13,7 +13,7 @@ if(isset($_GET['hack_name'])) {
     $img_name = str_replace(':', '_', $img_name);
     $images = (glob($_SERVER['DOCUMENT_ROOT'] . "/_assets/_img/hacks/img_" . $img_name . "_*.{png,jpg}", GLOB_NOSORT|GLOB_BRACE));
     $images = array_map(fn($image) => explode("/",$image)[sizeof(explode("/",$image)) - 1], $images);
-    print(json_encode(array("patches" => getHackFromDatabase($pdo, $hack_name), "images" => $images, "admin" => $is_Admin)));
+    print(json_encode(array("patches" => getHackFromDatabase($pdo, $hack_name), "images" => $images, "user" => array("logged_in" => $_SESSION['logged_in'],"users" => getAllUsersFromDatabase($pdo), "admin" => $is_Admin))));
 }
 
 else if(isset($_GET['hack_id'])) {

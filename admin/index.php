@@ -36,7 +36,7 @@ if(sizeof($_GET) == 2 || intval($_GET['hack_id']) != 0) {
 		<link rel="stylesheet" type="text/css" href="/_assets/_css/bootstrap.css">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 		<link rel="shortcut icon" href="/_assets/_img/icon.ico" />
-		<script src="admin.js"></script>
+		<script src="admin.js?t=<?php print(filemtime('admin.js')); ?>"></script>
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
 	</head>
 	<body>		<div class="container">

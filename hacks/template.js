@@ -30,11 +30,10 @@ const DEBOUNCE_DELAY = 200;
 async function main() {
 
   const data = await getData();
-  console.log(data)
   const templatePageContainer = document.querySelector("#template-page");
   templatePageContainer.innerHTML = getTemplatePageContent(data);
 
-  const hacksTable = getHacksTable(data.patches, data.admin);
+  const hacksTable = getHacksTable(data.patches, data.user);
   const hacksCollectionDiv = document.querySelector("#hacksCollection");
   const hacksDescriptionDiv = document.querySelector("#hacksDescription");
 
@@ -59,7 +58,7 @@ async function getData() {
 
 function getTemplatePageContent(data) {
   const hack_name = data.patches[0].hack_name;
-  const options = data.admin ? `&nbsp;<a class="btn btn-danger text-nowrap" href="deleteHack.php?hack_name=${hack_name}"><img src="/_assets/_img/icons/delete.svg"></a>&nbsp;<a class="btn btn-info text-nowrap" href="editHack.php?hack_name=${hack_name}"><img src="/_assets/_img/icons/edit.svg"></a>` : `&nbsp;`;
+  const options = data.user.admin ? `&nbsp;<a class="btn btn-danger text-nowrap" href="deleteHack.php?hack_name=${hack_name}"><img src="/_assets/_img/icons/delete.svg"></a>&nbsp;<a class="btn btn-info text-nowrap" href="editHack.php?hack_name=${hack_name}"><img src="/_assets/_img/icons/edit.svg"></a>` : `&nbsp;`;
 
   return `
     <h1><u>${hack_name}</u>${options}</h1>
@@ -75,9 +74,9 @@ function getTemplatePageContent(data) {
  * @param {Hack[]} hacks
  * @returns {string}
  */
-function getHacksTable(hacks, adminCheck) {
+function getHacksTable(hacks, user) {
   const headerRow = getHacksTableHeaderRow();
-  const hackTableRows = hacks.map((hack) => getTableRowFromHack(hack, adminCheck)).join("");
+  const hackTableRows = hacks.map((hack) => getTableRowFromHack(hack, user)).join("");
 
   return `
     <table class="table-sm table-bordered">
@@ -94,6 +93,15 @@ function getHacksImagesContent(images) {
 
 function getImage(image) {
   return  `<img class=p-3 width=320 height=240 src="/_assets/_img/hacks/${image}">`
+}
+
+function getCreatorsMarkUp(creators, users) {
+  const data = creators.split(', ');
+  const userData = data.map((creator) => {
+    const x = users.filter(e => e.discord_username === creator | e.twitch_handle === creator)
+    return x.length != 0 ? `<a href="/users/${x[0].discord_id}" target="_blank">${creator}</a>` : creator
+  }).join(", ")
+  return userData
 }
 
 /**
@@ -119,7 +127,7 @@ function getHacksTableHeaderRow() {
  * @param {Hack} hack
  * @returns {string}
  */
-function getTableRowFromHack(hack, adminCheck) {
+function getTableRowFromHack(hack, user) {
   const hackID = hack.hack_id;
   const hackName = hack.hack_name;
   const hackVersion = hack.hack_version;
@@ -128,9 +136,11 @@ function getTableRowFromHack(hack, adminCheck) {
   const hackStarcount = hack.hack_starcount;
   const hackReleaseDate = hack.hack_release_date;
   const hackTags = hack.hack_tags; 
-  const adminLoad = adminCheck ? `<td class="border-0"><a class="btn btn-danger btn-block text-nowrap" href="deleteHack.php?hack_id=${hackID}"><img src="/_assets/_img/icons/delete.svg"></a></td><td class="border-0"><a class="btn btn-info btn-block text-nowrap" href="editHack.php?hack_id=${hackID}"><img src="/_assets/_img/icons/edit.svg"></a>` : `&nbsp;`
+  const adminLoad = user.admin ? `<td class="border-0"><a class="btn btn-danger btn-block text-nowrap" href="deleteHack.php?hack_id=${hackID}"><img src="/_assets/_img/icons/delete.svg"></a></td><td class="border-0"><a class="btn btn-info btn-block text-nowrap" href="editHack.php?hack_id=${hackID}"><img src="/_assets/_img/icons/edit.svg"></a>` : `&nbsp;`
   const hackRecommend = hack.hack_recommend
   const recommendRow = hackRecommend == 1 ? `class=table-primary` : ``
+  const creatorsMarkUp = getCreatorsMarkUp(hackCreator, user.users);
+
 
   return `
     <tr>
@@ -138,7 +148,7 @@ function getTableRowFromHack(hack, adminCheck) {
       <td ${recommendRow}>${hackName}</td>
       <td ${recommendRow}>${hackVersion}</td>
       <td ${recommendRow}><a href="/hacks/download.php?hack_id=${hackID}">Download</a><br><span class="text-muted">Downloads: ${hackDownloads}</span></td>
-      <td ${recommendRow}>${hackCreator}</td>
+      <td ${recommendRow}>${creatorsMarkUp}</td>
       <td ${recommendRow}>${hackStarcount}</td>
       <td ${recommendRow}>${hackReleaseDate}</td>
       <td ${recommendRow}>${hackTags}</td>

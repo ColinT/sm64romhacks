@@ -25,7 +25,7 @@ if($id == 0 || !$_SESSION['logged_in'] || !in_array($user_id, ADMIN_NEWS) && $us
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 		<link rel="shortcut icon" href="/_assets/_img/icon.ico" />
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
-		<script src="editNewspost.js"></script>
+		<script src="editNewspost.js?t=<?php print(filemtime('editNewspost.js')); ?>"></script>
 	</head>
 	<body>		<div class="container">
 	<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/header.php'); ?>

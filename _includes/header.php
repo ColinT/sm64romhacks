@@ -95,7 +95,8 @@ setInterval(() => {
           </a>
           <ul class="dropdown-menu">
             <?php if(in_array($_SESSION['userData']['discord_id'], ADMIN_SITE)) { ?>
-              <li><a class="dropdown-item" href="/admin">Admin Page</a></li> <?php } ?>
+              <li><a class="dropdown-item" href="/admin">Admin Page</a></li>
+              <li><a class="dropdown-item" href="/users">Users</a></li> <?php } ?>
           <li><a class="dropdown-item" href="/users/<?php print($_SESSION['userData']['discord_id']);?>">Profile</a></li>
           <hr/>
           <li><a class="dropdown-item" href="/login/logout.php">Logout</a></li>

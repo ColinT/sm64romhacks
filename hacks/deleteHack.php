@@ -7,7 +7,7 @@ $hack_id = intval($_GET['hack_id']);
 
 $is_author = str_contains(getPatchFromDatabase($pdo, $hack_id)[0]['hack_author'], $_SESSION['userData']['discord_id']) || str_contains(getHackFromDatabase($pdo, $hack_name)[0]['hack_author'], $_SESSION['userData']['discord_id']);
 if(strlen($hack_name) == 0 && $hack_id == 0 || strlen($hack_name) != 0 && $hack_id != 0 || !$_SESSION['logged_in'] || (!$is_author && !in_array($_SESSION['userData']['discord_id'], ADMIN_SITE))) {
-	header("Location: /404.php");
+    header("Location: /hacks/" . getURLEncodedName($hack_name));
 	die();
 }
 
