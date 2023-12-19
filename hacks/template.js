@@ -51,9 +51,17 @@ async function main() {
  */
 async function getData() {
   const urlName = window.location.pathname.split("/")[window.location.pathname.split("/").length - 1]
-  const response = await fetch(`/api/hacks?hack_name=${getURLName(urlName)}`); // relative to root
-  const data = await response.json();
-  return data;
+  try {
+    const response = await fetch(`/api/hacks?hack_name=${getURLName(urlName)}`);
+    if (!response.ok) {
+        throw new Error(`${response.status} ${response.statusText}`);
+    }
+    const r = await response.json()
+    return r;
+  } 
+  catch (error) {
+      console.log(error);
+  }
 }
 
 function getTemplatePageContent(data) {

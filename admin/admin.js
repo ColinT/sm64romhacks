@@ -9,11 +9,9 @@ async function main() {
 async function getAllPendingHacks() {
         try {
             const response = await fetch('/api/admin');
-            // network error in the 4xx–5xx range
             if (!response.ok) {
                 throw new Error(`${response.status} ${response.statusText}`);
             }
-            // use response here if we didn't throw above
             const r = await response.json()
             return r;
         } 

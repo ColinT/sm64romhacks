@@ -10,9 +10,17 @@ async function main() {
 }
 
 async function getData() {
-    const request = await fetch("/api/hacks")
-    const response = await request.json()
-    return response
+    try {
+        const response = await fetch(`/api/hacks`);
+        if (!response.ok) {
+            throw new Error(`${response.status} ${response.statusText}`);
+        }
+        const r = await response.json()
+        return r;
+      } 
+      catch (error) {
+          console.log(error);
+      }
 }
 
 function getDataList(hacks) {

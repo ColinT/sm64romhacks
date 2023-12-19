@@ -83,9 +83,17 @@ async function main() {
  * @returns {Hack[]}
  */
 async function getData() {
-  const response = await fetch("/api/hacks"); // relative to root
-  const data = await response.json();
-  return data;
+  try {
+    const response = await fetch(`/api/hacks`);
+    if (!response.ok) {
+        throw new Error(`${response.status} ${response.statusText}`);
+    }
+    const r = await response.json()
+    return r;
+  } 
+  catch (error) {
+      console.log(error);
+  }
 }
 
 /**

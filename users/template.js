@@ -10,10 +10,18 @@ async function main() {
 }
 
 async function getHacksByUser(username) {
-    const request = await fetch(`/api/users?user_name=${username}`);
-    const response = await request.json();
-    return response;
-}
+    try {
+        const response = await fetch(`/api/users?user_name=${username}`);
+        if (!response.ok) {
+            throw new Error(`${response.status} ${response.statusText}`);
+        }
+        const r = await response.json()
+        return r;
+      } 
+      catch (error) {
+          console.log(error);
+      }
+    }
 
 function getTemplatePageContent(data) {
     const tableHeaderRow = getTableHeaderRow();

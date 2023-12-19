@@ -13,15 +13,31 @@ async function main() {
 }
 
 async function getHackData(hack_name) {
-    const request = hack_name == 'all' ? await fetch(`/api/hacks`) : await fetch(`/api/hacks?hack_name=${hack_name.replaceAll('+', '%2B')}`);
-    const response = await request.json();
-    return response;
+    try {
+        const response = hack_name == 'all' ? await fetch(`/api/hacks`) : await fetch(`/api/hacks?hack_name=${hack_name.replaceAll('+', '%2B')}`);
+        if (!response.ok) {
+            throw new Error(`${response.status} ${response.statusText}`);
+        }
+        const r = await response.json()
+        return r;
+      } 
+      catch (error) {
+          console.log(error);
+      }
 }
 
 async function getPatchData(hack_id) {
-    const request = await fetch(`/api/hacks?hack_id=${hack_id}`);
-    const response = await request.json();
-    return response;
+    try {
+        const response = await fetch(`/api/hacks?hack_id=${hack_id}`);
+        if (!response.ok) {
+            throw new Error(`${response.status} ${response.statusText}`);
+        }
+        const r = await response.json()
+        return r;
+      } 
+      catch (error) {
+          console.log(error);
+      }
 }
 
 async function getHTMLContent(hack_name, hack_id) {
