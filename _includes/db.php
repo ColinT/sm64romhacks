@@ -393,7 +393,7 @@ function getAllPendingHacksFromDatabase($pdo){
     $sql = "SELECT * FROM hacks h
     LEFT JOIN hacks_authors ha ON (h.hack_id = ha.hack_id)
     LEFT JOIN author a ON (ha.author_id = a.author_id) 
-    WHERE hack_verified=0 GROUP BY hack_name";
+    WHERE hack_verified=0";
     try {
         $stmt = $pdo->prepare($sql);
         $stmt->execute();
@@ -402,6 +402,19 @@ function getAllPendingHacksFromDatabase($pdo){
     } catch (Exception $e) {
         echo $e;
     }
+}
+
+function getLastHackId($pdo) {
+    $sql = "SELECT h.hack_id FROM hacks h ORDER BY h.hack_id DESC LIMIT 1";
+    try {
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $data;
+    } catch (Exception $e) {
+        echo $e;
+    }
+
 }
 
 
@@ -428,6 +441,23 @@ function getPatchFromDatabase($pdo, $hack_id) {
     LEFT JOIN hacks_authors ha ON (h.hack_id = ha.hack_id) 
     LEFT JOIN author a ON (ha.author_id = a.author_id) 
     WHERE h.hack_id=:hack_id AND hack_verified=1";
+    try {
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([
+            'hack_id'=>$hack_id
+        ]);
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $data;
+    } catch(Exception $e) {
+        echo $e;
+    }
+}
+
+function getPendingPatchFromDatabase($pdo, $hack_id) {
+    $sql = "SELECT h.hack_id, h.hack_name, h.hack_version, h.hack_starcount, h.hack_release_date, GROUP_CONCAT(DISTINCT a.author_name SEPARATOR ', ') AS authors, h.hack_patchname   FROM hacks h 
+    LEFT JOIN hacks_authors ha ON (h.hack_id = ha.hack_id) 
+    LEFT JOIN author a ON (ha.author_id = a.author_id) 
+    WHERE h.hack_id=:hack_id AND hack_verified=0";
     try {
         $stmt = $pdo->prepare($sql);
         $stmt->execute([
