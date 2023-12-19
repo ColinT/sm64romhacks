@@ -14,9 +14,13 @@ if(sizeof($_POST) != 0) {
     $hack_starcount = isset($_POST['hack_amount']) ? intval($_POST['hack_amount']) : 0;
     $hack_release_date = $_POST['hack_release_date'];
     $hack_patchname = stripChars($_FILES['hack_patchname']["name"]);
+    $hack_tags = "";
+    $hack_description = "";
 
     $hack = getHackFromDatabase($pdo, $hack_name);
     if($hack) {
+        $hack_tags = $hack[0]['hack_tags'];
+        $hack_description = $hack[0]['hack_description'];
         foreach($hack as $entry) {
             if($entry['hack_version'] == $hack_version || $entry['hack_patchname'] == $hack_patchname) {
                 header("Location: /404.php");
@@ -29,7 +33,7 @@ if(sizeof($_POST) != 0) {
     if(in_array($_SESSION['userData']['discord_id'], ADMIN_SITE)) {
         $result = move_uploaded_file($_FILES['hack_patchname']['tmp_name'], $_SERVER['DOCUMENT_ROOT'].'/patch/'.$hack_patchname);
         $hack_patchname = substr($hack_patchname, 0, -4);
-        addHackToDatabase($pdo, $hack_name, $hack_version, $hack_starcount, $hack_release_date, $hack_patchname, NULL, NULL, 1, 0);
+        addHackToDatabase($pdo, $hack_name, $hack_version, $hack_starcount, $hack_release_date, $hack_patchname, $hack_tags, $hack_description, 1, 0);
     }
 
     else {
