@@ -57,7 +57,7 @@ function updateUserInDatabase($pdo,$discord_id,$discord_avatar,$discord_email,$d
             discord_avatar = '$discord_avatar',
             discord_email = '$discord_email',
             discord_username = '$discord_username',
-            twitch_handle ? '$twitch_handle'
+            twitch_handle = '$twitch_handle'
             WHERE discord_id = '$discord_id'";
 
     try {
@@ -390,7 +390,7 @@ function getHacksByUserFromDatabase($pdo, $user_id) {
 }
 
 function getAllPendingHacksFromDatabase($pdo){
-    $sql = "SELECT * FROM hacks h
+    $sql = "SELECT h.hack_id, h.hack_name, h.hack_version, h.hack_starcount, h.hack_release_date FROM hacks h
     LEFT JOIN hacks_authors ha ON (h.hack_id = ha.hack_id)
     LEFT JOIN author a ON (ha.author_id = a.author_id) 
     WHERE hack_verified=0";

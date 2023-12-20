@@ -1,6 +1,12 @@
 <?php
-include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php';
+include($_SERVER['DOCUMENT_ROOT'].'/_includes/functions.php');
+include($_SERVER['DOCUMENT_ROOT'].'/_includes/db.php');
+
 createUsersDatabase($pdo);
+createNewspostDatabase($pdo);
+createHacksDatabase($pdo);
+createAuthorsDatabase($pdo);
+createHackAuthorsDatabase($pdo);
 
 
 if(!isset($_GET['code'])){
@@ -67,7 +73,6 @@ curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
 
 array_push($result, curl_exec($ch));
 
-
 $userData = json_decode($result[0],true);
 
 $twitch_username = getTwitchUserName(json_decode($result[1],true));
@@ -89,6 +94,8 @@ setcookie("name", stripChars($userData['username']), time() + (86400 * 30), "/")
 setcookie("avatar", $userData['avatar'], time() + (86400 * 30), "/");
 setcookie("email", stripChars($userData['email']), time() + (86400 * 30), "/");
 setcookie("global_name", stripChars($userData['global_name']), time() + (86400 * 30), "/");
+if($twitch_username) setcookie("twitch_handle", $twitch_username, time() + (86400 * 30), "/");
+
 header("Location: " . $_COOKIE['redirect']);
 exit();
 

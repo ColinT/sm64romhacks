@@ -42,9 +42,10 @@ const TAG_COLUMN_INDEX = 4;
 
 async function main() {
   const data = await getData();
-  console.log(data)
+  const user = await getUser();
+  const users = await getAllUsers();
   const tagsDropdownMenu = getTagsDropdownMenu(data.tags);
-  const hacksTable = getHacksTable(data.hacks, data.user);
+  const hacksTable = getHacksTable(data.hacks, user, users);
   const hacksCollectionDiv = document.querySelector("#hacksCollection");
   hacksCollectionDiv.innerHTML = hacksTable;
   const myTable = document.getElementById("myTable");
@@ -97,13 +98,42 @@ async function getData() {
   }
 }
 
+async function getUser() {
+  try {
+    const response = await fetch(`/api/user`);
+    if (!response.ok) {
+        throw new Error(`${response.status} ${response.statusText}`);
+    }
+    const r = await response.json()
+    return r;
+  } 
+  catch (error) {
+      return {logged_in: false, admin: false};
+  }
+}
+
+async function getAllUsers() {
+  try {
+    const response = await fetch(`/api/users`);
+    if (!response.ok) {
+        throw new Error(`${response.status} ${response.statusText}`);
+    }
+    const r = await response.json()
+    return r;
+  } 
+  catch (error) {
+      console.log(error);
+  }
+}
+
+
 /**
  * @param {Hack[]} hacks
  * @returns {string}
  */
-function getHacksTable(hacks, user) {
+function getHacksTable(hacks, user, users) {
   const headerRow = getHacksTableHeaderRow(user);
-  const hackTableRows = hacks.map((hack) => getTableRowFromHack(hack, user)).join("");
+  const hackTableRows = hacks.map((hack) => getTableRowFromHack(hack, user, users)).join("");
 
   return `
     <table class="table-sm table-bordered" id="myTable">
@@ -150,16 +180,16 @@ function getHacksTableHeaderRow(user) {
  * @param {Hack} hack
  * @returns {string}
  */
-function getTableRowFromHack(hack, user) {
+function getTableRowFromHack(hack, user, users) {
   const hackName = hack.hack_name;
   const creators = hack.hack_author
   const releaseDate = hack.release_date;
   const tag = hack.hack_tags;
   const downloads = hack.total_downloads;
   const link = getURLName(hackName);
-  const deleteButton = user.admin ? `<a class="btn btn-danger btn-block text-nowrap" href="deleteHack.php?hack_name=${getURLName(hackName)}"><img src="/_assets/_img/icons/delete.svg"></a>` : "&nbsp;"
-  const editButton = user.admin ? `<a class="btn btn-info btn-block text-nowrap" href="editHack.php?hack_name=${getURLName(hackName)}"><img src="/_assets/_img/icons/edit.svg"></a>` : "&nbsp;";
-  const creatorsMarkUp = getCreatorsMarkUp(creators, user.users);
+  const deleteButton = user.admin || user.logged_in && (creators.toLowerCase().includes(user.data.discord_username.toLowerCase()) || creators.toLowerCase().includes(user.data.twitch_handle.toLowerCase())) ? `<a class="btn btn-danger btn-block text-nowrap" href="deleteHack.php?hack_name=${getURLName(hackName)}"><img src="/_assets/_img/icons/delete.svg"></a>` : "&nbsp;"
+  const editButton = user.admin || user.logged_in && (creators.toLowerCase().includes(user.data.discord_username.toLowerCase()) || creators.toLowerCase().includes(user.data.twitch_handle.toLowerCase())) ? `<a class="btn btn-info btn-block text-nowrap" href="editHack.php?hack_name=${getURLName(hackName)}"><img src="/_assets/_img/icons/edit.svg"></a>` : "&nbsp;";
+  const creatorsMarkUp = getCreatorsMarkUp(creators, users);
 
 
   // TODO: use the correct relative url path

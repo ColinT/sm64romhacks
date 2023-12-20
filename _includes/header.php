@@ -1,17 +1,3 @@
-<?php
-if(filter_var($_COOKIE['logged_in'], FILTER_VALIDATE_BOOLEAN)) {
-  $avatar_url = "https://cdn.discordapp.com/avatars/" . $_COOKIE['discord_id']. "/" . $_COOKIE['avatar'] . ".jpg";
-  setcookie("logged_in", "true", time() + (86400 * 30), "/");
-}
-else setcookie("logged_in", "false", time() + (86400 * 30), "/");
-
-setcookie("redirect", $_SERVER['REQUEST_URI'], time() + (86400 * 30), "/");
-
-
-
-?>
-
-
 <script>
 setInterval(() => {
   var t = new Date();

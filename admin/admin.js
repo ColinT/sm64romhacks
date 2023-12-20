@@ -36,7 +36,13 @@ function getAllPendingHacksTable(allPendingHacks) {
 
 function getPendingHacksTableHeaderRow() {
     return `
-        <tr><th><b>Hack Name</b></th><th><b>Version</b></th><th><b>Hack Author</b></th><th><b>Star Count</b></th><th><b>Release Date</b></th><th class="border-0">&nbsp;</th></tr>
+        <tr>
+            <th><b>Hack Name</b></th>
+            <th><b>Version</b></th>
+            <th><b>Star Count</b></th>
+            <th><b>Release Date</b></th>
+            <th class="border-0">&nbsp;</th>
+        </tr>
     `
 }
 
@@ -44,7 +50,6 @@ function getPendingHackTableRowContent(pendingHack) {
     const hackID = pendingHack.hack_id;
     const hackName = pendingHack.hack_name;
     const hackVersion = pendingHack.hack_version;
-    const hackAuthor = pendingHack.author_name;
     const hackStarcount = pendingHack.hack_starcount;
     const hackReleaseDate = pendingHack.hack_release_date;
     
@@ -52,7 +57,6 @@ function getPendingHackTableRowContent(pendingHack) {
         <tr>
             <td>${hackName}</td>
             <td>${hackVersion}</td>
-            <td>${hackAuthor}</td>
             <td>${hackStarcount}</td>
             <td>${hackReleaseDate}</td>
             <td class="border-0 align-top"><a class="btn btn-success text-nowrap" href="/admin?hack_id=${hackID}&mode=accept"><img src="/_assets/_img/icons/accept.svg"></a>&nbsp;<a class="btn btn-danger text-nowrap" href="/admin?hack_id=${hackID}&mode=reject"><img src="/_assets/_img/icons/delete.svg"></a></td>

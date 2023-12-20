@@ -18,7 +18,6 @@ foreach($newsposts as $newspost) {
 }
 
 deleteUserFromDatabase($pdo, $user_id);
-session_destroy();
-header("Location: /");
+header("Location: /login/logout.php");
 die();
 ?>

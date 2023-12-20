@@ -1,6 +1,13 @@
 <?php	
 
-	include($_SERVER['DOCUMENT_ROOT'] . "/_includes/includes.php");
+include($_SERVER['DOCUMENT_ROOT'].'/_includes/functions.php');
+include($_SERVER['DOCUMENT_ROOT'].'/_includes/db.php');
+
+createUsersDatabase($pdo);
+createNewspostDatabase($pdo);
+createHacksDatabase($pdo);
+createAuthorsDatabase($pdo);
+createHackAuthorsDatabase($pdo);
 
 	function getEndPoint() {
 		$endPoint = "game_id=2692&first=100";
