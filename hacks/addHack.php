@@ -2,7 +2,7 @@
 
 include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php';
 
-if(!$_SESSION['logged_in']) {
+if(!filter_var($_COOKIE['logged_in'], FILTER_VALIDATE_BOOLEAN)) {
 	header("Location: /404.php");
 	die();
 }
@@ -30,7 +30,7 @@ if(sizeof($_POST) != 0) {
     }
 
 
-    if(in_array($_SESSION['userData']['discord_id'], ADMIN_SITE)) {
+    if(in_array($_COOKIE['discord_id'], ADMIN_SITE)) {
         $result = move_uploaded_file($_FILES['hack_patchname']['tmp_name'], $_SERVER['DOCUMENT_ROOT'].'/patch/'.$hack_patchname);
         $hack_patchname = substr($hack_patchname, 0, -4);
         addHackToDatabase($pdo, $hack_name, $hack_version, $hack_starcount, $hack_release_date, $hack_patchname, $hack_tags, $hack_description, 1, 0);

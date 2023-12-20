@@ -42,6 +42,7 @@ const TAG_COLUMN_INDEX = 4;
 
 async function main() {
   const data = await getData();
+  console.log(data)
   const tagsDropdownMenu = getTagsDropdownMenu(data.tags);
   const hacksTable = getHacksTable(data.hacks, data.user);
   const hacksCollectionDiv = document.querySelector("#hacksCollection");

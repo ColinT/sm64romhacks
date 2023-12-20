@@ -1,6 +1,5 @@
 <?php
-session_start();
-if(!$_SESSION['logged_in']) header("Location: init-oauth.php");
+if(!filter_var($_COOKIE['logged_in'], FILTER_VALIDATE_BOOLEAN)) header("Location: init-oauth.php");
 else {header("Location: dashboard.php");}
 die();
 ?>

@@ -5,8 +5,8 @@ include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php';
 $hack_name = stripChars(getURLDecodedName($_GET['hack_name']));
 $hack_id = intval($_GET['hack_id']);
 
-$is_author = str_contains(getPatchFromDatabase($pdo, $hack_id)[0]['hack_author'], $_SESSION['userData']['discord_id']) || str_contains(getHackFromDatabase($pdo, $hack_name)[0]['hack_author'], $_SESSION['userData']['discord_id']);
-if(strlen($hack_name) == 0 && $hack_id == 0 || strlen($hack_name) != 0 && $hack_id != 0 || !$_SESSION['logged_in'] || (!$is_author && !in_array($_SESSION['userData']['discord_id'], ADMIN_SITE))) {
+$is_author = str_contains(getPatchFromDatabase($pdo, $hack_id)[0]['hack_author'], $_COOKIE['discord_id']) || str_contains(getHackFromDatabase($pdo, $hack_name)[0]['hack_author'], $_COOKIE['discord_id']);
+if(strlen($hack_name) == 0 && $hack_id == 0 || strlen($hack_name) != 0 && $hack_id != 0 || !filter_var($_COOKIE['logged_in'], FILTER_VALIDATE_BOOLEAN) || (!$is_author && !in_array($_COOKIE['discord_id'], ADMIN_SITE))) {
     header("Location: /hacks/" . getURLEncodedName($hack_name));
 	die();
 }

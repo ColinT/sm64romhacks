@@ -8,7 +8,7 @@
     }
 
     else {
-        if(!$_SESSION['logged_in'] || !in_array($_SESSION['userData']['discord_id'], ADMIN_SITE)) {
+        if(!filter_var($_COOKIE['logged_in'], FILTER_VALIDATE_BOOLEAN) || !in_array($_COOKIE['discord_id'], ADMIN_SITE)) {
             print(json_encode(http_response_code(403)));
         }
         else {

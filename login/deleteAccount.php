@@ -2,7 +2,7 @@
 
 include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php';
 
-$user_id = $_SESSION['userData']['discord_id'];
+$user_id = $_COOKIE['discord_id'];
 
 $newsposts = getAllNewspostsFromDatabase($pdo);
 

@@ -6,8 +6,8 @@ include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php';
 $id = intval($_GET['id']);
 $newspost = getNewspostFromDatabase($pdo, $id);
 $author_id = $newspost['post_author'];
-$user_id = $_SESSION['userData']['discord_id'];
-if($id == 0 || !$_SESSION['logged_in'] || !in_array($user_id, ADMIN_NEWS) && $user_id != $author_id) {
+$user_id = $_COOKIE['discord_id'];
+if($id == 0 || !filter_var($_COOKIE['logged_in'], FILTER_VALIDATE_BOOLEAN) || !in_array($user_id, ADMIN_NEWS) && $user_id != $author_id) {
 	header("Location: /");
 	die();
 }

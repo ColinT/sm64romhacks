@@ -83,15 +83,13 @@ else {
     updateUserInDatabase($pdo,$userData['id'],$userData['avatar'],stripChars($userData['email']),stripChars($userData['global_name']), $twitch_username);
 }
 
-$_SESSION['logged_in'] = true;
-$_SESSION['userData'] = [
-    'discord_id'=>$userData['id'],
-    'name'=>stripChars($userData['username']),
-    'avatar'=>$userData['avatar'],
-    'email'=>stripChars($userData['email']),
-    'global_name'=>stripChars($userData['global_name'])
-];
-header("Location: " . $_SESSION['redirect']);
+setcookie("logged_in", "true", time() + (86400 * 30), "/");
+setcookie("discord_id", $userData['id'], time() + (86400 * 30), "/");
+setcookie("name", stripChars($userData['username']), time() + (86400 * 30), "/");
+setcookie("avatar", $userData['avatar'], time() + (86400 * 30), "/");
+setcookie("email", stripChars($userData['email']), time() + (86400 * 30), "/");
+setcookie("global_name", stripChars($userData['global_name']), time() + (86400 * 30), "/");
+header("Location: " . $_COOKIE['redirect']);
 exit();
 
 

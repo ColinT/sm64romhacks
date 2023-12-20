@@ -1,12 +1,12 @@
 <?php
-if(isset($_SESSION['userData'])) {
-  extract($_SESSION['userData']);
-  $avatar_url = "https://cdn.discordapp.com/avatars/$discord_id/$avatar.jpg";
-  $_SESSION["logged_in"] = true;
+if(filter_var($_COOKIE['logged_in'], FILTER_VALIDATE_BOOLEAN)) {
+  $avatar_url = "https://cdn.discordapp.com/avatars/" . $_COOKIE['discord_id']. "/" . $_COOKIE['avatar'] . ".jpg";
+  setcookie("logged_in", "true", time() + (86400 * 30), "/");
 }
-else $_SESSION["logged_in"] = false;
+else setcookie("logged_in", "false", time() + (86400 * 30), "/");
 
-$_SESSION['redirect'] = $_SERVER['REQUEST_URI'];
+setcookie("redirect", $_SERVER['REQUEST_URI'], time() + (86400 * 30), "/");
+
 
 
 ?>
@@ -78,11 +78,11 @@ setInterval(() => {
 	<li class="nav-item">
 	  <a class="nav-link" href="https://ko-fi.com/marvjungs">Support!</a>
 	</li>
-    <?php if(!$_SESSION["logged_in"]) { ?>    
+    <?php if(!filter_var($_COOKIE['logged_in'], FILTER_VALIDATE_BOOLEAN)) { ?>    
       <li class="nav-item"><a href="/login" class="nav-link" title="By logging in you agree with our Terms of Service">Login</a></li>
     <?php }?>
-    <?php if($_SESSION["logged_in"]) { 
-      if(in_array($_SESSION['userData']['discord_id'], ADMIN_SITE)) {
+    <?php if(filter_var($_COOKIE['logged_in'], FILTER_VALIDATE_BOOLEAN)) { 
+      if(in_array($_COOKIE['discord_id'], ADMIN_SITE)) {
         $available_actions = "&nbsp;<span class=\"badge badge-light\">" . sizeof(getAllPendingHacksFromDatabase($pdo)) . "</span>";
       }
       else {
@@ -91,13 +91,13 @@ setInterval(() => {
       ?>      
       <li class="nav-item dropdown">          
         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-          <img src="<?php echo $avatar_url;?>" width=16 height=16 />&nbsp;<?php echo $global_name . $available_actions;?>
+          <img src="<?php echo $avatar_url;?>" width=16 height=16 />&nbsp;<?php echo $_COOKIE['global_name'] . $available_actions;?>
           </a>
           <ul class="dropdown-menu">
-            <?php if(in_array($_SESSION['userData']['discord_id'], ADMIN_SITE)) { ?>
+            <?php if(in_array($_COOKIE['discord_id'], ADMIN_SITE)) { ?>
               <li><a class="dropdown-item" href="/admin">Admin Page</a></li>
               <li><a class="dropdown-item" href="/users">Users</a></li> <?php } ?>
-          <li><a class="dropdown-item" href="/users/<?php print($_SESSION['userData']['discord_id']);?>">Profile</a></li>
+          <li><a class="dropdown-item" href="/users/<?php print($_COOKIE['discord_id']);?>">Profile</a></li>
           <hr/>
           <li><a class="dropdown-item" href="/login/logout.php">Logout</a></li>
           <li><a class="dropdown-item text-danger" href="/login/deleteAccount.php">Delete Account</a></li>

@@ -1,5 +1,4 @@
 <?php 
-$add_button = ($_SESSION['logged_in']) ? "<a class=\"btn btn-success text-nowrap\" href=\"addHack.php\"><img src=\"/_assets/_img/icons/add.svg\"></a>" : "&nbsp;"; 
 $amount = getAmountOfHacksInDatabase($pdo)[0]['count'];
 if($amount == 0){
 	$a_patch=file($_SERVER['DOCUMENT_ROOT']. "/_assets/_data/patches.csv");
