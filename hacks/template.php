@@ -16,12 +16,12 @@
 			<?php 
 				$img_name = stripChars(getURLDecodedName($hack_name));
 				$img_name = str_replace(':', '_', $img_name);
-				$images = (glob($_SERVER['DOCUMENT_ROOT'] . "/_assets/_img/hacks/img_" . $img_name . "_*.{png,jpg}", GLOB_NOSORT|GLOB_BRACE));
+				$images = (glob($_SERVER['DOCUMENT_ROOT'] . "/api/images/img_" . $img_name . "_*.{png,jpg}", GLOB_NOSORT|GLOB_BRACE));
 				foreach($images as $image) {
 					$image = explode("/",$image)[sizeof(explode("/",$image)) - 1];
 					$ext = substr($image, -3);
 					$image = substr_replace($image, "", -4);
-					print("<meta property=\"og:image:url\" content=\"https://sm64romhacks.com/_assets/_img/hacks/$image.$ext\" />\n\t\t\t");
+					print("<meta property=\"og:image:url\" content=\"https://sm64romhacks.com/api/images/$image.$ext\" />\n\t\t\t");
 					print("<meta property=\"og:image:type\" content=\"image/$ext\" />\n\t\t\t");
 					print("<meta property=\"og:image:height\" content=\"120\" />\n\t\t\t");
 					print("<meta property=\"og:image:width\" content=\"160\" />\n\t\t\t");
@@ -41,7 +41,7 @@
 					$image = explode("/",$image)[sizeof(explode("/",$image)) - 1];
 					$ext = substr($image, -3);
 					$image = substr_replace($image, "", -4);
-					print("<meta property=\"twitter:image\" content=\"https://sm64romhacks.com/_assets/_img/hacks/$image.$ext\" />\n\t\t\t");
+					print("<meta property=\"twitter:image\" content=\"https://sm64romhacks.com/api/images/$image.$ext\" />\n\t\t\t");
 				}
 			?>
 			

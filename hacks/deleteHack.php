@@ -20,11 +20,11 @@ if(strlen($hack_name) != 0) {
 	$data = getHackFromDatabase($pdo, $hack_name);
 	$img_name = stripChars(getURLDecodedName($hack_name));
     $img_name = str_replace(':', '_', $img_name);
-    $images = (glob($_SERVER['DOCUMENT_ROOT'] . "/_assets/_img/hacks/img_" . $img_name . "_*.{png,jpg}", GLOB_NOSORT|GLOB_BRACE));
+    $images = (glob($_SERVER['DOCUMENT_ROOT'] . "/api/images/img_" . $img_name . "_*.{png,jpg}", GLOB_NOSORT|GLOB_BRACE));
     $images = array_map(fn($image) => explode("/",$image)[sizeof(explode("/",$image)) - 1], $images);
 
 	foreach($images as $image) {
-		unlink($_SERVER['DOCUMENT_ROOT'] . '/_assets/_img/hacks/' . $image);
+		unlink($_SERVER['DOCUMENT_ROOT'] . '/api/images/' . $image);
 	}
 
 
@@ -33,7 +33,7 @@ if(strlen($hack_name) != 0) {
 		unlink($_SERVER['DOCUMENT_ROOT'] . '/patch/' . $entry['hack_patchname'] . '.zip');
 		deletePatchFromDatabase($pdo, $entry['hack_id']);
 	}	
-	unlink($_SERVER['DOCUMENT_ROOT'] . '/_assets/_img/hacks/logo_' . getURLEncodedName($hack_name) . '.jpg');
+	unlink($_SERVER['DOCUMENT_ROOT'] . '/api/images/logo_' . getURLEncodedName($hack_name) . '.jpg');
 	header("Location: /hacks");
 }
 

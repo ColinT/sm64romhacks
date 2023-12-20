@@ -187,8 +187,8 @@ function getTableRowFromHack(hack, user, users) {
   const tag = hack.hack_tags;
   const downloads = hack.total_downloads;
   const link = getURLName(hackName);
-  const deleteButton = user.admin || user.logged_in && (creators.toLowerCase().includes(user.data.discord_username.toLowerCase()) || creators.toLowerCase().includes(user.data.twitch_handle.toLowerCase())) ? `<a class="btn btn-danger btn-block text-nowrap" href="deleteHack.php?hack_name=${getURLName(hackName)}"><img src="/_assets/_img/icons/delete.svg"></a>` : "&nbsp;"
-  const editButton = user.admin || user.logged_in && (creators.toLowerCase().includes(user.data.discord_username.toLowerCase()) || creators.toLowerCase().includes(user.data.twitch_handle.toLowerCase())) ? `<a class="btn btn-info btn-block text-nowrap" href="editHack.php?hack_name=${getURLName(hackName)}"><img src="/_assets/_img/icons/edit.svg"></a>` : "&nbsp;";
+  const deleteButton = user.admin || user.logged_in && (creators.toLowerCase().includes(user.data.discord_username.toLowerCase()) || user.data.twitch_handle != null && creators.toLowerCase().includes(user.data.twitch_handle.toLowerCase())) ? `<a class="btn btn-danger btn-block text-nowrap" href="deleteHack.php?hack_name=${getURLName(hackName)}"><img src="/_assets/_img/icons/delete.svg"></a>` : "&nbsp;"
+  const editButton = user.admin || user.logged_in && (creators.toLowerCase().includes(user.data.discord_username.toLowerCase()) || user.data.twitch_handle != null && creators.toLowerCase().includes(user.data.twitch_handle.toLowerCase())) ? `<a class="btn btn-info btn-block text-nowrap" href="editHack.php?hack_name=${getURLName(hackName)}"><img src="/_assets/_img/icons/edit.svg"></a>` : "&nbsp;";
   const creatorsMarkUp = getCreatorsMarkUp(creators, users);
 
 
@@ -211,7 +211,7 @@ function getTableRowFromHack(hack, user, users) {
 function getCreatorsMarkUp(creators, users) {
   const data = creators.split(', ');
   const userData = data.map((creator) => {
-    const x = users.filter(e => e.discord_username === creator | e.twitch_handle === creator)
+    const x = users.filter(e => e.discord_username === creator | e.twitch_handle != null && e.twitch_handle === creator)
     return x.length != 0 ? `<a href="/users/${x[0].discord_id}" target="_blank">${creator}</a>` : creator
   }).join(", ")
   return userData

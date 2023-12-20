@@ -70,7 +70,7 @@ async function getHTMLContent(hack_name, hack_id) {
           console.log(hackImages)
           const hackImagesCheck = hackImages.map((image) => {
             return `
-            <div class="col text-center"><img class=p-2 width=160 height=120 src=\"/_assets/_img/hacks/${image}"><br/><input class="col-form-input" type="checkbox" name="hack_images_checked[]" value="${image.substring(0, image.length - 4)}" id="flexCheckDefault" checked></div>
+            <div class="col text-center"><img class=p-2 width=160 height=120 src=\"/api/images/${image}"><br/><input class="col-form-input" type="checkbox" name="hack_images_checked[]" value="${image.substring(0, image.length - 4)}" id="flexCheckDefault" checked></div>
             `
           }).join("");
 

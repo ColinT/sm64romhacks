@@ -29,16 +29,20 @@ if(sizeof($_POST) != 0) {
     if($_POST['type'] == 'editHack') {
         $img_name = stripChars(getURLDecodedName($hack_name));
         $img_name = str_replace(':', '_', $img_name);
-        $images = (glob($_SERVER['DOCUMENT_ROOT'] . "/_assets/_img/hacks/img_" . $img_name . "_*.{png,jpg}", GLOB_NOSORT|GLOB_BRACE));
+        $images = (glob($_SERVER['DOCUMENT_ROOT'] . "/api/images/img_" . $img_name . "_*.{png,jpg}", GLOB_NOSORT|GLOB_BRACE));
         foreach($images as $image) {
             $image = explode("/",$image)[sizeof(explode("/",$image)) - 1];
             $ext = substr($image, -3);
             $image = substr_replace($image, "", -4);
             if(!in_array($image, $_POST['hack_images_checked'])) {
-                unlink($_SERVER['DOCUMENT_ROOT'] . "/_assets/_img/hacks/$image.$ext");
+                unlink($_SERVER['DOCUMENT_ROOT'] . "/api/images/$image.$ext");
             }
+            if(file_exists($_SERVER['DOCUMENT_ROOT'] . "/api/images/$image.$ext")) {
+                $new_image = str_replace($img_name, stripChars(getURLDecodedName(stripChars($_POST['hack_new_name']))),$image);
+                rename($_SERVER['DOCUMENT_ROOT'] . "/api/images/$image.$ext", $_SERVER['DOCUMENT_ROOT'] . "/api/images/$new_image.$ext");    
+            }
+
         }
-        
         $hack_old_name = stripChars($_POST['hack_old_name']);
         $hack_name = stripChars($_POST['hack_new_name']);
         $hack_description = str_replace("\r\n", "<br/>", $hack_description);
@@ -59,7 +63,7 @@ if(sizeof($_POST) != 0) {
             $tmp_name = $_FILES['hack_images']['tmp_name'][$i];
 
 
-            $images = (glob($_SERVER['DOCUMENT_ROOT'] . "/_assets/_img/hacks/img_" . $img_name . "_*.{png,jpg}", GLOB_NOSORT|GLOB_BRACE));
+            $images = (glob($_SERVER['DOCUMENT_ROOT'] . "/api/images/img_" . $img_name . "_*.{png,jpg}", GLOB_NOSORT|GLOB_BRACE));
             $counter = 0;
             if(sizeof($images) != 0) {
                 $image = explode("/",$images[sizeof($images) - 1])[sizeof(explode("/",$images[sizeof($images) - 1])) - 1];
@@ -67,8 +71,9 @@ if(sizeof($_POST) != 0) {
                 $counter = (int)substr($image, -1);
                 $counter++;
             }
-            $logo_result = move_uploaded_file($tmp_name, $_SERVER['DOCUMENT_ROOT'].'/_assets/_img/hacks/img_' . $img_name . "_$counter.$ext");
+            $logo_result = move_uploaded_file($tmp_name, $_SERVER['DOCUMENT_ROOT'].'/api/images/img_' . $img_name . "_$counter.$ext");
         }
+        
     }
     else {
         $hack_name = stripChars($_POST['hack_name']);
