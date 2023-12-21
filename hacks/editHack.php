@@ -34,7 +34,8 @@ if(sizeof($_POST) != 0) {
             $image = explode("/",$image)[sizeof(explode("/",$image)) - 1];
             $ext = substr($image, -3);
             $image = substr_replace($image, "", -4);
-            if(!in_array($image, $_POST['hack_images_checked'])) {
+            
+            if(($_POST['hack_images_checked'] != null && !in_array($image, $_POST['hack_images_checked'])) || $_POST['hack_images_checked'] == null) {
                 unlink($_SERVER['DOCUMENT_ROOT'] . "/api/images/$image.$ext");
             }
             if(file_exists($_SERVER['DOCUMENT_ROOT'] . "/api/images/$image.$ext")) {
@@ -64,14 +65,7 @@ if(sizeof($_POST) != 0) {
 
 
             $images = (glob($_SERVER['DOCUMENT_ROOT'] . "/api/images/img_" . $img_name . "_*.{png,jpg}", GLOB_NOSORT|GLOB_BRACE));
-            $counter = 0;
-            if(sizeof($images) != 0) {
-                $image = explode("/",$images[sizeof($images) - 1])[sizeof(explode("/",$images[sizeof($images) - 1])) - 1];
-                $image = substr_replace($image, "", -4); 
-                $counter = (int)substr($image, -1);
-                $counter++;
-            }
-            $logo_result = move_uploaded_file($tmp_name, $_SERVER['DOCUMENT_ROOT'].'/api/images/img_' . $img_name . "_$counter.$ext");
+            $logo_result = move_uploaded_file($tmp_name, $_SERVER['DOCUMENT_ROOT'].'/api/images/img_' . $img_name . "_" . uniqid().".$ext");
         }
         
     }

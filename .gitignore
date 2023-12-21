@@ -9,4 +9,4 @@ smwcarchive/
 .cache/
 .git/
 _includes/config.php
-_assets/_img/hacks
+api/images/
