@@ -69,7 +69,7 @@
   <!-- Copyright -->
   <div class="text-center p-3">
   &copy; 
-    <a href="https://sm64romhacks.com/">sm64romhacks.com</a><br/><script>document.write(new Date().getFullYear())</script>
+    <a href="https://sm64romhacks.com/">sm64romhacks.com</a>&nbsp;&#8226;&nbsp;<a href="/tos">Terms of Service</a>&nbsp;&#8226;&nbsp;<a href="/privacy-policy">Privacy Policy</a><br/><script>document.write(new Date().getFullYear())</script>
   <!-- Copyright -->
   </div>
 </footer>
