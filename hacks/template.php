@@ -21,7 +21,7 @@
 					$image = explode("/",$image)[sizeof(explode("/",$image)) - 1];
 					$ext = substr($image, -3);
 					$image = substr_replace($image, "", -4);
-					print("<meta property=\"og:image:url\" content=\"https://sm64romhacks.com/api/images/$image.$ext\" />\n\t\t\t");
+					print("<meta property=\"og:image:url\" content=\"https://test.sm64romhacks.com/api/images/$image.$ext\" />\n\t\t\t");
 					print("<meta property=\"og:image:type\" content=\"image/$ext\" />\n\t\t\t");
 					print("<meta property=\"og:image:height\" content=\"120\" />\n\t\t\t");
 					print("<meta property=\"og:image:width\" content=\"160\" />\n\t\t\t");
@@ -32,8 +32,8 @@
 
 			<!-- Twitter Meta Tags -->
 			<meta name="twitter:card" content="summary_large_image">
-			<meta property="twitter:domain" content="sm64romhacks.com">
-			<meta property="twitter:url" content="https://sm64romhacks.com/hacks/<?php print(getURLEncodedName($hack_name));?>">
+			<meta property="twitter:domain" content="test.sm64romhacks.com">
+			<meta property="twitter:url" content="https://test.sm64romhacks.com/hacks/<?php print(getURLEncodedName($hack_name));?>">
 			<meta name="twitter:title" content="sm64romhacks - <?php print($hack_name);?>">
 			<meta name="twitter:description" content="<?php print($data[0]['hack_description']);?>">
 			<?php
@@ -41,7 +41,7 @@
 					$image = explode("/",$image)[sizeof(explode("/",$image)) - 1];
 					$ext = substr($image, -3);
 					$image = substr_replace($image, "", -4);
-					print("<meta property=\"twitter:image\" content=\"https://sm64romhacks.com/api/images/$image.$ext\" />\n\t\t\t");
+					print("<meta property=\"twitter:image\" content=\"https://test.sm64romhacks.com/api/images/$image.$ext\" />\n\t\t\t");
 				}
 			?>
 			
