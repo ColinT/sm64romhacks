@@ -371,7 +371,7 @@ function getHackFromDatabase($pdo, $hack_name) {
 
 function getHacksByUserFromDatabase($pdo, $user_id) {
     $sql = "SELECT * FROM users u
-            LEFT JOIN author a ON(u.discord_username=a.author_name or u.twitch_handle=a.author_name)
+            LEFT JOIN author a ON(u.discord_username=a.author_name or u.twitch_handle=a.author_name and u.twitch_handle <> null)
             LEFT JOIN hacks_authors ha ON(a.author_id=ha.author_id)
             LEFT JOIN hacks h ON(ha.hack_id=h.hack_id)
             WHERE discord_id='$user_id'
