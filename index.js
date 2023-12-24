@@ -48,16 +48,10 @@ function getNewspostContent(newspost, user) {
 }
 
 function replaceURLs(text) {
-  // Put the URL to variable $1 after visiting the URL
-  const Rexp = new RegExp(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g);
- 
-  // Replace the RegExp content by HTML element
-  const links = text.match(Rexp);
-  if(links) {links.forEach(element => {
-    element[0] = element[0].replace(/[&\/\\#, +()$~%.'":*?<>{}]/g, '')
-    text = text.replaceAll(element, `<a href="${element}" target="_blank">${element}</a>`)
-  });}
-  return text;
+  let urlRegex = /(https?:\/\/[^\s]+)/g;
+  return text.replace(urlRegex, function(url) {
+      return `<a href="${url}" target="_blank">${url}</a>`;
+  })
 }
 
 async function getAllNews() {
