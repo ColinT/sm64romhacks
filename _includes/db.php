@@ -54,15 +54,21 @@ function addUserToDatabase($pdo,$discord_id,$discord_avatar,$discord_email,$disc
 
 function updateUserInDatabase($pdo,$discord_id,$discord_avatar,$discord_email,$discord_username,$twitch_handle) {
     $sql = "UPDATE users SET
-            discord_avatar = '$discord_avatar',
-            discord_email = '$discord_email',
-            discord_username = '$discord_username',
-            twitch_handle = '$twitch_handle'
-            WHERE discord_id = '$discord_id'";
+            discord_avatar = ':discord_avatar',
+            discord_email = ':discord_email',
+            discord_username = ':discord_username',
+            twitch_handle = ':twitch_handle'
+            WHERE discord_id = ':discord_id'";
 
     try {
             $stmt = $pdo->prepare($sql);
-            $stmt->execute();
+            $stmt->execute([
+                'discord_avatar'=>$discord_avatar,
+                'discord_email'=>$discord_email,
+                'discord_username'=>$discord_username,
+                'twitch_handle'=>$twitch_handle,
+                'discord_id'=>$discord_id
+            ]);
         } 
     catch (Exception $e) {
         echo $e;
@@ -99,10 +105,12 @@ function getUserByNameFromDatabase($pdo,$discord_username){
 }
 
 function deleteUserFromDatabase($pdo, $discord_id) {
-    $sql = "DELETE FROM users WHERE discord_id = $discord_id";
+    $sql = "DELETE FROM users WHERE discord_id = :discord_id";
     try {
         $stmt = $pdo->prepare($sql);
-        $stmt->execute();
+        $stmt->execute([
+            'discord_id'=>$discord_id
+        ]);
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
     } catch (Exception $e) {
         echo $e;
@@ -157,10 +165,12 @@ function addNewspostToDatabase($pdo, $post_title, $post_text, $post_author) {
 }
 
 function deleteNewspostFromDatabase($pdo, $post_id) {
-    $sql = "DELETE FROM news WHERE post_id = $post_id";
+    $sql = "DELETE FROM news WHERE post_id = :post_id";
     try {
         $stmt = $pdo->prepare($sql);
-        $stmt->execute();
+        $stmt->execute([
+            'post_id'=>$post_id
+        ]);
     } catch (Exception $e) {
         echo $e;
     }
@@ -172,14 +182,19 @@ function deleteNewspostFromDatabase($pdo, $post_id) {
 function updateNewspostInDatabase($pdo,$post_id,$post_author,$post_title,$post_text) {
     $UTC_TIMESTAMP = "UTC_TIMESTAMP()";
     $sql = "UPDATE news SET
-            post_author = \"$post_author\",
-            post_title = '$post_title',
-            post_text = \"$post_text\",
+            post_author = \":post_author\",
+            post_title = ':post_title',
+            post_text = \":post_text\",
             edited_at = $UTC_TIMESTAMP
-            WHERE post_id = $post_id";
+            WHERE post_id = :post_id";
     try {
             $stmt = $pdo->prepare($sql);
-            $stmt->execute();
+            $stmt->execute([
+                'post_author'=>$post_author,
+                'post_title'=>$post_title,
+                'post_text'=>$post_text,
+                'post_id'=>$post_id
+            ]);
         } 
     catch (Exception $e) {
         echo $e;
@@ -328,10 +343,12 @@ function addHackAuthorToDatabase($pdo, $hack_id, $author_id) {
 }
 
 function deleteHackAuthorFromDatabase($pdo, $hack_id) {
-    $sql = "DELETE FROM hacks_authors WHERE hack_id=$hack_id";
+    $sql = "DELETE FROM hacks_authors WHERE hack_id=:hack_id";
     try {
         $stmt = $pdo->prepare($sql);
-        $stmt->execute();
+        $stmt->execute([
+            'hack_id'=>$hack_id
+        ]);
     } catch (Exception $e) {
         echo $e;
     }
@@ -374,13 +391,15 @@ function getHacksByUserFromDatabase($pdo, $user_id) {
             LEFT JOIN author a ON(u.discord_username=a.author_name or u.twitch_handle=a.author_name and u.twitch_handle <> null)
             LEFT JOIN hacks_authors ha ON(a.author_id=ha.author_id)
             LEFT JOIN hacks h ON(ha.hack_id=h.hack_id)
-            WHERE discord_id='$user_id'
+            WHERE discord_id=':user_id'
             GROUP BY h.hack_name
             ";
 
     try {
         $stmt = $pdo->prepare($sql);
-        $stmt->execute();
+        $stmt->execute([
+            'user_id'=>$user_id
+        ]);
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $data;
     } catch(Exception $e) {
@@ -486,35 +505,46 @@ function getRandomHackFromDatabase($pdo) {
 
 function updatePatchInDatabase($pdo,$hack_id,$hack_name,$hack_version,$hack_starcount,$hack_release_date,$hack_verified){
     $sql = "UPDATE hacks SET 
-            hack_name = \"$hack_name\",
-            hack_version = \"$hack_version\",
-            hack_starcount = $hack_starcount,
-            hack_release_date = '$hack_release_date',
-            hack_verified = $hack_verified
-            WHERE hack_id = $hack_id";
+            hack_name = \":hack_name\",
+            hack_version = \":hack_version\",
+            hack_starcount = :hack_starcount,
+            hack_release_date = ':hack_release_date',
+            hack_verified = :hack_verified
+            WHERE hack_id = :hack_id";
     try {
         $stmt = $pdo->prepare($sql);
-        $stmt->execute();
+        $stmt->execute([
+            'hack_name'=>$hack_name,
+            'hack_version'=>$hack_version,
+            'hack_starcount'=>$hack_starcount,
+            'hack_release_date'=>$hack_release_date,
+            'hack_verified'=>$hack_verified,
+            'hack_id'=>$hack_id
+        ]);
     } catch (Exception $e) {
         echo $e;
     }
 }
 
 function recommendPatchFromDatabase($pdo, $hack_id) {
-    $sql = "UPDATE hacks SET hack_recommend = 1 WHERE hack_id = $hack_id";
+    $sql = "UPDATE hacks SET hack_recommend = 1 WHERE hack_id = :hack_id";
     try {
         $stmt = $pdo->prepare($sql);
-        $stmt->execute();
+        $stmt->execute([
+            'hack_id'=>$hack_id
+        ]);
     } catch(Exception $e) {
         echo $e;
     }
 }
 
 function unrecommendPatchFromDatabase($pdo, $hack_id) {
-    $sql = "UPDATE hacks SET hack_recommend = 0 WHERE hack_id = $hack_id";
+    $sql = "UPDATE hacks SET hack_recommend = 0 WHERE hack_id = :hack_id";
     try {
         $stmt = $pdo->prepare($sql);
-        $stmt->execute();
+        $stmt->execute([
+            'hack_id'=>$hack_id
+        ]);
     } catch(Exception $e) {
         echo $e;
     }
@@ -524,20 +554,24 @@ function unrecommendPatchFromDatabase($pdo, $hack_id) {
 function verifyPatchInDatabase($pdo,$hack_id){
     $sql = "UPDATE hacks SET 
             hack_verified = 1
-            WHERE hack_id = $hack_id";
+            WHERE hack_id = :hack_id";
     try {
         $stmt = $pdo->prepare($sql);
-        $stmt->execute();
+        $stmt->execute([
+            'hack_id'=>$hack_id
+        ]);
     } catch (Exception $e) {
         echo $e;
     }
 }
 
 function updateDownloadCounter($pdo, $hack_id) {
-    $sql = "UPDATE hacks SET hack_downloads=hack_downloads+1 WHERE hack_id=$hack_id";
+    $sql = "UPDATE hacks SET hack_downloads=hack_downloads+1 WHERE hack_id=:hack_id";
     try {
         $stmt = $pdo->prepare($sql);
-        $stmt->execute();
+        $stmt->execute([
+            'hack_id'=>$hack_id
+        ]);
     } catch (Exception $e) {
         echo $e;
     }
@@ -545,13 +579,18 @@ function updateDownloadCounter($pdo, $hack_id) {
 
 function updateHackInDatabase($pdo, $hack_old_name, $hack_new_name,$hack_tags, $hack_description) {
     $sql = "UPDATE hacks SET 
-            hack_name = \"$hack_new_name\",
-            hack_description = \"$hack_description\",
-            hack_tags = \"$hack_tags\"
-            WHERE hack_name = \"$hack_old_name\"";
+            hack_name = \":hack_new_name\",
+            hack_description = \":hack_description\",
+            hack_tags = \":hack_tags\"
+            WHERE hack_name = \":hack_old_name\"";
     try {
         $stmt = $pdo->prepare($sql);
-        $stmt->execute();
+        $stmt->execute([
+            'hack_new_name'=>$hack_new_name,
+            'hack_description'=>$hack_description,
+            'hack_tags'=>$hack_tags,
+            'hack_old_name'=>$hack_old_name
+        ]);
     } catch(Exception $e) {
         echo $e;
     }
@@ -570,20 +609,24 @@ function getAllTagsFromDatabase($pdo) {
 }
 
 function deleteHackFromDatabase($pdo, $hack_name) {
-    $sql = "DELETE FROM hacks WHERE hack_name = \"$hack_name\"";
+    $sql = "DELETE FROM hacks WHERE hack_name = \":hack_name\"";
     try {
         $stmt = $pdo->prepare($sql);
-        $stmt->execute();
+        $stmt->execute([
+            'hack_name'=>$hack_name
+        ]);
     } catch (Exception $e) {
         echo $e;
     }
 }
 
 function deletePatchFromDatabase($pdo, $hack_id) {
-    $sql = "DELETE FROM hacks WHERE hack_id = $hack_id";
+    $sql = "DELETE FROM hacks WHERE hack_id = :hack_id";
     try {
         $stmt = $pdo->prepare($sql);
-        $stmt->execute();
+        $stmt->execute([
+            'hack_id'=>$hack_id
+        ]);
     } catch(Exception $e) {
         echo $e;
     }
