@@ -8,17 +8,13 @@ function stripChars($string) {
 
 function getURLEncodedName($hackname)
 {
-	
 	$hackname=str_replace(":","_",$hackname);
-
 	return urlencode($hackname);
 }
 
 function getURLDecodedName($hackname)
 {
 	$hackname=str_replace("_",":",$hackname);
-
-
 	return urldecode($hackname);
 }
 

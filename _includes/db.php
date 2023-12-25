@@ -54,11 +54,11 @@ function addUserToDatabase($pdo,$discord_id,$discord_avatar,$discord_email,$disc
 
 function updateUserInDatabase($pdo,$discord_id,$discord_avatar,$discord_email,$discord_username,$twitch_handle) {
     $sql = "UPDATE users SET
-            discord_avatar = ':discord_avatar',
-            discord_email = ':discord_email',
-            discord_username = ':discord_username',
-            twitch_handle = ':twitch_handle'
-            WHERE discord_id = ':discord_id'";
+            discord_avatar = :discord_avatar,
+            discord_email = :discord_email,
+            discord_username = :discord_username,
+            twitch_handle = :twitch_handle
+            WHERE discord_id = :discord_id";
 
     try {
             $stmt = $pdo->prepare($sql);
@@ -182,9 +182,9 @@ function deleteNewspostFromDatabase($pdo, $post_id) {
 function updateNewspostInDatabase($pdo,$post_id,$post_author,$post_title,$post_text) {
     $UTC_TIMESTAMP = "UTC_TIMESTAMP()";
     $sql = "UPDATE news SET
-            post_author = \":post_author\",
-            post_title = ':post_title',
-            post_text = \":post_text\",
+            post_author = :post_author,
+            post_title = :post_title,
+            post_text = :post_text,
             edited_at = $UTC_TIMESTAMP
             WHERE post_id = :post_id";
     try {
@@ -505,10 +505,10 @@ function getRandomHackFromDatabase($pdo) {
 
 function updatePatchInDatabase($pdo,$hack_id,$hack_name,$hack_version,$hack_starcount,$hack_release_date,$hack_verified){
     $sql = "UPDATE hacks SET 
-            hack_name = \":hack_name\",
-            hack_version = \":hack_version\",
+            hack_name = :hack_name,
+            hack_version = :hack_version,
             hack_starcount = :hack_starcount,
-            hack_release_date = ':hack_release_date',
+            hack_release_date = :hack_release_date,
             hack_verified = :hack_verified
             WHERE hack_id = :hack_id";
     try {
@@ -579,10 +579,10 @@ function updateDownloadCounter($pdo, $hack_id) {
 
 function updateHackInDatabase($pdo, $hack_old_name, $hack_new_name,$hack_tags, $hack_description) {
     $sql = "UPDATE hacks SET 
-            hack_name = \":hack_new_name\",
-            hack_description = \":hack_description\",
-            hack_tags = \":hack_tags\"
-            WHERE hack_name = \":hack_old_name\"";
+            hack_name = :hack_new_name,
+            hack_description = :hack_description,
+            hack_tags = :hack_tags
+            WHERE hack_name = :hack_old_name";
     try {
         $stmt = $pdo->prepare($sql);
         $stmt->execute([
@@ -609,7 +609,7 @@ function getAllTagsFromDatabase($pdo) {
 }
 
 function deleteHackFromDatabase($pdo, $hack_name) {
-    $sql = "DELETE FROM hacks WHERE hack_name = \":hack_name\"";
+    $sql = "DELETE FROM hacks WHERE hack_name = :hack_name";
     try {
         $stmt = $pdo->prepare($sql);
         $stmt->execute([
