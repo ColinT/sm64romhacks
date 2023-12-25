@@ -187,8 +187,8 @@ function getTableRowFromHack(hack, user, users) {
   const tag = hack.hack_tags;
   const downloads = hack.total_downloads;
   const link = getURLName(hackName);
-  const deleteButton = user.admin || user.logged_in && (creators.toLowerCase().includes(user.data.discord_username.toLowerCase()) || user.data.twitch_handle != "" && creators.toLowerCase().includes(user.data.twitch_handle.toLowerCase())) ? `<a class="btn btn-danger btn-block text-nowrap" href="deleteHack.php?hack_name=${getURLName(hackName)}"><img src="/_assets/_img/icons/delete.svg"></a>` : "&nbsp;"
-  const editButton = user.admin || user.logged_in && (creators.toLowerCase().includes(user.data.discord_username.toLowerCase()) || user.data.twitch_handle != "" && creators.toLowerCase().includes(user.data.twitch_handle.toLowerCase())) ? `<a class="btn btn-info btn-block text-nowrap" href="editHack.php?hack_name=${getURLName(hackName)}"><img src="/_assets/_img/icons/edit.svg"></a>` : "&nbsp;";
+  const deleteButton = checkActionsAbilities(creators, user) ? `<a class="btn btn-danger btn-block text-nowrap" href="deleteHack.php?hack_name=${getURLName(hackName)}"><img src="/_assets/_img/icons/delete.svg"></a>` : "&nbsp;"
+  const editButton = checkActionsAbilities(creators, user) ? `<a class="btn btn-info btn-block text-nowrap" href="editHack.php?hack_name=${getURLName(hackName)}"><img src="/_assets/_img/icons/edit.svg"></a>` : "&nbsp;";
   const creatorsMarkUp = getCreatorsMarkUp(creators, users);
 
 
@@ -206,6 +206,18 @@ function getTableRowFromHack(hack, user, users) {
       <td class="border-0 edit-button">${editButton}</td>
     </tr>
   `;
+}
+
+function checkActionsAbilities(creators, user) {
+  creators = creators.split(", ");
+  let r = false;
+  creators.forEach((creator) => {
+    if(user.admin || user.logged_in && (creator.toLowerCase() === user.data.discord_username.toLowerCase() || user.data.twitch_handle != null && creator.toLowerCase() === user.data.twitch_handle.toLowerCase())) {
+      r = true;
+      return false;
+    }
+  })
+  return r;
 }
 
 function getCreatorsMarkUp(creators, users) {

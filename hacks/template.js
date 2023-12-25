@@ -179,7 +179,7 @@ function getTableRowFromHack(hack, user, users) {
   const hackStarcount = hack.hack_starcount;
   const hackReleaseDate = hack.hack_release_date;
   const hackTags = hack.hack_tags;
-  const adminLoad = user.admin || user.logged_in && (hackCreator.toLowerCase().includes(user.data.discord_username.toLowerCase()) || user.data.twitch_handle != "" && hackCreator.toLowerCase().includes(user.data.twitch_handle.toLowerCase())) ? `<td class="border-0"><a class="btn btn-danger btn-block text-nowrap" href="deleteHack.php?hack_id=${hackID}"><img src="/_assets/_img/icons/delete.svg"></a></td><td class="border-0"><a class="btn btn-info btn-block text-nowrap" href="editHack.php?hack_id=${hackID}"><img src="/_assets/_img/icons/edit.svg"></a>` : `&nbsp;`
+  const adminLoad = checkActionsAbilities(hackCreator, user) ? `<td class="border-0"><a class="btn btn-danger btn-block text-nowrap" href="deleteHack.php?hack_id=${hackID}"><img src="/_assets/_img/icons/delete.svg"></a></td><td class="border-0"><a class="btn btn-info btn-block text-nowrap" href="editHack.php?hack_id=${hackID}"><img src="/_assets/_img/icons/edit.svg"></a>` : `&nbsp;`
   const hackRecommend = hack.hack_recommend
   const recommendRow = hackRecommend == 1 ? `class=table-primary` : ``
   const creatorsMarkUp = getCreatorsMarkUp(hackCreator, users);
@@ -200,6 +200,19 @@ function getTableRowFromHack(hack, user, users) {
     </tr>
   `;
 }
+
+function checkActionsAbilities(creators, user) {
+  creators = creators.split(", ");
+  let r = false;
+  creators.forEach((creator) => {
+    if(user.admin || user.logged_in && (creator.toLowerCase() === user.data.discord_username.toLowerCase() || user.data.twitch_handle != null && creator.toLowerCase() === user.data.twitch_handle.toLowerCase())) {
+      r = true;
+      return false;
+    }
+  })
+  return r;
+}
+
 
 function getURLName(hackName) {
   hackName = (hackName + '')
