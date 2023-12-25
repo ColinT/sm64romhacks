@@ -10,7 +10,7 @@ $name = strtolower($_COOKIE['name']);
 $authors_patch = strtolower(getPatchFromDatabase($pdo, $hack_id)[0]['authors']);
 $authors_hack = strtolower(getHackFromDatabase($pdo, $hack_name)[0]['authors']);
 
-$is_author = str_contains($authors_patch, $name) || str_contains($authors_patch, $twitch_handle) && $twitch_handle != NULL || str_contains($authors_hack, $twitch_handle) && $twitch_handle != NULL || str_contains($authors_hack, $name);
+$is_author = isUserAuthor($authors_patch) || isUserAuthor(($authors_hack));
 
 if(strlen($hack_name) == 0 && $hack_id == 0 || strlen($hack_name) != 0 && $hack_id != 0 || !filter_var($_COOKIE['logged_in'], FILTER_VALIDATE_BOOLEAN) || (!$is_author && !in_array($_COOKIE['discord_id'], ADMIN_SITE))) {
 	header("Location: /hacks");

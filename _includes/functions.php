@@ -18,6 +18,20 @@ function getURLDecodedName($hackname)
 	return urldecode($hackname);
 }
 
+function isUserAuthor($authors) {
+
+	$twitch_handle = strtolower($_COOKIE['twitch_handle']);
+	$name = strtolower($_COOKIE['name']);	
+	$authors = explode(", ", $authors);
+
+	foreach($authors as $author) {
+		if(strtolower($author) == strtolower($name) || $twitch_handle != NULL && strtolower($author) == strtolower($twitch_handle)) {
+			return true;
+		}
+	}
+	return false;
+}
+
 //https://github.com/fabiomb/is_bot
 function is_bot(){
 	$agent = $_SERVER['HTTP_USER_AGENT'];
