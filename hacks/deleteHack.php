@@ -18,6 +18,7 @@ if(strlen($hack_name) == 0 && $hack_id == 0 || strlen($hack_name) != 0 && $hack_
 
 if(strlen($hack_name) != 0) {
 	$data = getHackFromDatabase($pdo, $hack_name);
+	$hack_tags = $data[0]['hack_tags'];
 	$img_name = stripChars(getURLDecodedName($hack_name));
     $img_name = str_replace(':', '_', $img_name);
     $images = (glob($_SERVER['DOCUMENT_ROOT'] . "/api/images/img_" . $img_name . "_*.{png,jpg}", GLOB_NOSORT|GLOB_BRACE));
@@ -30,10 +31,16 @@ if(strlen($hack_name) != 0) {
 
 	foreach($data as $entry) {
 		deleteHackAuthorFromDatabase($pdo, $entry['hack_id']);
+		deleteHackTagFromDatabase($pdo, $entry['hack_id']);
 		unlink($_SERVER['DOCUMENT_ROOT'] . '/patch/' . $entry['hack_patchname'] . '.zip');
 		deletePatchFromDatabase($pdo, $entry['hack_id']);
 	}	
-	unlink($_SERVER['DOCUMENT_ROOT'] . '/api/images/logo_' . getURLEncodedName($hack_name) . '.jpg');
+	$hack_tags = explode(", ", $hack_tags);
+	foreach($hack_tags as $tag) {
+		if(getHacksByTagFromDatabase($pdo, $tag)[0]['count'] == 0) {
+			deleteTagFromDatabase($pdo, $tag);
+		}
+	}
 	header("Location: /hacks");
 }
 
@@ -42,6 +49,7 @@ else {
 	$hack_patchname = $data[0]['hack_patchname'];
 	unlink($_SERVER['DOCUMENT_ROOT'] . '/patch/' . $hack_patchname . '.zip');
 	deleteHackAuthorFromDatabase($pdo, $hack_id);
+	deleteHackTagFromDatabase($pdo, $hack_id);
 	deletePatchFromDatabase($pdo, $hack_id);
 	header("Location: /hacks/" .  getURLEncodedName($data[0]['hack_name']));
 }

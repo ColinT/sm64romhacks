@@ -59,11 +59,7 @@ async function getHTMLContent(hack_name, hack_id) {
 
         const tagsDataList = allTags.map((tag) => {
             tag = tag.hack_tags
-            tag = tag.split(", ");
-            const ta = tag.map((t) => {
-              return `<option value="${t}">${t}</option>`
-            }).join("");
-            return ta.toString()
+            return `<option value="${tag}">${tag}</option>`
           }).join("");
 
           const hackImages = hackData.images;

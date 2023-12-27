@@ -42,22 +42,40 @@ if(sizeof($_POST) != 0) {
                 $new_image = str_replace($img_name, stripChars(getURLDecodedName(stripChars($_POST['hack_new_name']))),$image);
                 rename($_SERVER['DOCUMENT_ROOT'] . "/api/images/$image.$ext", $_SERVER['DOCUMENT_ROOT'] . "/api/images/$new_image.$ext");    
             }
-
         }
         $hack_old_name = stripChars($_POST['hack_old_name']);
+        $hack_old_tags = getHackFromDatabase($pdo, $hack_old_name)[0]['hack_tags'];
         $hack_name = stripChars($_POST['hack_new_name']);
         $hack_description = str_replace("\r\n", "<br/>", $hack_description);
         $hack_description = stripChars($hack_description);
         $hack_description = str_replace("&lt;br/&gt;", "<br/>", $hack_description);
         $hack_tags = stripChars($_POST['hack_tags']);
-        updateHackInDatabase($pdo,$hack_old_name,$hack_name,$hack_tags,$hack_description);
+        updateHackInDatabase($pdo,$hack_old_name,$hack_name,$hack_description);
+
+        $hack_tags = explode(", ", $hack_tags);
+
         $hack = getHackFromDatabase($pdo, $hack_name);
         foreach($hack as $entry) {
             unrecommendPatchFromDatabase($pdo, intval($entry['hack_id']));
             if(isset($_POST[$entry['hack_id']])) {
                 recommendPatchFromDatabase($pdo, intval($entry['hack_id']));
             }
+            $hack_id = $entry['hack_id'];
+            deleteHackTagFromDatabase($pdo, $hack_id);
+            foreach($hack_tags as $tag) {
+                if(sizeof(getTagFromDatabase($pdo, $tag)) == 0) addTagToDatabase($pdo, $tag);
+                $tag_id = getTagFromDatabase($pdo, $tag)[0]['tag_id'];
+                addHackTagToDatabase($pdo, $hack_id, $tag_id);
+            }
+
         }
+        $hack_old_tags = explode(", ", $hack_old_tags);
+        foreach($hack_old_tags as $tag) {
+            if(getHacksByTagFromDatabase($pdo, $tag)[0]['count'] == 0) {
+                deleteTagFromDatabase($pdo, $tag);
+            }
+        }
+
         for($i = 0; $i < sizeof($_FILES['hack_images']['tmp_name']); $i++) {
             $image_name = $_FILES['hack_images']['name'][$i];
             $ext = pathinfo($_FILES['hack_images']['name'][$i], PATHINFO_EXTENSION);

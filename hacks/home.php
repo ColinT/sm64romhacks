@@ -10,7 +10,11 @@ if($amount == 0){
 		$tag=substr_replace($tag, "", -1);
 		$description="";
 		if(strlen($date) == 0) $date = "9999-12-31";
-		addHackToDatabase($pdo, $name, $version, $amount, $date, $dl, $tag,$description, 1, 0);
+		addHackToDatabase($pdo, $name, $version, $amount, $date, $dl,$description, 1, 0);
+		if(sizeof(getTagFromDatabase($pdo, $tag)) == 0) addTagToDatabase($pdo, $tag);
+		$tag_id = getTagFromDatabase($pdo, $tag)[0]['tag_id'];
+		addHackTagToDatabase($pdo, $hack_id, $tag_id);
+
 		
 		$creator = explode(" & ", $creator);
 		foreach($creator as $author) {

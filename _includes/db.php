@@ -239,7 +239,6 @@ function createHacksDatabase($pdo) {
         `hack_release_date` date DEFAULT NULL,
         `hack_patchname` varchar(255) NOT NULL,
         `hack_downloads` int(11) NOT NULL,
-        `hack_tags` varchar(255) DEFAULT NULL,
         `hack_description` text DEFAULT NULL,
         `hack_verified` tinyint(1) NOT NULL,
         `hack_recommend` tinyint(1) NOT NULL,
@@ -283,8 +282,8 @@ function createAuthorsDatabase($pdo) {
         
 }
 
-function addHackToDatabase($pdo,$hack_name,$hack_version,$hack_starcount,$hack_release_date,$hack_patchname,$hack_tags,$hack_description,$hack_verified){
-    $sql = "INSERT INTO hacks (hack_name,hack_version,hack_starcount,hack_release_date,hack_patchname,hack_tags,hack_description,hack_verified) VALUES (:hack_name,:hack_version,:hack_starcount,:hack_release_date,:hack_patchname,:hack_tags,:hack_description,:hack_verified)";
+function addHackToDatabase($pdo,$hack_name,$hack_version,$hack_starcount,$hack_release_date,$hack_patchname,$hack_description,$hack_verified){
+    $sql = "INSERT INTO hacks (hack_name,hack_version,hack_starcount,hack_release_date,hack_patchname,hack_description,hack_verified) VALUES (:hack_name,:hack_version,:hack_starcount,:hack_release_date,:hack_patchname,:hack_description,:hack_verified)";
     try {
         $stmt = $pdo->prepare($sql);
         $stmt->execute([
@@ -293,7 +292,6 @@ function addHackToDatabase($pdo,$hack_name,$hack_version,$hack_starcount,$hack_r
             'hack_starcount'=>$hack_starcount,
             'hack_release_date'=>$hack_release_date,
             'hack_patchname'=>$hack_patchname,
-            'hack_tags'=>$hack_tags,
             'hack_description'=>$hack_description,
             'hack_verified'=>$hack_verified
         ]);
@@ -367,9 +365,11 @@ function getAmountOfHacksInDatabase($pdo){
 }
 
 function getHackFromDatabase($pdo, $hack_name) {
-    $sql = "SELECT h.hack_id, h.hack_name, h.hack_version, h.hack_starcount, h.hack_release_date, h.hack_patchname, h.hack_downloads, h.hack_tags, h.hack_description, h.hack_verified, h.hack_recommend, GROUP_CONCAT(DISTINCT a.author_name SEPARATOR ', ') AS authors  FROM hacks h 
+    $sql = "SELECT h.hack_id, h.hack_name, h.hack_version, h.hack_starcount, h.hack_release_date, h.hack_patchname, h.hack_downloads, h.hack_description, h.hack_verified, h.hack_recommend, GROUP_CONCAT(DISTINCT a.author_name SEPARATOR ', ') AS authors, GROUP_CONCAT(DISTINCT t.tag_name SEPARATOR ', ') AS hack_tags  FROM hacks h 
     LEFT JOIN hacks_authors ha ON (h.hack_id = ha.hack_id) 
     LEFT JOIN author a ON (ha.author_id = a.author_id) 
+    LEFT JOIN hacks_tags ht ON (h.hack_id = ht.hack_id)
+    LEFT JOIN tags t ON (ht.tag_id = t.tag_id)
     WHERE h.hack_name=:hack_name AND hack_verified=1
     GROUP BY h.hack_id
     ORDER BY h.hack_recommend DESC, CASE WHEN h.hack_release_date = '9999-12-31' THEN 2 ELSE 1 END, h.hack_release_date DESC";
@@ -438,10 +438,12 @@ function getLastHackId($pdo) {
 
 
 function getAllUniqueHacksFromDatabase($pdo){
-    $sql = "SELECT h.hack_name, GROUP_CONCAT(DISTINCT a.author_name SEPARATOR ', ') AS hack_author, MIN(h.hack_release_date) AS release_date, SUM(h.hack_downloads) AS total_downloads, h.hack_tags FROM hacks h 
+    $sql = "SELECT h.hack_name, GROUP_CONCAT(DISTINCT a.author_name SEPARATOR ', ') AS hack_author, GROUP_CONCAT(DISTINCT t.tag_name SEPARATOR ', ') AS hack_tags, MIN(h.hack_release_date) AS release_date, SUM(h.hack_downloads) AS total_downloads FROM hacks h 
     LEFT JOIN hacks_authors ha ON (h.hack_id = ha.hack_id) 
     LEFT JOIN author a ON (ha.author_id = a.author_id)
     LEFT JOIN users u ON (u.discord_username=a.author_name OR u.twitch_handle=a.author_name) 
+    LEFT JOIN hacks_tags ht ON (h.hack_id = ht.hack_id)
+    LEFT JOIN tags t ON (ht.tag_id = t.tag_id)
     WHERE hack_verified=1 GROUP BY h.hack_name
     ORDER BY h.hack_name;";
     try {
@@ -577,18 +579,16 @@ function updateDownloadCounter($pdo, $hack_id) {
     }
 }
 
-function updateHackInDatabase($pdo, $hack_old_name, $hack_new_name,$hack_tags, $hack_description) {
+function updateHackInDatabase($pdo, $hack_old_name, $hack_new_name, $hack_description) {
     $sql = "UPDATE hacks SET 
             hack_name = :hack_new_name,
             hack_description = :hack_description,
-            hack_tags = :hack_tags
             WHERE hack_name = :hack_old_name";
     try {
         $stmt = $pdo->prepare($sql);
         $stmt->execute([
             'hack_new_name'=>$hack_new_name,
             'hack_description'=>$hack_description,
-            'hack_tags'=>$hack_tags,
             'hack_old_name'=>$hack_old_name
         ]);
     } catch(Exception $e) {
@@ -597,7 +597,7 @@ function updateHackInDatabase($pdo, $hack_old_name, $hack_new_name,$hack_tags, $
 }
 
 function getAllTagsFromDatabase($pdo) {
-    $sql = "SELECT hack_tags FROM hacks WHERE hack_tags <> \"\" AND hack_verified=1 GROUP BY hack_tags ORDER BY hack_tags";
+    $sql = "SELECT tag_name FROM tags WHERE tag_name <> \"\" ORDER BY tag_name";
     try {
         $stmt = $pdo->prepare($sql);
         $stmt->execute();
@@ -628,6 +628,117 @@ function deletePatchFromDatabase($pdo, $hack_id) {
             'hack_id'=>$hack_id
         ]);
     } catch(Exception $e) {
+        echo $e;
+    }
+}
+
+function createTagsDatabase($pdo) {
+    $sql = "CREATE TABLE IF NOT EXISTS `tags` (
+        tag_id INT(11) NOT NULL AUTO_INCREMENT,
+        tag_name VARCHAR(255) NOT NULL,
+        PRIMARY KEY(`tag_id`)
+        ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4";
+        try {
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute();
+        } catch(Exception $e) {
+            echo $e;
+        }         
+}
+
+function addTagToDatabase($pdo, $tag_name) {
+    $sql = "INSERT INTO tags (tag_name) VALUES (:tag_name)";
+    try {
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([
+            'tag_name'=>$tag_name
+        ]);
+    } catch (Exception $e) {
+        echo $e;
+    }
+
+}
+
+function getTagFromDatabase($pdo, $tag_name) {
+    $sql = "SELECT * FROM tags WHERE tag_name=:tag_name";
+    try {
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([
+            'tag_name'=>$tag_name
+        ]);
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC); 
+        return $data;
+    } catch (Exception $e) {
+        echo $e;
+    }
+
+}
+
+function deleteTagFromDatabase($pdo, $tag_name) {
+    $sql = "DELETE FROM tags WHERE tag_name=:tag_name";
+    try {
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([
+            'tag_name'=>$tag_name
+        ]);
+    } catch (Exception $e) {
+        echo $e;
+    }
+
+}
+
+
+function createHacksTagsDatabase($pdo) {
+    $sql = "CREATE TABLE IF NOT EXISTS `hacks_tags` ( 
+        hack_id INT(11) NOT NULL, 
+        tag_id INT(11) NOT NULL, 
+        CONSTRAINT fk_patch_id FOREIGN KEY (hack_id) REFERENCES hacks(hack_id),
+        CONSTRAINT fk_tag_id FOREIGN KEY (tag_id) REFERENCES tags(tag_id)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
+        try {
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute();
+        } catch(Exception $e) {
+            echo $e;
+        }     
+}
+
+function addHackTagToDatabase($pdo, $hack_id, $tag_id) {
+    $sql = "INSERT INTO hacks_tags (hack_id, tag_id) VALUES (:hack_id,:tag_id)";
+    try {
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([
+            'hack_id'=>$hack_id,
+            'tag_id'=>$tag_id
+        ]);
+    } catch (Exception $e) {
+        echo $e;
+    }
+}
+
+function deleteHackTagFromDatabase($pdo, $hack_id) {
+    $sql = "DELETE FROM hacks_tags WHERE hack_id=:hack_id";
+    try {
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([
+            'hack_id'=>$hack_id
+        ]);
+    } catch (Exception $e) {
+        echo $e;
+    }
+}
+
+function getHacksByTagFromDatabase($pdo, $tag_name) {
+    $sql = "SELECT COUNT(h.hack_id) AS count FROM hacks h 
+    LEFT JOIN hacks_tags ht ON (h.hack_id = ht.hack_id)
+    LEFT JOIN tags t ON (ht.tag_id = t.tag_id)
+    WHERE hack_verified=1 AND t.tag_name = :tag_name";
+    try {
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([
+            'tag_name'=>$tag_name
+        ]);
+    } catch (Exception $e) {
         echo $e;
     }
 }

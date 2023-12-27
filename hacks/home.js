@@ -145,15 +145,9 @@ function getHacksTable(hacks, user, users) {
 
 function getTagsDropdownMenu(tags) {
   const tagsDropdownMenu = tags.map((tag) => {
-    tag = tag.hack_tags
-    tag = tag.split(", ");
-    const ta = tag.map((t) => {
-      return `<option value="${t}">${t}</option>`
-    }).join("");
-    return ta.toString()
+    tag = tag.tag_name
+    return `<option value="${tag}">${tag}</option>`
   }).join("") 
-
-
   return tagsDropdownMenu
 }
 
@@ -232,7 +226,7 @@ function getCreatorsMarkUp(creators, users) {
 function getURLName(hackName)
 {
   hackName = (hackName + '')
-  hackName = hackName.replaceAll(':', '_')
+  hackName = hackName.replaceAll(':', '_');
   return encodeURIComponent(hackName)
     .replace(/!/g, '%21')
     .replace(/'/g, '%27')
@@ -240,7 +234,6 @@ function getURLName(hackName)
     .replace(/\)/g, '%29')
     .replace(/\*/g, '%2A')
     .replace(/~/g, '%7E')
-    .replace(/%20/g, '+')
   }
 
 

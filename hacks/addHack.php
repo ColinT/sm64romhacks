@@ -33,13 +33,13 @@ if(sizeof($_POST) != 0) {
     if(in_array($_COOKIE['discord_id'], ADMIN_SITE)) {
         $result = move_uploaded_file($_FILES['hack_patchname']['tmp_name'], $_SERVER['DOCUMENT_ROOT'].'/patch/'.$hack_patchname);
         $hack_patchname = substr($hack_patchname, 0, -4);
-        addHackToDatabase($pdo, $hack_name, $hack_version, $hack_starcount, $hack_release_date, $hack_patchname, $hack_tags, $hack_description, 1, 0);
+        addHackToDatabase($pdo, $hack_name, $hack_version, $hack_starcount, $hack_release_date, $hack_patchname, $hack_description, 1, 0);
     }
 
     else {
         $result = move_uploaded_file($_FILES['hack_patchname']['tmp_name'], $_SERVER['DOCUMENT_ROOT'].'/admin/'.$hack_patchname);
         $hack_patchname = substr($hack_patchname, 0, -4);
-        addHackToDatabase($pdo, $hack_name, $hack_version, $hack_starcount, $hack_release_date, $hack_patchname, $hack_tags, $hack_description, 0, 0);
+        addHackToDatabase($pdo, $hack_name, $hack_version, $hack_starcount, $hack_release_date, $hack_patchname, $hack_description, 0, 0);
     }
 
     $hack_authors = explode(", ", $hack_author);
@@ -51,7 +51,6 @@ if(sizeof($_POST) != 0) {
         }
         $hack_id = getLastHackId($pdo)[0]['hack_id'];
         addHackAuthorToDatabase($pdo, $hack_id, $author_id);
-    
     }
 
 

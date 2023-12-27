@@ -8,6 +8,8 @@ createNewspostDatabase($pdo);
 createHacksDatabase($pdo);
 createAuthorsDatabase($pdo);
 createHackAuthorsDatabase($pdo);
+createTagsDatabase($pdo);
+createHacksTagsDatabase($pdo);
 
 setcookie("redirect", $_SERVER['SCRIPT_URL'], time() + (86400 * 30), "/");
 
