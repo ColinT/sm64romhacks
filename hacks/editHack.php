@@ -50,7 +50,8 @@ if(sizeof($_POST) != 0) {
         $hack_description = stripChars($hack_description);
         $hack_description = str_replace("&lt;br/&gt;", "<br/>", $hack_description);
         $hack_tags = stripChars($_POST['hack_tags']);
-        updateHackInDatabase($pdo,$hack_old_name,$hack_name,$hack_description);
+        $hack_megapack = isset($_POST['hack_megapack']) ? 1 : 0;
+        updateHackInDatabase($pdo,$hack_old_name,$hack_name,$hack_description, $hack_megapack);
 
         $hack_tags = explode(", ", $hack_tags);
 

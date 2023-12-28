@@ -49,9 +49,9 @@ async function getHTMLContent(hack_name, hack_id) {
         const recommendVersions = patches.map((patch) => {
             const version = patch.hack_version;
             const id = patch.hack_id;
-            const checked = patch.hack_recommend == 1 ? "checked" : "";
+            const version_checked = patch.hack_recommend == 1 ? "checked" : "";
             return `
-                <input class="col-form-input" type="checkbox" name="${id}" id="flexCheckDefault" ${checked}>
+                <input class="col-form-input" type="checkbox" name="${id}" id="flexCheckDefault" ${version_checked}>
                 <label class="col-form-label" for="flexCheckDefault">${version}</label><br/>`;
         }).join("");
 
@@ -72,6 +72,8 @@ async function getHTMLContent(hack_name, hack_id) {
 
           let description = patches[0].hack_description;
           description = description.replaceAll("<br/>", "\r\n");
+
+          const megapack_checked = patches[0].hack_megapack == 1 ? `checked` : `&nbsp;`;
         
         return `
         <form action="#" method="post" enctype="multipart/form-data">
@@ -92,6 +94,15 @@ async function getHTMLContent(hack_name, hack_id) {
             </td>
             <td class="text-left">
                 ${recommendVersions}
+            </td>
+        </tr>
+        <tr>
+            <td class="text-right">
+                <label for="hack_megapack" class="col-form-label text-nowrap">Megapack:</label>
+            </td>
+            <td class="text-left">
+                <input class="col-form-input" type="checkbox" name="hack_megapack" id="flexCheckDefault" ${megapack_checked}>
+                <label class="col-form-label" for="flexCheckDefault">&nbsp;</label><br/>
             </td>
         </tr>
         <tr>

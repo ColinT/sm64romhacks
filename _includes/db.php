@@ -242,6 +242,7 @@ function createHacksDatabase($pdo) {
         `hack_description` text DEFAULT NULL,
         `hack_verified` tinyint(1) NOT NULL,
         `hack_recommend` tinyint(1) NOT NULL,
+        `hack_megapack` tinyint(1) NOT NULL,
         PRIMARY KEY (`hack_id`)
       ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4";
       try {
@@ -282,8 +283,8 @@ function createAuthorsDatabase($pdo) {
         
 }
 
-function addHackToDatabase($pdo,$hack_name,$hack_version,$hack_starcount,$hack_release_date,$hack_patchname,$hack_description,$hack_verified){
-    $sql = "INSERT INTO hacks (hack_name,hack_version,hack_starcount,hack_release_date,hack_patchname,hack_description,hack_verified) VALUES (:hack_name,:hack_version,:hack_starcount,:hack_release_date,:hack_patchname,:hack_description,:hack_verified)";
+function addHackToDatabase($pdo,$hack_name,$hack_version,$hack_starcount,$hack_release_date,$hack_patchname,$hack_description,$hack_verified, $hack_megapack){
+    $sql = "INSERT INTO hacks (hack_name,hack_version,hack_starcount,hack_release_date,hack_patchname,hack_description,hack_verified,hack_megapack) VALUES (:hack_name,:hack_version,:hack_starcount,:hack_release_date,:hack_patchname,:hack_description,:hack_verified,:hack_megapack)";
     try {
         $stmt = $pdo->prepare($sql);
         $stmt->execute([
@@ -293,7 +294,8 @@ function addHackToDatabase($pdo,$hack_name,$hack_version,$hack_starcount,$hack_r
             'hack_release_date'=>$hack_release_date,
             'hack_patchname'=>$hack_patchname,
             'hack_description'=>$hack_description,
-            'hack_verified'=>$hack_verified
+            'hack_verified'=>$hack_verified,
+            'hack_megapack'=>$hack_megapack
         ]);
     } catch (Exception $e) {
         echo $e;
@@ -365,14 +367,14 @@ function getAmountOfHacksInDatabase($pdo){
 }
 
 function getHackFromDatabase($pdo, $hack_name) {
-    $sql = "SELECT h.hack_id, h.hack_name, h.hack_version, h.hack_starcount, h.hack_release_date, h.hack_patchname, h.hack_downloads, h.hack_description, h.hack_verified, h.hack_recommend, GROUP_CONCAT(DISTINCT a.author_name SEPARATOR ', ') AS authors, GROUP_CONCAT(DISTINCT t.tag_name SEPARATOR ', ') AS hack_tags  FROM hacks h 
+    $sql = "SELECT h.hack_id, h.hack_name, h.hack_version, h.hack_starcount, h.hack_release_date, h.hack_patchname, h.hack_downloads, h.hack_description, h.hack_verified, h.hack_recommend, GROUP_CONCAT(DISTINCT a.author_name SEPARATOR ', ') AS authors, GROUP_CONCAT(DISTINCT t.tag_name SEPARATOR ', ') AS hack_tags, h.hack_megapack  FROM hacks h 
     LEFT JOIN hacks_authors ha ON (h.hack_id = ha.hack_id) 
     LEFT JOIN author a ON (ha.author_id = a.author_id) 
     LEFT JOIN hacks_tags ht ON (h.hack_id = ht.hack_id)
     LEFT JOIN tags t ON (ht.tag_id = t.tag_id)
     WHERE h.hack_name=:hack_name AND hack_verified=1
     GROUP BY h.hack_id
-    ORDER BY h.hack_recommend DESC, CASE WHEN h.hack_release_date = '9999-12-31' THEN 2 ELSE 1 END, h.hack_release_date DESC";
+    ORDER BY h.hack_recommend DESC, CASE WHEN h.hack_release_date = '0000-00-00' THEN 2 ELSE 1 END, h.hack_release_date DESC";
     
     try {
         $stmt = $pdo->prepare($sql);
@@ -384,6 +386,27 @@ function getHackFromDatabase($pdo, $hack_name) {
     } catch (Exception $e) {
         echo $e;
     }
+}
+
+function getMegapackHacksFromDatabase($pdo) {
+    $sql = "SELECT h1.hack_name, GROUP_CONCAT(DISTINCT a.author_name SEPARATOR ', ') AS hack_author, h1.hack_starcount, h1.hack_release_date, GROUP_CONCAT(DISTINCT t.tag_name SEPARATOR ', ') AS hack_tags
+    FROM hacks h1
+    LEFT JOIN hacks h2 ON h1.hack_name = h2.hack_name AND h1.hack_release_date < h2.hack_release_date
+    LEFT JOIN hacks_authors ha ON (h1.hack_id = ha.hack_id) 
+    LEFT JOIN author a ON (ha.author_id = a.author_id)
+    LEFT JOIN hacks_tags ht ON (h1.hack_id = ht.hack_id)
+    LEFT JOIN tags t ON (ht.tag_id = t.tag_id)
+    WHERE h2.hack_release_date IS NULL AND h1.hack_megapack = 1
+    GROUP BY h1.hack_name
+    ORDER BY h1.hack_name;";
+    try {
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $data;
+    } catch(Exception $e) {
+        echo $e;
+    }  
 }
 
 function getHacksByUserFromDatabase($pdo, $user_id) {
@@ -438,7 +461,7 @@ function getLastHackId($pdo) {
 
 
 function getAllUniqueHacksFromDatabase($pdo){
-    $sql = "SELECT h.hack_name, GROUP_CONCAT(DISTINCT a.author_name SEPARATOR ', ') AS hack_author, GROUP_CONCAT(DISTINCT t.tag_name SEPARATOR ', ') AS hack_tags, MIN(h.hack_release_date) AS release_date, SUM(h.hack_downloads) AS total_downloads FROM hacks h 
+    $sql = "SELECT h.hack_name, GROUP_CONCAT(DISTINCT a.author_name SEPARATOR ', ') AS hack_author, GROUP_CONCAT(DISTINCT t.tag_name SEPARATOR ', ') AS hack_tags, MIN(h.hack_release_date) AS release_date, SUM(h.hack_downloads) AS total_downloads, h.hack_megapack FROM hacks h 
     LEFT JOIN hacks_authors ha ON (h.hack_id = ha.hack_id) 
     LEFT JOIN author a ON (ha.author_id = a.author_id)
     LEFT JOIN users u ON (u.discord_username=a.author_name OR u.twitch_handle=a.author_name) 
@@ -579,17 +602,19 @@ function updateDownloadCounter($pdo, $hack_id) {
     }
 }
 
-function updateHackInDatabase($pdo, $hack_old_name, $hack_new_name, $hack_description) {
+function updateHackInDatabase($pdo, $hack_old_name, $hack_new_name, $hack_description, $hack_megapack) {
     $sql = "UPDATE hacks SET 
             hack_name = :hack_new_name,
             hack_description = :hack_description,
+            hack_megapack = :hack_megapack
             WHERE hack_name = :hack_old_name";
     try {
         $stmt = $pdo->prepare($sql);
         $stmt->execute([
             'hack_new_name'=>$hack_new_name,
             'hack_description'=>$hack_description,
-            'hack_old_name'=>$hack_old_name
+            'hack_old_name'=>$hack_old_name,
+            'hack_megapack'=>$hack_megapack
         ]);
     } catch(Exception $e) {
         echo $e;
