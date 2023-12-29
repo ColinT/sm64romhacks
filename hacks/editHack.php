@@ -56,6 +56,8 @@ if(sizeof($_POST) != 0) {
         $hack_tags = explode(", ", $hack_tags);
 
         $hack = getHackFromDatabase($pdo, $hack_name);
+
+
         foreach($hack as $entry) {
             unrecommendPatchFromDatabase($pdo, intval($entry['hack_id']));
             if(isset($_POST[$entry['hack_id']])) {
@@ -64,18 +66,19 @@ if(sizeof($_POST) != 0) {
             $hack_id = $entry['hack_id'];
             deleteHackTagFromDatabase($pdo, $hack_id);
             foreach($hack_tags as $tag) {
-                if(sizeof(getTagFromDatabase($pdo, $tag)) == 0) addTagToDatabase($pdo, $tag);
+                if(!getTagFromDatabase($pdo, $tag)) addTagToDatabase($pdo, $tag);
                 $tag_id = getTagFromDatabase($pdo, $tag)[0]['tag_id'];
                 addHackTagToDatabase($pdo, $hack_id, $tag_id);
             }
-
         }
+
         $hack_old_tags = explode(", ", $hack_old_tags);
         foreach($hack_old_tags as $tag) {
-            if(getHacksByTagFromDatabase($pdo, $tag)[0]['count'] == 0) {
-                deleteTagFromDatabase($pdo, $tag);
+            if(getHacksByTagFromDatabase($pdo, $tag)) {
+                deleteTagFromDatabase($pdo, $tag);   
             }
         }
+
 
         for($i = 0; $i < sizeof($_FILES['hack_images']['tmp_name']); $i++) {
             $image_name = $_FILES['hack_images']['name'][$i];

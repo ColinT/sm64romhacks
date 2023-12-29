@@ -374,7 +374,7 @@ function getHackFromDatabase($pdo, $hack_name) {
     LEFT JOIN tags t ON (ht.tag_id = t.tag_id)
     WHERE h.hack_name=:hack_name AND hack_verified=1
     GROUP BY h.hack_id
-    ORDER BY h.hack_recommend DESC, CASE WHEN h.hack_release_date = '0000-00-00' THEN 2 ELSE 1 END, h.hack_release_date DESC";
+    ORDER BY h.hack_recommend DESC, CASE WHEN h.hack_release_date = '9999-12-31' THEN 2 ELSE 1 END, h.hack_release_date DESC";
     
     try {
         $stmt = $pdo->prepare($sql);
@@ -391,7 +391,7 @@ function getHackFromDatabase($pdo, $hack_name) {
 function getMegapackHacksFromDatabase($pdo) {
     $sql = "SELECT h1.hack_name, GROUP_CONCAT(DISTINCT a.author_name SEPARATOR ', ') AS hack_author, h1.hack_starcount, h1.hack_release_date, GROUP_CONCAT(DISTINCT t.tag_name SEPARATOR ', ') AS hack_tags
     FROM hacks h1
-    LEFT JOIN hacks h2 ON h1.hack_name = h2.hack_name AND h1.hack_release_date < h2.hack_release_date
+    LEFT JOIN hacks h2 ON h1.hack_name = h2.hack_name AND h1.hack_release_date > h2.hack_release_date
     LEFT JOIN hacks_authors ha ON (h1.hack_id = ha.hack_id) 
     LEFT JOIN author a ON (ha.author_id = a.author_id)
     LEFT JOIN hacks_tags ht ON (h1.hack_id = ht.hack_id)
@@ -461,14 +461,16 @@ function getLastHackId($pdo) {
 
 
 function getAllUniqueHacksFromDatabase($pdo){
-    $sql = "SELECT h.hack_name, GROUP_CONCAT(DISTINCT a.author_name SEPARATOR ', ') AS hack_author, GROUP_CONCAT(DISTINCT t.tag_name SEPARATOR ', ') AS hack_tags, MIN(h.hack_release_date) AS release_date, SUM(h.hack_downloads) AS total_downloads, h.hack_megapack FROM hacks h 
-    LEFT JOIN hacks_authors ha ON (h.hack_id = ha.hack_id) 
+    $sql = "SELECT h1.hack_name, GROUP_CONCAT(DISTINCT a.author_name SEPARATOR ', ') AS hack_author, GROUP_CONCAT(DISTINCT t.tag_name SEPARATOR ', ') AS hack_tags, h1.hack_release_date AS release_date, SUM(h1.hack_downloads) AS total_downloads, h1.hack_megapack FROM hacks h1 
+    LEFT JOIN hacks h2 ON (h1.hack_name = h2.hack_name AND h1.hack_release_date > h2.hack_release_date)
+    LEFT JOIN hacks_authors ha ON (h1.hack_id = ha.hack_id) 
     LEFT JOIN author a ON (ha.author_id = a.author_id)
     LEFT JOIN users u ON (u.discord_username=a.author_name OR u.twitch_handle=a.author_name) 
-    LEFT JOIN hacks_tags ht ON (h.hack_id = ht.hack_id)
+    LEFT JOIN hacks_tags ht ON (h1.hack_id = ht.hack_id)
     LEFT JOIN tags t ON (ht.tag_id = t.tag_id)
-    WHERE hack_verified=1 GROUP BY h.hack_name
-    ORDER BY h.hack_name;";
+    WHERE h1.hack_verified=1 AND h2.hack_release_date IS NULL
+    GROUP BY h1.hack_name
+    ORDER BY h1.hack_name;";
     try {
         $stmt = $pdo->prepare($sql);
         $stmt->execute();
