@@ -23,11 +23,11 @@ include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php';
 			<div align="center">
 			<h1>Grand ROM Hack Megapack</h1>
 			<p>This megapack offers a selection of major Super Mario 64 ROM hacks which are universally considered to be the greatest. This is in hope to provide an ideal starter pack which serves as an easily accessible introduction to the world of ROM hacks.</p>
-			<i>Contents of this page was last updated: 2023-06-30 (yyyy-mm-dd)</i>
+			<i>Contents of this page was last updated: 2024-01-01 (yyyy-mm-dd)</i>
 			<table>
 				<tr>
-					<td><div class="btn-group-lg"><a class="btn btn-primary" href="Grand%20Rom%20Hack%20Megapack%202023%20(Summer Edition).zip" style="margin-bottom: 24px;">Download Megapack</a></div></td>
-					<td><div class="btn-group-lg"><a class="btn btn-primary" href="Grand%20SM64%20Kaizo%20Megapack%202023%20(Summer Edition).zip" style="margin-bottom: 24px;">Download KAIZO Megapack</a></div></td>
+					<td><div class="btn-group-lg"><a class="btn btn-primary" href="Grand%20Rom%20Hack%20Megapack%202023%20(Final Edition).zip" style="margin-bottom: 24px;">Download Megapack</a></div></td>
+					<td><div class="btn-group-lg"><a class="btn btn-primary" href="Grand%20SM64%20Kaizo%20Megapack%202023%20(Final Edition).zip" style="margin-bottom: 24px;">Download KAIZO Megapack</a></div></td>
 				</tr>
 			</table>
 			Difficulty:
@@ -39,7 +39,8 @@ include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php';
 							<option value="kaizo">Kaizo</option>
 						</select><br/><br/>
 
-				<div id="megapack"></div>
+				<div id="normalmegapack"><h5>Normal Megapack Hacks</h5></div><br/><br/>
+				<div id="kaizomegapack"><h5>Kaizo Megapack Hacks</h5></div>
 
 				<?php include($_SERVER['DOCUMENT_ROOT'].'/_includes/footer.php'); ?>
 				

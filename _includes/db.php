@@ -389,16 +389,22 @@ function getHackFromDatabase($pdo, $hack_name) {
 }
 
 function getMegapackHacksFromDatabase($pdo) {
-    $sql = "SELECT h1.hack_name, GROUP_CONCAT(DISTINCT a.author_name SEPARATOR ', ') AS hack_author, h1.hack_starcount, h1.hack_release_date, GROUP_CONCAT(DISTINCT t.tag_name SEPARATOR ', ') AS hack_tags
+    $sql = "SELECT h1.hack_name, GROUP_CONCAT(DISTINCT a.author_name SEPARATOR ', ') AS hack_author, h1.hack_starcount, h1.hack_release_date, t.tag_name AS hack_tags
     FROM hacks h1
     LEFT JOIN hacks h2 ON h1.hack_name = h2.hack_name AND h1.hack_release_date > h2.hack_release_date
     LEFT JOIN hacks_authors ha ON (h1.hack_id = ha.hack_id) 
     LEFT JOIN author a ON (ha.author_id = a.author_id)
     LEFT JOIN hacks_tags ht ON (h1.hack_id = ht.hack_id)
     LEFT JOIN tags t ON (ht.tag_id = t.tag_id)
-    WHERE h2.hack_release_date IS NULL AND h1.hack_megapack = 1
+    WHERE h2.hack_release_date IS NULL AND h1.hack_megapack = 1 AND t.tag_name IN ('EASY', 'NORMAL', 'ADVANCED')
     GROUP BY h1.hack_name
-    ORDER BY h1.hack_name;";
+    ORDER BY CASE t.tag_name
+        WHEN 'EASY' THEN 1
+        WHEN 'NORMAL' THEN 2
+        WHEN 'ADVANCED' THEN 3
+        ELSE 4
+    END,
+    h1.hack_name;";
     try {
         $stmt = $pdo->prepare($sql);
         $stmt->execute();
@@ -408,6 +414,32 @@ function getMegapackHacksFromDatabase($pdo) {
         echo $e;
     }  
 }
+
+function getMegapackKaizoHacksFromDatabase($pdo) {
+    $sql = "SELECT h1.hack_name, GROUP_CONCAT(DISTINCT a.author_name SEPARATOR ', ') AS hack_author, h1.hack_starcount, h1.hack_release_date, t.tag_name AS hack_tags
+    FROM hacks h1
+    LEFT JOIN hacks h2 ON h1.hack_name = h2.hack_name AND h1.hack_release_date > h2.hack_release_date
+    LEFT JOIN hacks_authors ha ON (h1.hack_id = ha.hack_id) 
+    LEFT JOIN author a ON (ha.author_id = a.author_id)
+    LEFT JOIN hacks_tags ht ON (h1.hack_id = ht.hack_id)
+    LEFT JOIN tags t ON (ht.tag_id = t.tag_id)
+    WHERE h2.hack_release_date IS NULL AND h1.hack_megapack = 1 AND t.tag_name = 'KAIZO'
+    GROUP BY h1.hack_name
+    ORDER BY CASE t.tag_name
+        WHEN 'KAIZO' THEN 1
+        ELSE 2
+    END,
+    h1.hack_name;";
+    try {
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $data;
+    } catch(Exception $e) {
+        echo $e;
+    }  
+}
+
 
 function getHacksByUserFromDatabase($pdo, $user_id) {
     $sql = "SELECT * FROM users u

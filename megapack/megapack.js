@@ -43,10 +43,16 @@ const TAG_COLUMN_INDEX = 4;
 
 
 async function main() {
-  const hacks = await getData();
-  const hacksTable = getHacksTable(hacks);
-  const hacksCollectionDiv = document.querySelector("#megapack");
-  hacksCollectionDiv.innerHTML = hacksTable;
+  const normalHacks = await getNormalHacks();
+  const normalHacksTable = getHacksTable(normalHacks);
+  const normalHacksCollectionDiv = document.querySelector("#normalmegapack");
+  normalHacksCollectionDiv.innerHTML += normalHacksTable;
+
+  const kaizoHacks = await getKaizoHacks();
+  const kaizoHacksTable = getHacksTable(kaizoHacks);
+  const kaizoHacksCollectionDiv = document.querySelector("#kaizomegapack");
+  kaizoHacksCollectionDiv.innerHTML += kaizoHacksTable;
+
 
     /** @type {HackTableRowContent[]} */
     const tableRowContents = Array.from(myTable.getElementsByTagName("tr")).slice(1).map((tableRow) => {
@@ -70,9 +76,9 @@ async function main() {
 /**
  * @returns {Hack[]}
  */
-async function getData() {
+async function getNormalHacks() {
   try {
-    const response = await fetch(`/api/megapack`);
+    const response = await fetch(`/api/megapack?type=normal`);
     if (!response.ok) {
         throw new Error(`${response.status} ${response.statusText}`);
     }
@@ -83,6 +89,24 @@ async function getData() {
       console.log(error);
   }
 }
+
+/**
+ * @returns {Hack[]}
+ */
+async function getKaizoHacks() {
+  try {
+    const response = await fetch(`/api/megapack?type=kaizo`);
+    if (!response.ok) {
+        throw new Error(`${response.status} ${response.statusText}`);
+    }
+    const r = await response.json()
+    return r;
+  } 
+  catch (error) {
+      console.log(error);
+  }
+}
+
 
 
 
@@ -115,7 +139,7 @@ function getHacksTableHeaderRow() {
       <th class="creator"><b>Creator</b></th>
       <th><b>Star Count</b></th>
       <th><b>Release Date</b></th>
-      <th hidden>Tags</th>
+      <th>Tags</th>
     </tr>
   `;
 }
@@ -143,7 +167,7 @@ function getTableRowFromHack(hack) {
       <td>${creators}</td>
       <td>${starcount}</td>
       <td class="text-nowrap">${releaseDate}</td>
-      <td hidden>${tags}</td>
+      <td>${tags}</td>
     </tr>
   `;
 }
@@ -177,7 +201,20 @@ function getURLName(hackName)
  function setTagFilterHandler(tagInput, tableRowContents) {
     tagInput.addEventListener("change", debounce((changeEvent) => {
       const searchString = changeEvent.target.value.toUpperCase();
-      filterRows(tableRowContents, isTableRowContentKeySubstring(searchString, "tag"));
+      if(searchString == 'KAIZO') {
+        document.getElementById('normalmegapack').style.display = "none";
+        document.getElementById('kaizomegapack').style.display = "block";
+      }
+      else if(searchString == '') {
+        document.getElementById('normalmegapack').style.display = "block";
+        document.getElementById('kaizomegapack').style.display = "block";
+        filterRows(tableRowContents, isTableRowContentKeySubstring(searchString, "tag"));
+      }
+      else {
+        document.getElementById('normalmegapack').style.display = "block";
+        document.getElementById('kaizomegapack').style.display = "none";
+        filterRows(tableRowContents, isTableRowContentKeySubstring(searchString, "tag"));
+      }
     }), DEBOUNCE_DELAY);
   }
   

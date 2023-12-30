@@ -133,7 +133,7 @@ function getHacksImagesContent(images) {
 }
 
 function getImage(image) {
-  return `<img class=p-3 width=320 height=240 src="/api/images/${image}">`
+  return `<img class="p-3" width=320 height=240 src="/api/images/${image}">`
 }
 
 function getCreatorsMarkUp(creators, users) {
