@@ -53,23 +53,29 @@ async function main() {
   const kaizoHacksCollectionDiv = document.querySelector("#kaizomegapack");
   kaizoHacksCollectionDiv.innerHTML += kaizoHacksTable;
 
+  const tables = document.getElementsByClassName('myTable');
 
+  for(let myTable of tables) {
     /** @type {HackTableRowContent[]} */
     const tableRowContents = Array.from(myTable.getElementsByTagName("tr")).slice(1).map((tableRow) => {
-        const columns = tableRow.getElementsByTagName("td");
-        return {
-          hackName: columns[HACK_NAME_COLUMN_INDEX].innerText.toUpperCase(),
-          authorName: columns[AUTHOR_NAME_COLUMN_INDEX].innerText.toUpperCase(),
-          starcount: columns[STAR_COUNT_COLUMN_INDEX].innerText.toUpperCase(),
-          hackDate: columns[HACK_DATE_COLUMN_INDEX].innerText.toUpperCase(),
-          tag: columns[TAG_COLUMN_INDEX].innerText.toUpperCase(),
-          tableRow,
-        }
-      });
-        
-      const tagInput = document.getElementById("tagInput");
-      tagInput.value = "";
-      setTagFilterHandler(tagInput, tableRowContents);
+      const columns = tableRow.getElementsByTagName("td");
+      return {
+        hackName: columns[HACK_NAME_COLUMN_INDEX].innerText.toUpperCase(),
+        authorName: columns[AUTHOR_NAME_COLUMN_INDEX].innerText.toUpperCase(),
+        starcount: columns[STAR_COUNT_COLUMN_INDEX].innerText.toUpperCase(),
+        hackDate: columns[HACK_DATE_COLUMN_INDEX].innerText.toUpperCase(),
+        tag: columns[TAG_COLUMN_INDEX].innerText.toUpperCase(),
+        tableRow,
+      }
+    });
+      
+    const tagInput = document.getElementById("tagInput");
+    tagInput.value = "";
+    setTagFilterHandler(tagInput, tableRowContents);
+
+  }
+
+
     
 }
 
@@ -119,7 +125,7 @@ function getHacksTable(hacks) {
   const hackTableRows = hacks.map((hack) => getTableRowFromHack(hack)).join("");
 
   return `
-    <table class="table-sm table-bordered" id="myTable">
+    <table class="table-sm table-bordered myTable">
       ${headerRow}
       ${hackTableRows}
     </table>
@@ -201,20 +207,22 @@ function getURLName(hackName)
  function setTagFilterHandler(tagInput, tableRowContents) {
     tagInput.addEventListener("change", debounce((changeEvent) => {
       const searchString = changeEvent.target.value.toUpperCase();
-      if(searchString == 'KAIZO') {
-        document.getElementById('normalmegapack').style.display = "none";
-        document.getElementById('kaizomegapack').style.display = "block";
+      const normalmegapackdiv = document.getElementById('normalmegapack');
+      const kaizomegapackdiv = document.getElementById('kaizomegapack');
+      console.log(normalmegapackdiv.style, kaizomegapackdiv.style)
+      if(searchString === 'KAIZO') {
+        normalmegapackdiv.style.display = "none";
+        kaizomegapackdiv.style.display = "block";
       }
-      else if(searchString == '') {
-        document.getElementById('normalmegapack').style.display = "block";
-        document.getElementById('kaizomegapack').style.display = "block";
-        filterRows(tableRowContents, isTableRowContentKeySubstring(searchString, "tag"));
+      else if(searchString === '') {
+        normalmegapackdiv.style.display = "block";
+        kaizomegapackdiv.style.display = "block";
       }
       else {
-        document.getElementById('normalmegapack').style.display = "block";
-        document.getElementById('kaizomegapack').style.display = "none";
-        filterRows(tableRowContents, isTableRowContentKeySubstring(searchString, "tag"));
+        normalmegapackdiv.style.display = "block";
+        kaizomegapackdiv.style.display = "none";
       }
+      filterRows(tableRowContents, isTableRowContentKeySubstring(searchString, "tag"));
     }), DEBOUNCE_DELAY);
   }
   
