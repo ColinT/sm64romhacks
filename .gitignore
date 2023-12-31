@@ -9,3 +9,5 @@ smwcarchive/
 .cache/
 .git/
 api/images/
+vendor/
+.env
