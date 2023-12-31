@@ -20,6 +20,12 @@ You can then visit the website at `localhost:8000` in your browser.
 
 ### Prerequisites
 
+#### PHP
+
+Download PHP from: https://windows.php.net/download/
+
+Unzip and add the folder containing `php.exe` to your `PATH`.
+
 #### Docker and MySQL
 
 ##### WSL 2 for Docker
