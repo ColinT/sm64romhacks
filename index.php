@@ -1,7 +1,4 @@
-<?php
-include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php';
-
-?>
+<?php include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php'; ?>
 
 <!DOCTYPE HTML>
 <html>
@@ -17,14 +14,16 @@ include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php';
 		<script src="index.js?t=<?php print(filemtime('index.js')); ?>"></script>
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
 	</head>
-	<body>		<div class="container">
+
+	<body>
+		<div class="container">
 			<?php include $_SERVER['DOCUMENT_ROOT'].'/_includes/header.php'; ?>
 			<div align="center">
 				<div id="addNews"></div>
 					<div class="text-left" id="news">
 				</div>
-
-			<?php include $_SERVER['DOCUMENT_ROOT'].'/_includes/footer.php'; ?>	
-			</div>		</div>
+				<?php include $_SERVER['DOCUMENT_ROOT'].'/_includes/footer.php'; ?>	
+			</div>
+		</div>
 	</body>
 </html>

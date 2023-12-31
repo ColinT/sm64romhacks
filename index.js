@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", main);
 
-
 async function main() {
   const allNews = await getAllNews();
   const user = await getUser();
@@ -15,7 +14,7 @@ function getNewspostContent(newspost, user) {
   const isAdmin = user.admin;
   const user_id = user.discord_id;
   const id = newspost.post_id;
-  const author_id = newspost.post_author; 
+  const author_id = newspost.post_author;
   const title = newspost.post_title;
   const text = newspost.post_text;
   const created_at = newspost.created_at;
@@ -29,18 +28,19 @@ function getNewspostContent(newspost, user) {
   const editedHTML = created_at == edited_at ? `&nbsp;` : ` (last edited at: ${convertEditedTime(`${edited_at}+00:00`, id)})`;
 
   const HTMLContent = `
-  <div class="bg-dark">
-    <table>
-      <tr>
-        <td rowspan=2><img src="${avatar_url}" width=64 height=64/></td>
-        <td width=100%><h5>${title}</h5></td><td class="text-nowrap">${editButton} &nbsp; ${deleteButton}</td>
-      </tr>
-      <tr>
-        <td colspan=2>By ${author_markup} on ${convertCreatedTime(`${created_at}+00:00`, id)}${editedHTML}
-        </td>
-      </tr>
-    </table>
-    <hr/>${replaceURLs(text)}<br/><br/>
+    <div class="bg-dark">
+      <table>
+        <tr>
+          <td rowspan=2><img src="${avatar_url}" width=64 height=64/></td>
+          <td width=100%><h5>${title}</h5></td><td class="text-nowrap">${editButton} &nbsp; ${deleteButton}</td>
+        </tr>
+        <tr>
+          <td colspan=2>By ${author_markup} on ${convertCreatedTime(`${created_at}+00:00`, id)}${editedHTML}
+          </td>
+        </tr>
+      </table>
+      <hr/>
+      ${replaceURLs(text)}<br/><br/>
     </div><br/><br/>
   `;
 
@@ -49,22 +49,22 @@ function getNewspostContent(newspost, user) {
 
 function replaceURLs(text) {
   let urlRegex = /(https?:\/\/[^\s]+)/g;
-  return text.replace(urlRegex, function(url) {
-      return `<a href="${url}" target="_blank">${url}</a>`;
-  })
+  return text.replace(urlRegex, function (url) {
+    return `<a href="${url}" target="_blank">${url}</a>`;
+  });
 }
 
 async function getAllNews() {
   try {
     const response = await fetch(`/api/news`);
     if (!response.ok) {
-        throw new Error(`${response.status} ${response.statusText}`);
+      throw new Error(`${response.status} ${response.statusText}`);
     }
-    const r = await response.json()
+    const r = await response.json();
     return r;
-  } 
+  }
   catch (error) {
-      console.log(error);
+    console.log(error);
   }
 }
 
@@ -72,41 +72,40 @@ async function getUser() {
   try {
     const response = await fetch(`/api/user`);
     if (!response.ok) {
-        throw new Error(`${response.status} ${response.statusText}`);
+      throw new Error(`${response.status} ${response.statusText}`);
     }
-    const r = await response.json()
+    const r = await response.json();
     return r;
-  } 
-  catch (error) {
-      return {logged_in: false, admin: false};
   }
-
+  catch (error) {
+    return { logged_in: false, admin: false };
+  }
 }
 
-function convertCreatedTime(time, id) {
-    let options = {
-        year: 'numeric',
-        month: 'numeric',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: 'numeric',
-        second: 'numeric',
-        hour12: false
-      };
-    time = new Intl.DateTimeFormat('sv', options).format(new Date(time));
-    return time;
+function convertCreatedTime(time, _id) {
+  let options = {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
+    hour12: false
+  };
+  time = new Intl.DateTimeFormat('sv', options).format(new Date(time));
+  return time;
 }
 
-function convertEditedTime(time, id) {
-    let options = {
-        year: 'numeric',
-        month: 'numeric',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: 'numeric',
-        second: 'numeric',
-        hour12: false
-      };
-    time = new Intl.DateTimeFormat('sv', options).format(new Date(time));
-    return time;
+function convertEditedTime(time, _id) {
+  let options = {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
+    hour12: false
+  };
+  time = new Intl.DateTimeFormat('sv', options).format(new Date(time));
+  return time;
 }
