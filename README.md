@@ -10,14 +10,6 @@ These files serve for the revamped version of [sm64romhacks.com](https://www.sm6
 A usage of these files is permitted for contribution and improving the system with the consent of the author (Me).
 Last Updated: 2023-12-24
 
-## Running Locally on Windows
-
-Install and setup prerequisites, start your MySQL Server Docker Container, then run the command:
-```
-php -S localhost:8000 -c .
-```
-You can then visit the website at `localhost:8000` in your browser.
-
 ### Prerequisites
 
 #### PHP and MySQL
