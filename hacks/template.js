@@ -76,7 +76,7 @@ async function getUser() {
     return r;
   }
   catch (error) {
-    return { logged_in: false, admin: false, data: {twitch_handle: ""} };
+    return { logged_in: false, admin: false, data: {twitch_handle: null} };
   }
 }
 
@@ -99,7 +99,7 @@ async function getUsers() {
 function getTemplatePageContent(data, user) {
   const hack_name = data.patches[0].hack_name;
   console.log(user)
-  const options = user.admin || user.logged_in && (data.patches[0].authors.toLowerCase().includes(user.data.discord_username.toLowerCase()) || user.data.twitch_handle != "" && data.patches[0].authors.toLowerCase().includes(user.data.twitch_handle.toLowerCase())) ? `&nbsp;<a class="btn btn-danger text-nowrap" href="deleteHack.php?hack_name=${hack_name}"><img src="/_assets/_img/icons/delete.svg"></a>&nbsp;<a class="btn btn-info text-nowrap" href="editHack.php?hack_name=${hack_name}"><img src="/_assets/_img/icons/edit.svg"></a>` : `&nbsp;`;
+  const options = user.admin || user.logged_in && (data.patches[0].authors.toLowerCase().includes(user.data.discord_username.toLowerCase()) || user.data.twitch_handle != null && data.patches[0].authors.toLowerCase().includes(user.data.twitch_handle.toLowerCase())) ? `&nbsp;<a class="btn btn-danger text-nowrap" href="deleteHack.php?hack_name=${hack_name}"><img src="/_assets/_img/icons/delete.svg"></a>&nbsp;<a class="btn btn-info text-nowrap" href="editHack.php?hack_name=${hack_name}"><img src="/_assets/_img/icons/edit.svg"></a>` : `&nbsp;`;
 
   return `
     <h1><u>${hack_name}</u>${options}</h1>
