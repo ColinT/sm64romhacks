@@ -9,3 +9,4 @@ smwcarchive/
 .cache/
 .git/
 api/images/
+.credentials.json
