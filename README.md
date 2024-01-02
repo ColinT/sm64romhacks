@@ -12,6 +12,10 @@ Last Updated: 2023-12-24
 
 ### Prerequisites
 
+#### Credentials File
+
+To use all the services you will need to store your credentials in a file. Create a file named ```.credentials.json``` on the root of the project and copy paste the contents from ```.credentials_example.json``` into ```.credentials.json```.
+
 #### PHP and MySQL
 
 Download XAMPP from here: https://www.apachefriends.org/
@@ -43,12 +47,12 @@ You will also need to setup a database (without any tables):
 
 This Project comes with a config file, consisting of the most important constants. You will need to adjust this file:
 
-1. Open the file ```/_includes/config.php```
-2. Adjust the configs as follows:
+1. Open the file ```/.credentials.json```
+2. Adjust the credentials as follows:
     Replace `YOUR_DB_HOST` with your db server adress. If running this locally, enter `localhost`
     Replace `YOUR_DB_USER` with the User Account you created earlier.
     Replace `YOUR_DB_PASS` with the Password of thr User Account you created earlier.
-    Replace `YOUR_DB_Name` with the name if the Database you created earlier.
+    Replace `YOUR_DB_NAME` with the name if the Database you created earlier.
 
 #### Twitch and Discord API
 
@@ -60,15 +64,15 @@ This Project makes use of the Twitch and Discord API for the streams page and th
 2. Register your application. For this: Enter an unique name, set the OAuth redirect URL to http://localhost, select Website Integration as the Category and Confidential as Client Type.
 3. Press on Create.
 4. Click on ```manage``` on the application you just created.
-5. Copy the Client ID, replace ```YOUR_TWITCH_CLIENT_ID``` with your Client ID in the config.php file.
-6. Generate a new Secret. Replace ```YOUR_TWITCH_CLIENT_SECRET``` with your Client Secret in the config.php file. Do not share these keys with anyone, ever.
+5. Copy the Client ID, replace ```YOUR_TWITCH_CLIENT_ID``` with your Client ID in the ```.credentials.json``` file.
+6. Generate a new Secret. Replace ```YOUR_TWITCH_CLIENT_SECRET``` with your Client Secret in the ```.credentials.json``` file. Do not share these keys with anyone, ever.
 
 ##### Discord API Keys
 
 1. Head over to https://discord.com/developers/docs/intro and click on ```Applications``` in the top left corner. Create a new application and accept the Terms Of Service.
-2. Click on the OAuth2 Tab. Copy the Client ID and replace it with ```YOUR_DISCORD_CLIENT_ID``` in the config.php file.
-3. Generate a Client Secret and replace it with ```YOUR_DISCORD_CLIENT_SECRET``` in the config.php file. Do not share these keys with anyone.
-4. Add A Redirect URI. This must be the same URL as specified in the config.php file as ```DISCORD_REDIRECT_URI```.
+2. Click on the OAuth2 Tab. Copy the Client ID and replace it with ```YOUR_DISCORD_CLIENT_ID``` in the ```.credentials.json``` file.
+3. Generate a Client Secret and replace it with ```YOUR_DISCORD_CLIENT_SECRET``` in the ```.credentials.json``` file. Do not share these keys with anyone.
+4. Add A Redirect URI. This must be the same URL as specified in the ```.credentials.json``` file as ```DISCORD_REDIRECT_URI```.
 5. Head over to the URL Generator. Tick the scopes ```identify```, ```email``` and ```connections```.
 6. Scroll down and select the Redirect URI we specified earlier.
-7. Copy the generated URL and replace it with the Link in the ```/login/init-oauth.php``` defined variable.
+7. Copy the generated URL and replace it with ```DISCORD_REDIRECT_URL``` in the ```.credentials.json``` file.
