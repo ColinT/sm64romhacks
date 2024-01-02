@@ -788,7 +788,7 @@ function deleteHackTagFromDatabase($pdo, $hack_id) {
 }
 
 function getHacksByTagFromDatabase($pdo, $tag_name) {
-    $sql = "SELECT COUNT(h.hack_id) AS count FROM hacks h 
+    $sql = "SELECT COUNT(*) AS count FROM hacks h 
     LEFT JOIN hacks_tags ht ON (h.hack_id = ht.hack_id)
     LEFT JOIN tags t ON (ht.tag_id = t.tag_id)
     WHERE hack_verified=1 AND t.tag_name = :tag_name";
@@ -797,6 +797,8 @@ function getHacksByTagFromDatabase($pdo, $tag_name) {
         $stmt->execute([
             'tag_name'=>$tag_name
         ]);
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC); 
+        return $data;
     } catch (Exception $e) {
         echo $e;
     }

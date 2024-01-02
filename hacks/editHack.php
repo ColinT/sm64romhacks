@@ -74,7 +74,7 @@ if(sizeof($_POST) != 0) {
 
         $hack_old_tags = explode(", ", $hack_old_tags);
         foreach($hack_old_tags as $tag) {
-            if(getHacksByTagFromDatabase($pdo, $tag)) {
+            if(getHacksByTagFromDatabase($pdo, $tag)[0]['count'] == 0) {
                 deleteTagFromDatabase($pdo, $tag);   
             }
         }
