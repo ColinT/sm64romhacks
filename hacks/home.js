@@ -43,6 +43,7 @@ const TAG_COLUMN_INDEX = 4;
 async function main() {
   const data = await getData();
   const user = await getUser();
+  console.log(user);
   const users = await getAllUsers();
   const tagsDropdownMenu = getTagsDropdownMenu(data.tags);
   const hacksTable = getHacksTable(data.hacks, user, users);
@@ -108,7 +109,7 @@ async function getUser() {
     return r;
   } 
   catch (error) {
-      return {logged_in: false, admin: false, data: {twitch_handle: ""}};
+      return {logged_in: false, admin: false, data: {twitch_handle: null}};
   }
 }
 

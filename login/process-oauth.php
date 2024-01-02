@@ -26,6 +26,7 @@ $payload = [
     'scope'=>'identify+email+connections',
 ];
 
+
 $payload_string = http_build_query($payload);
 $discord_token_url = "https://discordapp.com/api/oauth2/token";
 
@@ -48,9 +49,11 @@ if(!$result){
 $result = json_decode($result,true);
 $access_token = $result['access_token'];
 
+
 $discord_users_url = "https://discordapp.com/api/users/@me";
 $discord_users_connections_url = "https://discordapp.com/api/users/@me/connections";
 $header = array("Authorization: Bearer $access_token", "Content-Type: application/x-www-form-urlencoded");
+
 
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
@@ -77,8 +80,6 @@ $userData = json_decode($result[0],true);
 
 $twitch_username = getTwitchUserName(json_decode($result[1],true));
 
-
-
 $user_data = getUserFromDatabase($pdo,$userData['id']);
 
 if(!$user_data){
@@ -102,6 +103,7 @@ exit();
 
 
 function getTwitchUserName($userData) {
+
     foreach($userData as $entry) {
         if($entry['type'] == 'twitch') {
             return $entry['name'];

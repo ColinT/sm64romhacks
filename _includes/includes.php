@@ -11,7 +11,7 @@ createHackAuthorsDatabase($pdo);
 createTagsDatabase($pdo);
 createHacksTagsDatabase($pdo);
 
-setcookie("redirect", $_SERVER['SCRIPT_URL'], time() + (86400 * 30), "/");
+setcookie("redirect", "/", time() + (86400 * 30), "/");
 
 if(filter_var($_COOKIE['logged_in'], FILTER_VALIDATE_BOOLEAN)) {
   $avatar_url = "https://cdn.discordapp.com/avatars/" . $_COOKIE['discord_id']. "/" . $_COOKIE['avatar'] . ".jpg";

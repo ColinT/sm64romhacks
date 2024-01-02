@@ -4,17 +4,20 @@ define("ADMIN_NEWS", array("260945217664974860", "120084264489451520", "10756869
 //                          AndrewSM64              FrostyZako              MarvJungs               Mushie64               Tomatobird8
 define("ADMIN_SITE", array("260945217664974860", "120084264489451520", "107568694359531520", "264457080889409536", "210326854282772480"));
 
-define("DB_HOST", "YOUR_DB_HOST");
-define("DB_USER", "YOUR_DB_USER");
-define("DB_PASS", "YOUR_DB_PASS");
-define("DB_NAME", "YOUR_DB_NAME");
+$jsonString = file_get_contents("$_SERVER[DOCUMENT_ROOT]/.credentials.json");
+$data = json_decode($jsonString);
 
-define("DISCORD_CLIENT_ID", "YOUR_DISCORD_CLIENT_ID");
-define("DISCORD_CLIENT_SECRET", "YOUR_DISCORD_CLIENT_SECRET");
-define("DISCORD_REDIRECT_URI", "http://localhost/login/process-oauth.php");
+define("DB_HOST", $data->DB_HOST);
+define("DB_USER", $data->DB_USER);
+define("DB_PASS", $data->DB_PASS);
+define("DB_NAME", $data->DB_NAME);
 
-define("TWITCH_CLIENT_ID", "YOUR_TWITCH_CLIENT_ID");
-define("TWITCH_CLIENT_SECRET", "YOUR_TWITCH_CLIENT_SECRET");
+define("TWITCH_CLIENT_ID", $data->TWITCH_CLIENT_ID);
+define("TWITCH_CLIENT_SECRET", $data->TWITCH_CLIENT_SECRET);
+
+define("DISCORD_CLIENT_ID", $data->DISCORD_CLIENT_ID);
+define("DISCORD_CLIENT_SECRET", $data->DISCORD_CLIENT_SECRET);
+define("DISCORD_REDIRECT_URI", $data->DISCORD_REDIRECT_URI);
 
 error_reporting(E_ERROR);
 
