@@ -1,8 +1,8 @@
 document.addEventListener("DOMContentLoaded", main);
 
 async function main() {
-    const data = await getData()
-    const hacks = data.hacks
+    const data = await getData();
+    const hacks = data.hacks;
     const dataList = getDataList(hacks);
     const dataListContainer = document.querySelector("#hack_name_options")
 

@@ -16,8 +16,8 @@ $user_id = $_COOKIE['discord_id'];
 $is_Admin = in_array($user_id, ADMIN_SITE) ? true : false;
 
 if(isset($_GET['hack_name'])) {
-    $hack_name = getURLDecodedName($_GET['hack_name']);
-    $img_name = stripChars(getURLDecodedName($hack_name));
+    $hack_name = $_GET['hack_name'];
+    $img_name = stripChars($hack_name);
     $img_name = str_replace(':', '_', $img_name);
     $images = (glob($_SERVER['DOCUMENT_ROOT'] . "/api/images/img_" . $img_name . "_*.{png,jpg}", GLOB_NOSORT|GLOB_BRACE));
     $images = array_map(fn($image) => explode("/",$image)[sizeof(explode("/",$image)) - 1], $images);

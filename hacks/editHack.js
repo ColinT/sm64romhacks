@@ -5,16 +5,15 @@ async function main() {
     const params = new Proxy(new URLSearchParams(window.location.search), {
         get: (searchParams, prop) => searchParams.get(prop),
       });
-    const hack_name = params.hack_name;
-    console.log(hack_name)
+    const hack_url = params.hack_name;
     const hack_id = params.hack_id;
-    container.innerHTML = await getHTMLContent(hack_name, hack_id)
+    container.innerHTML = await getHTMLContent(hack_url, hack_id)
 
 }
 
 async function getHackData(hack_name) {
     try {
-        const response = hack_name == 'all' ? await fetch(`/api/hacks`) : await fetch(`/api/hacks?hack_name=${hack_name.replaceAll('+', '%2B')}`);
+        const response = hack_name == 'all' ? await fetch(`/api/hacks`) : await fetch(`/api/hacks?hack_name=${hack_name}`);
         if (!response.ok) {
             throw new Error(`${response.status} ${response.statusText}`);
         }
@@ -78,14 +77,14 @@ async function getHTMLContent(hack_name, hack_id) {
         return `
         <form action="#" method="post" enctype="multipart/form-data">
         <table class="table table-bordered">
-        <input type="hidden" class="form-control" name="type" id="old_hack_name" value="editHack">  
+        <input type="hidden" class="form-control" name="type" value="editHack">  
         <tr>
             <td class="text-right">
                 <label for="hack_name" class="col-form-label text-nowrap">Hack Name:</label>
             </td>
             <td>
-                <input type="hidden" class="form-control" name="hack_old_name" id="old_hack_name" value="${hack_name}">  
-                <input type="text" class="form-control" name="hack_new_name" value="${hack_name}">  
+                <input type="hidden" class="form-control" name="hack_old_name" id="old_hack_name" value="${patches[0].hack_name}">  
+                <input type="text" class="form-control" name="hack_new_name" value="${patches[0].hack_name}">  
             </td>
         </tr>
         <tr>
