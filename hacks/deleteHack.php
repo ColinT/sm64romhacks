@@ -2,7 +2,7 @@
 
 include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php';
 
-$hack_name = stripChars(getURLDecodedName($_GET['hack_name']));
+$hack_name = stripChars($_GET['hack_name']);
 $hack_id = intval($_GET['hack_id']);
 
 $twitch_handle = strtolower($_COOKIE['twitch_handle']);
@@ -16,25 +16,29 @@ if(strlen($hack_name) == 0 && $hack_id == 0 || strlen($hack_name) != 0 && $hack_
 	die();
 }
 
+//Gets executed if a whole hack should be deleted
 if(strlen($hack_name) != 0) {
+	//Get data
 	$data = getHackFromDatabase($pdo, $hack_name);
 	$hack_tags = $data[0]['hack_tags'];
-	$img_name = stripChars(getURLDecodedName($hack_name));
-    $img_name = str_replace(':', '_', $img_name);
+	$img_name = stripChars($hack_name);
+	//Get all image names corresponding the hack name
     $images = (glob($_SERVER['DOCUMENT_ROOT'] . "/api/images/img_" . $img_name . "_*.{png,jpg}", GLOB_NOSORT|GLOB_BRACE));
     $images = array_map(fn($image) => explode("/",$image)[sizeof(explode("/",$image)) - 1], $images);
 
+	//Delete corresponding images
 	foreach($images as $image) {
 		unlink($_SERVER['DOCUMENT_ROOT'] . '/api/images/' . $image);
 	}
 
-
+	//Delete Patch and linked entires in the data base
 	foreach($data as $entry) {
 		deleteHackAuthorFromDatabase($pdo, $entry['hack_id']);
 		deleteHackTagFromDatabase($pdo, $entry['hack_id']);
 		unlink($_SERVER['DOCUMENT_ROOT'] . '/patch/' . $entry['hack_patchname'] . '.zip');
 		deletePatchFromDatabase($pdo, $entry['hack_id']);
 	}	
+	//Iterate through the hack tags, delete tag from database if not needed anymore
 	$hack_tags = explode(", ", $hack_tags);
 	foreach($hack_tags as $tag) {
 		if(getHacksByTagFromDatabase($pdo, $tag)[0]['count'] == 0) {
@@ -42,9 +46,12 @@ if(strlen($hack_name) != 0) {
 		}
 	}
 	header("Location: /hacks");
+	die();
 }
 
+//Gets executed if a singular patch should be deleted
 else {
+	//Delete patchfile and linked entires in database
 	$data = getPatchFromDatabase($pdo, $hack_id);
 	$hack_patchname = $data[0]['hack_patchname'];
 	unlink($_SERVER['DOCUMENT_ROOT'] . '/patch/' . $hack_patchname . '.zip');
@@ -52,5 +59,6 @@ else {
 	deleteHackTagFromDatabase($pdo, $hack_id);
 	deletePatchFromDatabase($pdo, $hack_id);
 	header("Location: /hacks/" .  getURLEncodedName($data[0]['hack_name']));
+	die();
 }
 ?>

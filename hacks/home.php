@@ -1,23 +1,25 @@
 <?php 
 $amount = getAmountOfHacksInDatabase($pdo)[0]['count'];
+//If empty database, fill it with data from the csv file
 if($amount == 0){
 	$a_patch=file($_SERVER['DOCUMENT_ROOT']. "/_assets/_data/patches.csv");
 	$hack_id = 1;
 	foreach($a_patch as $patch)
 	{
-		list($name, $version, $creator, $amount, $date, $dl, $tag)=explode(',',$patch);
-		$tag=str_replace("\n", "", $tag);
-		$tag=substr_replace($tag, "", -1);
-		$description="";
-		if(strlen($date) == 0) $date = "9999-12-31";
-		addHackToDatabase($pdo, $name, $version, $amount, $date, $dl,$description, 1, 0, 0);
-		if(sizeof(getTagFromDatabase($pdo, $tag)) == 0) addTagToDatabase($pdo, $tag);
-		$tag_id = getTagFromDatabase($pdo, $tag)[0]['tag_id'];
-		addHackTagToDatabase($pdo, $hack_id, $tag_id);
+		list($hack_name, $hack_version, $hack_creator, $hack_amount, $hack_date, $hack_dl, $hack_tag)=explode(',',$patch);
+		$hack_tag=str_replace("\n", "", $hack_tag);
+		$hack_tag=substr_replace($hack_tag, "", -1);
+		$hack_description="";
+		$hack_url = getURLEncodedName($hack_name);
+		if(strlen($hack_date) == 0) $hack_date = "9999-12-31";
+		addHackToDatabase($pdo, $hack_name, $hack_url, $hack_version, $hack_amount, $hack_date, $hack_dl,$hack_description, 1, 0, 0);
+		if(sizeof(getTagFromDatabase($pdo, $hack_tag)) == 0) addTagToDatabase($pdo, $hack_tag);
+		$hack_tag_id = getTagFromDatabase($pdo, $hack_tag)[0]['tag_id'];
+		addHackTagToDatabase($pdo, $hack_id, $hack_tag_id);
 
 		
-		$creator = explode(" & ", $creator);
-		foreach($creator as $author) {
+		$hack_creator = explode(" & ", $hack_creator);
+		foreach($hack_creator as $author) {
 			if(sizeof(getAuthorFromDatabase($pdo, $author)) == 0) addAuthorToDatabase($pdo, $author);
 			$author_id = getAuthorFromDatabase($pdo, $author)[0]['author_id'];
 			addHackAuthorToDatabase($pdo, $hack_id, $author_id);

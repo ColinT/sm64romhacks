@@ -8,10 +8,11 @@ $hack_id = intval($_GET['hack_id']);
 $twitch_handle = strtolower($_COOKIE['twitch_handle']);
 $name = strtolower($_COOKIE['name']);
 $authors_patch = strtolower(getPatchFromDatabase($pdo, $hack_id)[0]['authors']);
-$authors_hack = strtolower(getHackFromDatabase($pdo, $hack_name)[0]['authors']);
+$authors_hack = strtolower(getHackFromDatabase($pdo, getURLEncodedName($hack_name))[0]['authors']);
 
 $is_author = isUserAuthor($authors_patch) || isUserAuthor(($authors_hack));
 
+//Only allow editing if: Only either the whole hack or a patch should be edited AND the user is the author OR an admin
 if(strlen($hack_name) == 0 && $hack_id == 0 || strlen($hack_name) != 0 && $hack_id != 0 || !filter_var($_COOKIE['logged_in'], FILTER_VALIDATE_BOOLEAN) || (!$is_author && !in_array($_COOKIE['discord_id'], ADMIN_SITE))) {
 	header("Location: /hacks");
 	die();
@@ -20,14 +21,10 @@ if(strlen($hack_name) == 0 && $hack_id == 0 || strlen($hack_name) != 0 && $hack_
 if(sizeof($_POST) != 0) {
     $hack_description = stripChars($_POST['hack_description']);
 
-
-    if(!isset($hack_description) && $hack_id == 0) {
-        header("Location: /hacks");
-        die();
-    }
-
+    //Entire Hack gets edited
     if($_POST['type'] == 'editHack') {
-        $img_name = stripChars(getURLDecodedName($hack_name));
+        //List all images
+        $img_name = stripChars($hack_name);
         $img_name = str_replace(':', '_', $img_name);
         $images = (glob($_SERVER['DOCUMENT_ROOT'] . "/api/images/img_" . $img_name . "_*.{png,jpg}", GLOB_NOSORT|GLOB_BRACE));
         foreach($images as $image) {
@@ -35,35 +32,40 @@ if(sizeof($_POST) != 0) {
             $ext = substr($image, -3);
             $image = substr_replace($image, "", -4);
             
+            //Delete the images whose checkboxes were not checked
             if(($_POST['hack_images_checked'] != null && !in_array($image, $_POST['hack_images_checked'])) || $_POST['hack_images_checked'] == null) {
                 unlink($_SERVER['DOCUMENT_ROOT'] . "/api/images/$image.$ext");
             }
+            //Rename images if the hack name has been changed
             if(file_exists($_SERVER['DOCUMENT_ROOT'] . "/api/images/$image.$ext")) {
-                $new_image = str_replace($img_name, stripChars(getURLDecodedName(stripChars($_POST['hack_new_name']))),$image);
+                $new_image = str_replace($img_name, stripChars(stripChars($_POST['hack_new_name'])),$image);
                 rename($_SERVER['DOCUMENT_ROOT'] . "/api/images/$image.$ext", $_SERVER['DOCUMENT_ROOT'] . "/api/images/$new_image.$ext");    
             }
         }
+        //Get data and update hack data
         $hack_old_name = stripChars($_POST['hack_old_name']);
-        $hack_old_tags = getHackFromDatabase($pdo, $hack_old_name)[0]['hack_tags'];
+        $hack_old_tags = getHackFromDatabase($pdo, getURLEncodedName($hack_old_name))[0]['hack_tags'];
         $hack_name = stripChars($_POST['hack_new_name']);
+        $hack_url = getURLEncodedName($hack_name);
         $hack_description = str_replace("\r\n", "<br/>", $hack_description);
         $hack_description = stripChars($hack_description);
         $hack_description = str_replace("&lt;br/&gt;", "<br/>", $hack_description);
         $hack_tags = stripChars($_POST['hack_tags']);
         $hack_megapack = isset($_POST['hack_megapack']) ? 1 : 0;
-        updateHackInDatabase($pdo,$hack_old_name,$hack_name,$hack_description, $hack_megapack);
+        updateHackInDatabase($pdo,$hack_old_name,$hack_name,$hack_url,$hack_description, $hack_megapack);
 
         $hack_tags = explode(", ", $hack_tags);
 
-        $hack = getHackFromDatabase($pdo, $hack_name);
+        $hack = getHackFromDatabase($pdo, $hack_url);
 
-
+        //Set hack_recommend flag to 1 if hack should be recommened (checkbox check)
         foreach($hack as $entry) {
             unrecommendPatchFromDatabase($pdo, intval($entry['hack_id']));
             if(isset($_POST[$entry['hack_id']])) {
                 recommendPatchFromDatabase($pdo, intval($entry['hack_id']));
             }
             $hack_id = $entry['hack_id'];
+            //Set Tag Entries in Database
             deleteHackTagFromDatabase($pdo, $hack_id);
             foreach($hack_tags as $tag) {
                 if(!getTagFromDatabase($pdo, $tag)) addTagToDatabase($pdo, $tag);
@@ -72,6 +74,7 @@ if(sizeof($_POST) != 0) {
             }
         }
 
+        //Delete those tags which had been overwritten
         $hack_old_tags = explode(", ", $hack_old_tags);
         foreach($hack_old_tags as $tag) {
             if(getHacksByTagFromDatabase($pdo, $tag)[0]['count'] == 0) {
@@ -79,19 +82,18 @@ if(sizeof($_POST) != 0) {
             }
         }
 
-
+        //Interate through the uplaoded images and move them to the api/images folder
         for($i = 0; $i < sizeof($_FILES['hack_images']['tmp_name']); $i++) {
             $image_name = $_FILES['hack_images']['name'][$i];
             $ext = pathinfo($_FILES['hack_images']['name'][$i], PATHINFO_EXTENSION);
             $tmp_name = $_FILES['hack_images']['tmp_name'][$i];
 
-
-            $images = (glob($_SERVER['DOCUMENT_ROOT'] . "/api/images/img_" . $img_name . "_*.{png,jpg}", GLOB_NOSORT|GLOB_BRACE));
             $logo_result = move_uploaded_file($tmp_name, $_SERVER['DOCUMENT_ROOT'].'/api/images/img_' . $img_name . "_" . uniqid().".$ext");
         }
         
     }
     else {
+        //Get Patchdata
         $hack_name = stripChars($_POST['hack_name']);
         $hack_version = stripChars($_POST['hack_version']);
         $hack_author = stripChars($_POST['hack_author']);
@@ -100,7 +102,7 @@ if(sizeof($_POST) != 0) {
 
         deleteHackAuthorFromDatabase($pdo, $hack_id);
 
-
+        //Iterate through submitted list of authors, add them to the database if not exist
         $hack_authors = explode(", ", $hack_author);
         foreach($hack_authors as $author) {
             $author_new_id = getAuthorFromDatabase($pdo, $author)[0]['author_id'];
@@ -119,9 +121,6 @@ if(sizeof($_POST) != 0) {
 
 }
 
-
-if(strlen($hack_name) != 0) $hackdata = getHackFromDatabase($pdo, stripChars($_GET['hack_name']));
-else $hackdata = getPatchFromDatabase($pdo, $hack_id);
 ?>
 <!DOCTYPE HTML>
 <html>

@@ -14,7 +14,7 @@
 			<meta property="og:type" content="website" />
 			<meta property="og:url" content="https://sm64romhacks.com/hacks/<?php print(getURLEncodedName($hack_name));?>" />
 			<?php 
-				$img_name = stripChars(getURLDecodedName($hack_name));
+				$img_name = stripChars($hack_name);
 				$img_name = str_replace(':', '_', $img_name);
 				$images = (glob($_SERVER['DOCUMENT_ROOT'] . "/api/images/img_" . $img_name . "_*.{png,jpg}", GLOB_NOSORT|GLOB_BRACE));
 				foreach($images as $image) {

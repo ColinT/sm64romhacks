@@ -2,13 +2,17 @@
 
 include $_SERVER['DOCUMENT_ROOT'].'/_includes/includes.php';
 
+//Allow adding hacks only if logged in
 if(!filter_var($_COOKIE['logged_in'], FILTER_VALIDATE_BOOLEAN)) {
 	header("Location: /404.php");
 	die();
 }
 
+//Data from form is received
 if(sizeof($_POST) != 0) {
+    //Values from submitted data
     $hack_name = stripChars($_POST['hack_name']);
+    $hack_url = getURLEncodedName($hack_name);
     $hack_version = stripChars($_POST['hack_version']);
     $hack_author = stripChars($_POST['hack_author']);
     $hack_starcount = isset($_POST['hack_amount']) ? intval($_POST['hack_amount']) : 0;
@@ -17,11 +21,14 @@ if(sizeof($_POST) != 0) {
     $hack_tags = "";
     $hack_description = "";
 
-    $hack = getHackFromDatabase($pdo, $hack_name);
+    $hack = getHackFromDatabase($pdo, $hack_url);
+    //Hack already exists
     if($hack) {
+        //Get Tags and Description from Hack
         $hack_tags = $hack[0]['hack_tags'];
         $hack_description = $hack[0]['hack_description'];
         foreach($hack as $entry) {
+            //If database already has the same version or file, throw an error
             if($entry['hack_version'] == $hack_version || $entry['hack_patchname'] == $hack_patchname) {
                 header("Location: /404.php");
                 die();
@@ -29,19 +36,21 @@ if(sizeof($_POST) != 0) {
         }
     }
 
-
+    //If user is an admin, verify the patch immediately
     if(in_array($_COOKIE['discord_id'], ADMIN_SITE)) {
         $result = move_uploaded_file($_FILES['hack_patchname']['tmp_name'], $_SERVER['DOCUMENT_ROOT'].'/patch/'.$hack_patchname);
         $hack_patchname = substr($hack_patchname, 0, -4);
-        addHackToDatabase($pdo, $hack_name, $hack_version, $hack_starcount, $hack_release_date, $hack_patchname, $hack_description, 1, 0, 0);
+        addHackToDatabase($pdo, $hack_name, $hack_url, $hack_version, $hack_starcount, $hack_release_date, $hack_patchname, $hack_description, 1, 0, 0);
     }
 
+    //Else, patch gets put into a pending queue
     else {
         $result = move_uploaded_file($_FILES['hack_patchname']['tmp_name'], $_SERVER['DOCUMENT_ROOT'].'/admin/'.$hack_patchname);
         $hack_patchname = substr($hack_patchname, 0, -4);
-        addHackToDatabase($pdo, $hack_name, $hack_version, $hack_starcount, $hack_release_date, $hack_patchname, $hack_description, 0, 0, 0);
+        addHackToDatabase($pdo, $hack_name, $hack_url, $hack_version, $hack_starcount, $hack_release_date, $hack_patchname, $hack_description, 0, 0, 0);
     }
 
+    //Iterate through all hack authors and add them to the database if not exist
     $hack_authors = explode(", ", $hack_author);
     foreach($hack_authors as $author) {
         $author_id = getAuthorFromDatabase($pdo, $author)[0]['author_id'];
@@ -53,11 +62,12 @@ if(sizeof($_POST) != 0) {
         addHackAuthorToDatabase($pdo, $hack_id, $author_id);
     }
 
-
-
+    //If picture upload went wrong, thtow error
     if(!$result) {header("Location: /404.php"); die();}
 
+    if(!$hack) {addHackTagToDatabase($pdo, getLastHackId($pdo)[0]['hack_id'], 1);}
 
+    //Redirect
     header("Location: /hacks");
     die();
 

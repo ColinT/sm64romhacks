@@ -8,14 +8,10 @@ function stripChars($string) {
 
 function getURLEncodedName($hackname)
 {
-	$hackname=str_replace(":","_",$hackname);
-	return urlencode($hackname);
-}
-
-function getURLDecodedName($hackname)
-{
-	$hackname=str_replace("_",":",$hackname);
-	return urldecode($hackname);
+	$hackname = str_replace(' ', '-', $hackname); // Replaces all spaces with hyphens.
+	$hackname = preg_replace('/[^A-Za-z0-9\-]/', '', $hackname); // Removes special chars.
+ 
+	return preg_replace('/-+/', '-', $hackname); // Replaces multiple hyphens with single one.
 }
 
 function isUserAuthor($authors) {

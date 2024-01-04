@@ -177,13 +177,14 @@ function getHacksTableHeaderRow(user) {
  */
 function getTableRowFromHack(hack, user, users) {
   const hackName = hack.hack_name;
+  const hackURL = hack.hack_url;
   const creators = hack.hack_author
   const releaseDate = hack.release_date;
   const tag = hack.hack_tags;
   const downloads = hack.total_downloads;
-  const link = getURLName(hackName);
-  const deleteButton = checkActionsAbilities(creators, user) ? `<a class="btn btn-danger btn-block text-nowrap" href="deleteHack.php?hack_name=${hackName}"><img src="/_assets/_img/icons/delete.svg"></a>` : "&nbsp;"
-  const editButton = checkActionsAbilities(creators, user) ? `<a class="btn btn-info btn-block text-nowrap" href="editHack.php?hack_name=${hackName}"><img src="/_assets/_img/icons/edit.svg"></a>` : "&nbsp;";
+  const link = hack.hack_url;
+  const deleteButton = checkActionsAbilities(creators, user) ? `<a class="btn btn-danger btn-block text-nowrap" href="deleteHack.php?hack_name=${hackURL}"><img src="/_assets/_img/icons/delete.svg"></a>` : "&nbsp;"
+  const editButton = checkActionsAbilities(creators, user) ? `<a class="btn btn-info btn-block text-nowrap" href="editHack.php?hack_name=${hackURL}"><img src="/_assets/_img/icons/edit.svg"></a>` : "&nbsp;";
   const creatorsMarkUp = getCreatorsMarkUp(creators, users);
 
 
@@ -226,15 +227,7 @@ function getCreatorsMarkUp(creators, users) {
 
 function getURLName(hackName)
 {
-  hackName = (hackName + '')
-  hackName = hackName.replaceAll(':', '_');
   return encodeURIComponent(hackName)
-    .replace(/!/g, '%21')
-    .replace(/'/g, '%27')
-    .replace(/\(/g, '%28')
-    .replace(/\)/g, '%29')
-    .replace(/\*/g, '%2A')
-    .replace(/~/g, '%7E')
   }
 
 
